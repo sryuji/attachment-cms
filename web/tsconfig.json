@@ -23,7 +23,8 @@
     "noImplicitReturns": true, //return値の型必須
     "resolveJsonModule": true,
     "strictNullChecks": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "importHelpers": true
   },
-  "exclude": ["node_modules", ".nuxt", "dist", "coverage"]
+  "exclude": ["node_modules", ".nuxt", "dist", "coverage", "types/attachment-cms-server"]
 }

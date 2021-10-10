@@ -7,6 +7,7 @@ module.exports = {
   },
   extends: ['@nuxtjs/eslint-config-typescript', 'plugin:nuxt/recommended', 'plugin:vue/base', 'prettier'],
   plugins: [],
+  ignorePatterns: ['types/attachment-cms-server/**/*.d.ts'],
   // add your custom rules here
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',

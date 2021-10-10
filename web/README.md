@@ -37,8 +37,15 @@ nuxt.js の標準的なフォルダ構成に加えて追加されたファイル
   - データの model class/interface を置いてください
 - pages
   - Page Component で読み込まれるページ固有の Component は、`components`フォルダを切ってその配下に置いてください
+- repositories
+  - データアクセスのロジックを配置. 主に API reqeust/response 処理
+  - API request/response の method 定義は、`types/attachment-cms-server`の Form/Dto/Serializer 定義を可能な限り利用すること
+  - API request/response の method 名は、Controller の method 名と名前を可能な限り合わせること
 - services
   - データやルールに関するビジネスロジックを持つ function / class を置いてください
+- types
+  - 独自 module の d.ts を配置
+  - attachment-cms-server プロジェクトで生成した entity, dto, form, serializer の d.ts ファイルをコピーし配置
 - utils
   - 汎用的な function / class を置いてください
 
