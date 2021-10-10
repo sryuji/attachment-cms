@@ -10,6 +10,7 @@ module.exports = {
   plugins: [],
   rules: {
     'order/properties-alphabetical-order': true,
+    'order/properties-order': null,
     'scss/at-rule-no-unknown': null,
     'scss/at-import-no-partial-leading-underscore': null,
     'property-no-unknown': [

@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <h1>Attachment CMS</h1>
+    <h1>Account</h1>
   </div>
 </template>
 
@@ -9,10 +9,12 @@ import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({
   head() {
-    return {}
+    return {
+      title: 'Account',
+    }
   },
 })
-export default class TopPageComponent extends Vue {
+export default class AccountPageComponent extends Vue {
   mounted() {}
 }
 </script>

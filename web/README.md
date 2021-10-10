@@ -23,6 +23,25 @@ $ yarn nuxt
 $ yarn nuxt
 ```
 
+## Folder Structure
+
+nuxt.js の標準的なフォルダ構成に加えて追加されたファイル配置ルール
+
+- assets
+  - stylesheets
+    - scss ファイルを配置する場所
+    - 基本的に Component に記載するため、Page Component 間で共用したい style が在る場合にだけ利用してください
+- components
+  - ページ間で共用する Component class のみ、置いてください
+- models
+  - データの model class/interface を置いてください
+- pages
+  - Page Component で読み込まれるページ固有の Component は、`components`フォルダを切ってその配下に置いてください
+- services
+  - データやルールに関するビジネスロジックを持つ function / class を置いてください
+- utils
+  - 汎用的な function / class を置いてください
+
 ## Test
 
 jest を利用しています。

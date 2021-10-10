@@ -1,6 +1,6 @@
 import { format as dateFormat, parseISO, differenceInDays } from 'date-fns'
 import jaLocale from 'date-fns/locale/ja'
-import { isString } from '~/assets/javascripts/modules/string'
+import { isString } from '~/utils/string'
 
 export function parseDate(value: string | Date): Date {
   if (!value) return null

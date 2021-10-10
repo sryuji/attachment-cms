@@ -15,8 +15,8 @@
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": ["@nuxt/types", "@nuxtjs/axios", "@nuxt/content", "@types/node"],
-    "typeRoots": ["assets/javascripts/types"],
+    "types": ["@nuxt/types", "@nuxtjs/axios", "@nuxt/content", "@nuxtjs/toast", "universal-cookie"],
+    "typeRoots": ["./types", "./node_modules/@types"],
     // additional settings
     "noImplicitAny": true, // any型禁止
     "noImplicitThis": true, // 型なしthis禁止. class内は問題なし

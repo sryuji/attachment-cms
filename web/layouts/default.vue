@@ -1,24 +1,22 @@
 <template>
   <div class="font-body flex w-full">
-    <div class="w-72 flex-shrink-0 text-gray-700 bg-white">
+    <notification />
+    <div class="w-64 flex-shrink-0 text-gray-700 bg-white">
       <side-menu></side-menu>
     </div>
     <div class="flex-1 m-5 text-gray-700 bg-white">
-      <nuxt />
+      <nuxt class="container mx-auto" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import SideMenu from '@/components/side-menu.vue'
+import SideMenu from '~/components/side-menu.vue'
+import Notification from '~/components/notification.vue'
 
-@Component({ components: { SideMenu } })
+@Component({ components: { SideMenu, Notification } })
 export default class Default extends Vue {
   mounted() {}
 }
 </script>
-
-<style lang="scss">
-// @use '~/assets/stylesheets/tailwind.scss';
-</style>
