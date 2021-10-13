@@ -26,5 +26,5 @@
     "noFallthroughCasesInSwitch": false,
     "importHelpers": true
   },
-  "exclude": ["node_modules", ".nuxt", "dist", "coverage", "types/attachment-cms-server"]
+  "exclude": ["node_modules", ".nuxt", "dist", "coverage"]
 }

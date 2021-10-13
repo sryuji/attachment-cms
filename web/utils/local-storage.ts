@@ -1,6 +1,6 @@
-import get from 'lodash.get'
-import set from 'lodash.set'
-import unset from 'lodash.unset'
+import get from 'lodash/get'
+import set from 'lodash/set'
+import unset from 'lodash/unset'
 
 function notifyUnavailableLocalStorage(exception?: unknown) {
   // Sentry.withScope((scope) => {

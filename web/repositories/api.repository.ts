@@ -1,8 +1,7 @@
 import { NuxtAppOptions } from '@nuxt/types'
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { AxiosRequestConfig, AxiosError } from 'axios'
-import Cookies from 'universal-cookie'
-import { JWT_STORAGE_KEY, REFRESH_TOKEN_COOKIE_KEY } from '~/services/constants'
+import { JWT_STORAGE_KEY } from '~/services/constants'
 import {
   BadRequestError,
   ForbiddenError,
@@ -16,7 +15,7 @@ import {
 } from '~/utils/errors'
 import { fetchProperty } from '~/utils/local-storage'
 
-type HandleErrorOptions = { retry: boolean }
+type HandleErrorOptions = { attemptRefreshToken?: boolean }
 
 export default abstract class ApiRepository {
   private axios: NuxtAxiosInstance
@@ -29,7 +28,7 @@ export default abstract class ApiRepository {
 
   protected get(url: string, config?: AxiosRequestConfig) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.get(url, config))
+    return this.wrapRequest(this.axios.get(url, config), { attemptRefreshToken: false })
   }
 
   protected post(url: string, data: any, config?: AxiosRequestConfig) {
@@ -62,16 +61,20 @@ export default abstract class ApiRepository {
     return config
   }
 
-  private async wrapRequest(request: Promise<any>, options?: HandleErrorOptions) {
+  private async wrapRequest(
+    request: Promise<any>,
+    options: HandleErrorOptions = { attemptRefreshToken: false }
+  ): Promise<any> {
     try {
       const response = await request
       return Promise.resolve(response.data)
     } catch (error: any) {
-      return this.handleError(error, options)
+      const data = await this.handleError(error, options)
+      return Promise.resolve(data)
     }
   }
 
-  private handleError(error: AxiosError, options: HandleErrorOptions): Promise<void> {
+  private handleError(error: AxiosError, options: HandleErrorOptions): Promise<any> {
     const response = error.response
     const isTimeout = error.code === 'ECONNABORTED'
 
@@ -101,17 +104,16 @@ export default abstract class ApiRepository {
     }
   }
 
-  private async handleUnauthorizedError(error: AxiosError, baseData: any, options: HandleErrorOptions) {
-    const cookies = new Cookies()
-    const isRetry = options && options.retry
-    if (isRetry || !cookies.get(REFRESH_TOKEN_COOKIE_KEY)) throw new UnauthorizedError({ baseData })
+  private async handleUnauthorizedError(error: AxiosError, baseData: any, options: HandleErrorOptions): Promise<any> {
+    const attemptRefreshToken = options && options.attemptRefreshToken
+    if (!attemptRefreshToken) throw new UnauthorizedError({ baseData })
 
     const config = error.config
-    await this.app.$api.auth.refreshAccessToken().catch(() => {
-      throw new UnauthorizedError({ baseData })
+    await this.app.$api.auth.refreshAccessToken().catch((err) => {
+      throw new UnauthorizedError({ baseData, baseError: err })
     })
 
     this.setDefaultConfig(config)
-    return this.wrapRequest(this.request(config), { retry: true })
+    return this.request(config)
   }
 }

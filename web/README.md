@@ -46,6 +46,7 @@ nuxt.js の標準的なフォルダ構成に加えて追加されたファイル
 - types
   - 独自 module の d.ts を配置
   - attachment-cms-server プロジェクトで生成した entity, dto, form, serializer の d.ts ファイルをコピーし配置
+    - **`@Exclude` で response から除去された property も d.ts には含まれているので注意**
 - utils
   - 汎用的な function / class を置いてください
 

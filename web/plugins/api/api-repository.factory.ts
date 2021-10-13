@@ -4,6 +4,7 @@ import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { AccountsRepository } from '../../repositories/accounts.repository'
 import { AuthRepository } from '../../repositories/auth.repository'
 import { ApiRepositories } from './api-repositories.interface'
+import { ScopesRepository } from '~/repositories/scopes.repository'
 
 export default class ApiRepositoryFactory {
   private axios: NuxtAxiosInstance
@@ -20,6 +21,7 @@ export default class ApiRepositoryFactory {
     return {
       accounts: new AccountsRepository(this.axios, this.app),
       auth: new AuthRepository(this.axios, this.app),
+      scopes: new ScopesRepository(this.axios, this.app),
     }
   }
 

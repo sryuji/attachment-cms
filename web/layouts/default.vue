@@ -16,7 +16,7 @@ import SideMenu from '~/components/side-menu.vue'
 import Notification from '~/components/notification.vue'
 
 @Component({ components: { SideMenu, Notification } })
-export default class Default extends Vue {
-  mounted() {}
+export default class DefaultLayout extends Vue {
+  beforeMount() {}
 }
 </script>

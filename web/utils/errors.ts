@@ -7,9 +7,9 @@ type ConstructorOptions = {
 export class ExtendableError extends Error {
   baseData: any
   constructor(options?: ConstructorOptions) {
-    super(options.message || '')
-    this.baseData = options.baseData
-    if (options.baseError) this.stack = options.baseError.stack
+    super((options && options.message) || '')
+    this.baseData = (options && options.baseData) || null
+    if (options && options.baseError) this.stack = options.baseError.stack
   }
 }
 

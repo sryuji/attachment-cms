@@ -12,7 +12,7 @@
         <li class="menu-title">
           <span> Table List </span>
         </li>
-        <template v-if="true">
+        <template v-if="isLoggedIn">
           <li>
             <nuxt-link :to="{ name: 'scopes' }"> Scopes </nuxt-link>
           </li>
@@ -34,13 +34,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, namespace, Vue } from 'nuxt-property-decorator'
+import { authStore } from '~/store'
+
+const authModule = namespace('auth')
 
 @Component({})
 export default class SideMenuComponent extends Vue {
-  mounted() {}
+  beforeMount() {
+    authStore.checkAuth()
+  }
+
+  @authModule.Getter('isLoggedIn') isLoggedIn: boolean
+
   signOut() {
-    this.$api.auth.signOut()
+    authStore.signOut()
   }
 }
 </script>

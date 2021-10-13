@@ -4,7 +4,7 @@ import { UnauthorizedError } from '~/utils/errors'
 import { JWT_STORAGE_KEY } from '~/services/constants'
 
 export class AuthRepository extends ApiRepository {
-  async refreshAccessToken(): Promise<any> {
+  async refreshAccessToken(): Promise<Record<'accessToken', string>> {
     const data = await this.get('/auth/refresh')
     if (!data || !data.accessToken) throw new UnauthorizedError()
     saveProperty(JWT_STORAGE_KEY, 'accessToken', data.accessToken)

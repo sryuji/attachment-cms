@@ -1,15 +1,17 @@
+import { AccountSerializer } from 'types/attachment-cms-server/app/accounts/serializer/account.serializer'
 import ApiRepository from './api.repository'
+import { AccountForm } from '~/types/attachment-cms-server/app/accounts/dto/account.form'
 
 export class AccountsRepository extends ApiRepository {
-  findOne(accountId: number) {
-    return this.get(`/accounts/${accountId}`)
+  findOne(): Promise<AccountSerializer> {
+    return this.get(`/accounts`)
   }
 
-  update(accountId: number, data: any) {
-    return this.patch(`/accounts/${accountId}`, data)
+  update(data: AccountForm): Promise<AccountSerializer> {
+    return this.patch(`/accounts`, data)
   }
 
-  delete(accountId: number) {
-    return this.del(`/accounts/${accountId}`)
+  delete(): Promise<void> {
+    return this.del(`/accounts`)
   }
 }
