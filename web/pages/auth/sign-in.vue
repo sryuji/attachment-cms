@@ -1,14 +1,12 @@
 <template>
-  <div>
+  <div class="container mx-auto">
     <h1 class="mb-6">Sign In / Sign Up</h1>
-    <div class="container mx-auto">
-      <div>
-        <img
-          class="cursor-pointer"
-          src="~/assets/images/google/btn_google_signin_light_normal_web.png"
-          @click="moveGoogleAuthPage"
-        />
-      </div>
+    <div>
+      <img
+        class="cursor-pointer"
+        src="~/assets/images/google/btn_google_signin_light_normal_web.png"
+        @click="moveGoogleAuthPage"
+      />
     </div>
   </div>
 </template>

@@ -1,21 +1,27 @@
 <template>
-  <div class="font-body flex w-full">
+  <div>
     <notification />
-    <div class="w-64 flex-shrink-0 text-gray-700 bg-white">
-      <side-menu></side-menu>
-    </div>
-    <div class="flex-1 m-5 text-gray-700 bg-white">
-      <nuxt class="container mx-auto" />
+    <div class="font-body h-screen w-full drawer drawer-end">
+      <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content">
+        <navbar />
+        <nuxt />
+      </div>
+      <div class="drawer-side">
+        <label for="my-drawer" class="drawer-overlay"></label>
+        <side-menu />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import SideMenu from '~/components/side-menu.vue'
 import Notification from '~/components/notification.vue'
+import Navbar from '~/components/navbar.vue'
+import SideMenu from '~/components/side-menu.vue'
 
-@Component({ components: { SideMenu, Notification } })
+@Component({ components: { SideMenu, Navbar, Notification } })
 export default class DefaultLayout extends Vue {
   beforeMount() {}
 }

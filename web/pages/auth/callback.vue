@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="container mx-auto">
     <h1 class="mb-6"></h1>
-    <div class="container mx-auto">
+    <div>
       <div>
         <p class="text-xl">authenticating...</p>
       </div>
@@ -30,7 +30,7 @@ export default class AuthSignInPageComponent extends Vue {
       this.$router.replace({ path: flow.destination, params: flow.params })
       deleteModel(AUTH_FLOW_STORAGE_KEY)
     } else {
-      this.$router.replace({ path: '/' })
+      this.$router.replace({ path: 'scopes' })
     }
   }
 }

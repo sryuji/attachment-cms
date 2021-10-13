@@ -1,20 +1,16 @@
 <template>
-  <div>
-    <div class="flex-shrink-0 px-8 py-4 flex flex-row items-center justify-between">
-      <nuxt-link
-        :to="{ name: 'index' }"
-        class="text-lg font-semibold tracking-widest text-gray-900 rounded-lg focus:outline-none focus:shadow-outline"
-        >Dashboard</nuxt-link
-      >
-    </div>
+  <div class="overflow-y-auto w-80 bg-base-100 text-base-content">
     <div class="py-2 bg-base-200">
       <ul class="menu m-2 p-4 shadow-lg bg-base-100 rounded-box">
-        <li class="menu-title">
-          <span> Table List </span>
-        </li>
         <template v-if="isLoggedIn">
+          <li class="text-lg font-bold">
+            <span> Scopes </span>
+          </li>
           <li>
             <nuxt-link :to="{ name: 'scopes' }"> Scopes </nuxt-link>
+          </li>
+          <li class="text-lg font-bold">
+            <span> Other </span>
           </li>
           <li>
             <nuxt-link :to="{ name: 'account' }"> Account </nuxt-link>
@@ -25,7 +21,7 @@
         </template>
         <template v-else>
           <li>
-            <nuxt-link :to="{ name: 'auth-sign-in' }"> Sign In / Sign Up</nuxt-link>
+            <nuxt-link :to="{ name: 'auth-sign-in' }"> Sign In</nuxt-link>
           </li>
         </template>
       </ul>
