@@ -10,12 +10,16 @@ config.rawError = true
   stateFactory: true,
   namespaced: true,
 })
-export default class AuthModule extends VuexModule {
-  account: Account
+export default class extends VuexModule {
+  private _account: Account = null // NOTE: null初期化せずundefinedのままだと、reactive機能が動かないので注意
+
+  get account() {
+    return this._account
+  }
 
   @Mutation
   setAccount(account: Account) {
-    this.account = account
+    this._account = account
   }
 
   @Action

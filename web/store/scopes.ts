@@ -11,7 +11,7 @@ config.rawError = true
   stateFactory: true,
   namespaced: true,
 })
-export default class ScopesModule extends VuexModule {
+export default class extends VuexModule {
   scopes: Scope[]
 
   @Mutation

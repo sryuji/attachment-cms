@@ -92,13 +92,9 @@ module.exports = {
   purge: [
     `components/**/*.{vue,js}`,
     `layouts/**/*.vue`,
-    `middleware/**/*.{js,ts}`,
-    `models/**/*.{js,ts}`,
     `pages/**/*.vue`,
     `plugins/**/*.{js,ts}`,
     `nuxt.config.{js,ts}`,
-    `store/**/*.{js,ts}`,
-    `test/**/*.{js,ts}`,
   ],
   darkMode: false, // or 'media' or 'class'
   mode: 'jit',

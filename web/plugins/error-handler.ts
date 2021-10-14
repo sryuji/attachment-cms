@@ -3,7 +3,7 @@ import { eventBus } from '~/utils/event-bus'
 
 function notify(err: Error) {
   // TODO: Sentry.captureException(error)
-  if (['localhost', '192.168'].find((s) => window && window.location && window.location.hostname.startsWith(s))) {
+  if (process.client && ['localhost', '192.168'].find((s) => window.location.hostname.startsWith(s))) {
     err && console.error(err)
   }
 }

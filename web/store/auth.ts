@@ -10,7 +10,7 @@ config.rawError = true
   stateFactory: true,
   namespaced: true,
 })
-export default class AuthModule extends VuexModule {
+export default class extends VuexModule {
   get isLoggedIn() {
     return !!accountsStore.account
   }

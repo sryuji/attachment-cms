@@ -30,21 +30,17 @@
 </template>
 
 <script lang="ts">
-import { Component, namespace, Vue } from 'nuxt-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import { authStore } from '~/store'
 
-const authModule = namespace('auth')
-
-@Component({})
+@Component({
+  computed: {},
+})
 export default class Navbar extends Vue {
-  beforeMount() {
-    authStore.checkAuth()
-  }
+  beforeMount() {}
 
-  @authModule.Getter('isLoggedIn') isLoggedIn: boolean
-
-  signOut() {
-    authStore.signOut()
+  get isLoggedIn() {
+    return authStore.isLoggedIn
   }
 }
 </script>

@@ -30,7 +30,7 @@ export default class AuthSignInPageComponent extends Vue {
       this.$router.replace({ path: flow.destination, params: flow.params })
       deleteModel(AUTH_FLOW_STORAGE_KEY)
     } else {
-      this.$router.replace({ path: 'scopes' })
+      this.$router.replace({ name: 'scopes' })
     }
   }
 }
