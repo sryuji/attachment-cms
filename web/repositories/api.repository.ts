@@ -26,9 +26,9 @@ export default abstract class ApiRepository {
     this.app = app
   }
 
-  protected get(url: string, config?: AxiosRequestConfig) {
+  protected get(url: string, config?: AxiosRequestConfig, options: HandleErrorOptions = { attemptRefreshToken: true }) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.get(url, config), { attemptRefreshToken: true })
+    return this.wrapRequest(this.axios.get(url, config), options)
   }
 
   protected post(url: string, data: any, config?: AxiosRequestConfig) {
@@ -106,7 +106,7 @@ export default abstract class ApiRepository {
 
   private async handleUnauthorizedError(error: AxiosError, baseData: any, options: HandleErrorOptions): Promise<any> {
     const attemptRefreshToken = options && options.attemptRefreshToken
-    if (!attemptRefreshToken) throw new UnauthorizedError({ baseData, baseError: error })
+    if (process.server || !attemptRefreshToken) throw new UnauthorizedError({ baseData, baseError: error })
 
     const config = error.config
     await this.app.$api.auth.refreshAccessToken().catch((err) => {

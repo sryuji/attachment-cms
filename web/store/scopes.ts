@@ -12,7 +12,7 @@ config.rawError = true
   namespaced: true,
 })
 export default class extends VuexModule {
-  scopes: Scope[]
+  scopes: Scope[] = []
 
   @Mutation
   setScopes(scopes: Scope[]) {

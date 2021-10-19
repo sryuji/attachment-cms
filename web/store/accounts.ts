@@ -11,7 +11,7 @@ config.rawError = true
   namespaced: true,
 })
 export default class extends VuexModule {
-  private _account: Account = null // NOTE: null初期化せずundefinedのままだと、reactive機能が動かないので注意
+  private _account: Partial<Account> = {} // NOTE: 初期化せずundefinedのままだと、reactive機能が動かないので注意
 
   get account() {
     return this._account

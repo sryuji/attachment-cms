@@ -21,7 +21,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
     }
   },
 })
-export default class AuthSignInPageComponent extends Vue {
+export default class extends Vue {
   mounted() {}
   moveGoogleAuthPage(): void {
     window.location.href = `${this.$config.API_BASE_URL}/auth/google`

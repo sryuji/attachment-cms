@@ -13,7 +13,7 @@
             <span> Other </span>
           </li>
           <li>
-            <nuxt-link :to="{ name: 'account' }"> Account </nuxt-link>
+            <nuxt-link :to="{ name: 'accounts' }"> Account </nuxt-link>
           </li>
           <li>
             <a href="" @click.prevent.stop="signOut"> Sign Out </a>
@@ -31,11 +31,13 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { authStore } from '~/store'
+import { authStore, accountsStore } from '~/store'
 
 @Component({})
 export default class SideMenuComponent extends Vue {
-  beforeMount() {}
+  async beforeMount() {
+    await accountsStore.getAccount()
+  }
 
   get isLoggedIn(): boolean {
     return authStore.isLoggedIn

@@ -5,7 +5,7 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { AUTH_FLOW_STORAGE_KEY, NotificationType } from '~/services/constants'
-import { RedirectError } from '~/utils/errors'
+import { RedirectError, ServerValidationError } from '~/utils/errors'
 import { eventBus } from '~/utils/event-bus'
 import { saveProperty } from '~/utils/local-storage'
 
@@ -23,9 +23,15 @@ export default class NotificationComponent extends Vue {
 
   handleError(err: Error): void | Promise<void> {
     const name = err ? err.name : null
+    let message
     switch (name) {
       case 'ServerValidationError':
-        return this.showMessages([], 'warning')
+        if (err instanceof ServerValidationError) {
+          message = err.baseData.messages
+        } else {
+          message = 'サーバーにて入力エラーが検出されました。入力内容を再確認してください'
+        }
+        return this.showMessages(message, 'warning')
       case 'BadRequestError':
         return this.showMessages('権限がないため表示できません。', 'warning')
       case 'ForbiddenError':
@@ -38,13 +44,15 @@ export default class NotificationComponent extends Vue {
         if (err instanceof RedirectError) this.redirectPage(err.baseData)
         return
       case 'ClientValidationError':
-        return this.showMessages([], 'warning')
+        return this.showMessages(err.message || '入力エラーが検出されました。入力内容を再確認してください', 'warning')
       case 'NetworkError':
         return this.showMessages('通信に失敗しました。 通信状況を確認した後、再実行してください。', 'error')
       case 'TimeoutError':
         return this.showMessages('通信がタイムアウトしました。通信状況を確認した後、再実行してください。', 'error')
+      case 'ServerError':
+        return this.showMessages('サーバーでシステムエラーが発生しました。', 'error')
       default:
-        return this.showMessages('システムエラーが発生しました。', 'error')
+        return this.showMessages('エラーが発生しました。', 'error')
     }
   }
 
@@ -92,7 +100,7 @@ export default class NotificationComponent extends Vue {
 .toasted-container {
   .toasted {
     &.outline {
-      &.warning {
+      &.warning.info {
         border-color: #f90;
         color: #f90;
       }

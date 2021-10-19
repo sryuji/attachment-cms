@@ -11,7 +11,7 @@
         >
       </div>
       <div v-else class="flex items-stretch">
-        <nuxt-link :to="{ name: 'account' }" class="btn btn-ghost btn-sm rounded-btn normal-case"> Account </nuxt-link>
+        <nuxt-link :to="{ name: 'accounts' }" class="btn btn-ghost btn-sm rounded-btn normal-case"> Account </nuxt-link>
       </div>
     </div>
     <div class="flex-none">
