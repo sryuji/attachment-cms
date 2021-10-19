@@ -11,15 +11,11 @@ config.rawError = true
   namespaced: true,
 })
 export default class extends VuexModule {
-  private _account: Partial<Account> = {} // NOTE: 初期化せずundefinedのままだと、reactive機能が動かないので注意
-
-  get account() {
-    return this._account
-  }
+  account: Partial<Account> = {} // NOTE: 初期化せずundefinedのままだと、reactive機能が動かないので注意
 
   @Mutation
   setAccount(account: Account) {
-    this._account = account
+    this.account = account
   }
 
   @Action

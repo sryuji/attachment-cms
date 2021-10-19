@@ -55,7 +55,7 @@ const accountsModule = namespace('accounts')
 })
 export default class AccountPage extends Vue {
   form: AccountDto = { lastName: '', firstName: '' }
-  @accountsModule.Getter('account') account!: Account
+  @accountsModule.State('account') account: Account
 
   validator: FormValidationCordinator
 

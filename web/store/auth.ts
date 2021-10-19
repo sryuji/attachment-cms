@@ -28,7 +28,7 @@ export default class extends VuexModule {
 
   @Action
   async signOut(): Promise<void> {
-    if (this.isLoggedIn) return
+    if (!this.isLoggedIn) return
     await $api.auth.signOut()
     accountsStore.setAccount(null)
   }

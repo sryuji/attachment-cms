@@ -6,8 +6,8 @@
           <li class="text-lg font-bold">
             <span> Scopes </span>
           </li>
-          <li>
-            <nuxt-link :to="{ name: 'scopes' }"> Scopes </nuxt-link>
+          <li v-for="scope in scopes" :key="scope.id">
+            <nuxt-link :to="{ name: 'scopes-id', params: { id: scope.id } }">{{ scope.name }}</nuxt-link>
           </li>
           <li class="text-lg font-bold">
             <span> Other </span>
@@ -30,13 +30,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
-import { authStore, accountsStore } from '~/store'
+import { Component, namespace, Vue } from 'nuxt-property-decorator'
+import { authStore, scopesStore } from '~/store'
+import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
+
+const scopesModule = namespace('scopes')
 
 @Component({})
 export default class SideMenuComponent extends Vue {
+  @scopesModule.State('scopes') scopes: Scope[]
+
   async beforeMount() {
-    await accountsStore.getAccount()
+    await scopesStore.getScopes({ page: 1 })
   }
 
   get isLoggedIn(): boolean {

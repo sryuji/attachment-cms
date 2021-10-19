@@ -18,7 +18,6 @@ export class FormValidationCordinator {
   }
 
   initializeValidationEvent() {
-    console.log('initializeValidationEvent')
     this.validators = {}
     eventBus.initializeEvent('register-form-validator', this.registerValidatorHandler)
     eventBus.initializeEvent('unregister-form-validator', this.unregisterValidatorHandler)

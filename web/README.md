@@ -72,3 +72,14 @@ $ yarn test
 ```
 $ yarn lint
 ```
+
+## Technique
+
+### nuxt が生成するルーティング名が解らなくなった場合
+
+Vue Devtool の Routing > Routes で全ルート確認できる
+
+### nuxt pages で使える特殊命名文字
+
+`_` ファイル/フォルダ名の頭文字に付けると、parameter を mapping できる. `_id`で`:id` route を Mapping
+`-` ファイルの頭文字に付けると、ルーティング対象外. ただし、フォルダは対象外
