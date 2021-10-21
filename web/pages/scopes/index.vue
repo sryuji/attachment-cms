@@ -2,9 +2,11 @@
   <div class="container mx-auto">
     <h1>Scopes</h1>
     <div v-for="scope in scopes" :key="scope.id" class="card shadow-md m-3">
-      <div class="card-body text-center">
-        <nuxt-link class="text-xl" :to="{ name: 'scopes-id', params: { id: scope.id } }">{{ scope.name }}</nuxt-link>
-      </div>
+      <nuxt-link class="text-xl" :to="{ name: 'scopes-id', params: { id: scope.id } }">
+        <div class="card-body text-center">
+          {{ scope.name }}
+        </div>
+      </nuxt-link>
     </div>
   </div>
 </template>
