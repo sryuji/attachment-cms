@@ -33,8 +33,6 @@ nuxt.js の標準的なフォルダ構成に加えて追加されたファイル
     - 基本的に Component に記載するため、Page Component 間で共用したい style が在る場合にだけ利用してください
 - components
   - ページ間で共用する Component class のみ、置いてください
-- models
-  - データの model class/interface を置いてください
 - pages
   - Page Component で読み込まれるページ固有の Component は、`components`フォルダを切ってその配下に置いてください
 - repositories
@@ -47,6 +45,9 @@ nuxt.js の標準的なフォルダ構成に加えて追加されたファイル
   - 独自 module の d.ts を配置
   - attachment-cms-server プロジェクトで生成した entity, dto, form, serializer の d.ts ファイルをコピーし配置
     - **`@Exclude` で response から除去された property も d.ts には含まれているので注意**
+- store
+  - 各 module を class として定義している。クラスを分割したい場合、用途別に TypeScript の mixin を用いて分割すること
+    https://js.studio-kingdom.com/typescript/handbook/mixins
 - utils
   - 汎用的な function / class を置いてください
 
@@ -73,7 +74,7 @@ $ yarn test
 $ yarn lint
 ```
 
-## Technique
+## 忘れそうになる vue.js / vuex との差異
 
 ### nuxt が生成するルーティング名が解らなくなった場合
 
@@ -83,3 +84,27 @@ Vue Devtool の Routing > Routes で全ルート確認できる
 
 `_` ファイル/フォルダ名の頭文字に付けると、parameter を mapping できる. `_id`で`:id` route を Mapping
 `-` ファイルの頭文字に付けると、ルーティング対象外. ただし、フォルダは対象外
+
+### nuxt で props: true が使えない
+
+サポート対象外
+https://github.com/nuxt/nuxt.js/issues/8669#issuecomment-764006062
+
+`$router.push`を直接使う方法はあるが、それなら query や vuex を使う方が推奨されている
+
+### nuxt lifecycle
+
+- middleware
+  - SSR モードでは server で処理され、client では処理されない
+- asyncData / fetch
+  - SSR / Client 両方で処理. static で処理なし
+  - fetch は、store を利用するケース
+  - asyncData は、store 未利用で return 値で data()に値をマージしたいケース
+  - fetch は引数なしを推奨. fetch(context)は Deprecated.
+- beforeCreate /created
+  - SSR / Client の両方で処理. static で処理あり
+- beforeMount / mounted
+  - client のみの処理
+  - 要認証な処理はここで処理させる事になる？？？
+
+参考: https://qiita.com/too/items/e8ffcf7de7d48dcb9a9b

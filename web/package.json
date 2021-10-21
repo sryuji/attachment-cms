@@ -41,6 +41,7 @@
     "@types/lodash": "^4.14.175",
     "@types/uuid": "^8.3.1",
     "@types/validatorjs": "^3.15.0",
+    "@types/vue-router": "^2.0.0",
     "@vue/test-utils": "^1.2.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^27.0.5",

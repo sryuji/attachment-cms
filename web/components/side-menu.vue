@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { Component, namespace, Vue } from 'nuxt-property-decorator'
-import { authStore, scopesStore } from '~/store'
+import { authStore } from '~/store'
 import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
 
 const scopesModule = namespace('scopes')
@@ -40,16 +40,13 @@ const scopesModule = namespace('scopes')
 export default class SideMenuComponent extends Vue {
   @scopesModule.State('scopes') scopes: Scope[]
 
-  async beforeMount() {
-    await scopesStore.getScopes({ page: 1 })
-  }
-
   get isLoggedIn(): boolean {
     return authStore.isLoggedIn
   }
 
-  signOut() {
-    authStore.signOut()
+  async signOut() {
+    await authStore.signOut()
+    this.$router.replace({ path: '/' })
   }
 }
 </script>

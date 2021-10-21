@@ -1,20 +1,16 @@
 <template>
   <div class="container mx-auto">
-    <template v-if="scope">
-      <h1>{{ scope.name }}</h1>
-      <span>{{ scope.domain }}</span>
-      <span>{{ scope.testDomain }}</span>
-      <p>{{ scope.description }}</p>
-      <div v-for="release in releases" :key="release.id">
-        <span>{{ release.releasedAt | formatDatetime }}</span>
+    <h1>Scopes</h1>
+    <div v-for="scope in scopes" :key="scope.id" class="card shadow-md m-3">
+      <div class="card-body text-center">
+        <nuxt-link class="text-xl" :to="{ name: 'scopes-id', params: { id: scope.id } }">{{ scope.name }}</nuxt-link>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, namespace, Prop, Vue } from 'nuxt-property-decorator'
-import { mapGetters } from 'vuex'
+import { Component, namespace, Vue } from 'nuxt-property-decorator'
 import { scopesStore } from '~/store'
 import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
 
@@ -26,20 +22,12 @@ const scopesModule = namespace('scopes')
       title: 'Scopes',
     }
   },
-  computed: {
-    ...mapGetters('accounts', ['account']),
-  },
 })
-export default class ScopePageComponent extends Vue {
-  @Prop() scopeId!: number
-  @scopesModule.Getter('scopes') scopes!: Scope[]
+export default class ScopeListPage extends Vue {
+  @scopesModule.State('scopes') scopes: Scope[]
 
   async beforeMount() {
     await scopesStore.getScopes({ page: 1 })
-  }
-
-  get scope() {
-    return this.scopes && this.scopes.find((r) => r.id === this.scopeId)
   }
 }
 </script>

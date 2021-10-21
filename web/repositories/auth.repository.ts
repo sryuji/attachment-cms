@@ -1,18 +1,21 @@
+import Cookies from 'universal-cookie'
 import ApiRepository from './api.repository'
-import { deleteModel, saveProperty } from '~/utils/local-storage'
 import { UnauthorizedError } from '~/utils/errors'
-import { JWT_STORAGE_KEY } from '~/services/constants'
+import { ACCESS_TOKEN_COOKIE_KEY } from '~/services/constants'
+import { AccessTokenDto, generateAccessTokenCookie } from '~/services/authentication.helper'
 
 export class AuthRepository extends ApiRepository {
-  async refreshAccessToken(): Promise<Record<'accessToken', string>> {
+  async refreshAccessToken(): Promise<AccessTokenDto> {
     const data = await this.get('/auth/refresh', {}, { attemptRefreshToken: false })
     if (!data || !data.accessToken) throw new UnauthorizedError()
-    saveProperty(JWT_STORAGE_KEY, 'accessToken', data.accessToken)
+
+    generateAccessTokenCookie(data)
     return data
   }
 
   async signOut(): Promise<void> {
-    deleteModel(JWT_STORAGE_KEY)
+    const cookies = new Cookies()
+    cookies.remove(ACCESS_TOKEN_COOKIE_KEY)
     await this.del('/auth')
   }
 }

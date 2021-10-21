@@ -11,11 +11,12 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { AUTH_FLOW_STORAGE_KEY } from '~/services/constants'
+import { REDIRECT_TO } from '~/services/constants'
 import { deleteModel, fetchModel } from '~/utils/local-storage'
-import { accountsStore } from '~/store'
+import { authStore } from '~/store'
 
 @Component({
+  meta: { auth: false },
   head() {
     return {}
   },
@@ -23,12 +24,12 @@ import { accountsStore } from '~/store'
 export default class AuthSignInPageComponent extends Vue {
   async beforeMount(): Promise<void> {
     // NOTE: 認証フローは、 // sign-in.vue -> /auth/googole -> google認証 -> /auth/google/redirect -> (refreshToken cookie)  -> callback.vue -> GET accessToken with refreshToken cookie
-    await this.$api.auth.refreshAccessToken()
-    await accountsStore.getAccount()
-    const flow = fetchModel(AUTH_FLOW_STORAGE_KEY) as any
-    if (flow && flow.destination) {
-      this.$router.replace({ path: flow.destination, params: flow.params })
-      deleteModel(AUTH_FLOW_STORAGE_KEY)
+    await authStore.refreshAccessToken()
+
+    const route = fetchModel(REDIRECT_TO) as any
+    if (route && (route.path || route.name)) {
+      this.$router.replace(route)
+      deleteModel(REDIRECT_TO)
     } else {
       this.$router.replace({ name: 'scopes' })
     }

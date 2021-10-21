@@ -4,10 +4,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { AUTH_FLOW_STORAGE_KEY, NotificationType } from '~/services/constants'
+import { REDIRECT_TO, NotificationType } from '~/services/constants'
 import { RedirectError, ServerValidationError } from '~/utils/errors'
 import { eventBus } from '~/utils/event-bus'
-import { saveProperty } from '~/utils/local-storage'
+import { saveModel } from '~/utils/local-storage'
 
 @Component({})
 export default class NotificationComponent extends Vue {
@@ -85,7 +85,7 @@ export default class NotificationComponent extends Vue {
 
   handleUnauthorizedError(): void {
     this.showMessages('ログインしてください。', 'warning')
-    saveProperty(AUTH_FLOW_STORAGE_KEY, 'destination', this.$route)
+    saveModel(REDIRECT_TO, this.$route as any)
     this.$router.replace({ name: 'auth-sign-in' }).catch((err) => err)
   }
 

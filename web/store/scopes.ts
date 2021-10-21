@@ -20,9 +20,18 @@ export default class extends VuexModule {
   }
 
   @Mutation
+  clearScopes() {
+    this.scopes = []
+  }
+
+  @Mutation
   setScope(data: Scope) {
     const scope = this.scopes.find((r) => r.id === data.id)
     Object.assign(scope, data)
+  }
+
+  get hasScopes() {
+    return this.scopes.length > 0
   }
 
   @Action

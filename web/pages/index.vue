@@ -42,6 +42,7 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({
+  meta: { auth: false },
   head() {
     return {}
   },

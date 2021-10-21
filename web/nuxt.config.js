@@ -86,7 +86,9 @@ export default {
   },
 
   // https://nuxtjs.org/docs/configuration-glossary/configuration-router/
-  router: {},
+  router: {
+    middleware: ['auth'],
+  },
 
   // // https://tailwindcss.nuxtjs.org/options
   tailwindcss: {

@@ -1,7 +1,6 @@
 import { NuxtAppOptions } from '@nuxt/types'
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { AxiosRequestConfig, AxiosError } from 'axios'
-import { JWT_STORAGE_KEY } from '~/services/constants'
 import {
   BadRequestError,
   ForbiddenError,
@@ -13,7 +12,7 @@ import {
   TimeoutError,
   UnauthorizedError,
 } from '~/utils/errors'
-import { fetchProperty } from '~/utils/local-storage'
+import { authStore } from '~/store'
 
 type HandleErrorOptions = { attemptRefreshToken?: boolean }
 
@@ -51,12 +50,15 @@ export default abstract class ApiRepository {
     return this.wrapRequest(this.axios.request(config))
   }
 
-  private setDefaultConfig(config: AxiosRequestConfig) {
+  private setDefaultConfig(config: AxiosRequestConfig, options?: { force: boolean }) {
     config = config || {}
+    const force = options && options.force
     if (process.client) {
       config.headers = config.headers || {}
-      const authToken = fetchProperty(JWT_STORAGE_KEY, 'accessToken')
-      if (authToken && !config.headers.Authorization) config.headers.Authorization = `Bearer ${authToken}`
+      const authToken = authStore.accessToken
+      if (authToken && (force || !config.headers.Authorization)) {
+        config.headers.Authorization = `Bearer ${authToken}`
+      }
     }
     return config
   }
@@ -109,11 +111,11 @@ export default abstract class ApiRepository {
     if (process.server || !attemptRefreshToken) throw new UnauthorizedError({ baseData, baseError: error })
 
     const config = error.config
-    await this.app.$api.auth.refreshAccessToken().catch((err) => {
+    await authStore.refreshAccessToken().catch((err) => {
       throw new UnauthorizedError({ baseData, baseError: err })
     })
 
-    this.setDefaultConfig(config)
+    this.setDefaultConfig(config, { force: true })
     return this.request(config)
   }
 }
