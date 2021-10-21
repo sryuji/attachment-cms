@@ -46,7 +46,8 @@ export default class SideMenuComponent extends Vue {
 
   async signOut() {
     await authStore.signOut()
-    this.$router.replace({ path: '/' })
+    const rootName = 'index'
+    if (this.$route.name !== rootName) this.$router.replace({ name: rootName })
   }
 }
 </script>
