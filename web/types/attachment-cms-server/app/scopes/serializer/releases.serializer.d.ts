@@ -1,7 +1,5 @@
-import { Pager } from '../../base/pager';
 import { Release } from '../../../db/entity/release.entity';
-import { BaseSerializer } from '../../base/base.serializer';
-export declare class ReleasesSerializer extends BaseSerializer {
-    readonly releases: Release[];
-    readonly pager?: Pager;
+import { CollectionSerializer } from '../../base/collection.serializer';
+export declare class ReleasesSerializer extends CollectionSerializer {
+    releases: Release[];
 }

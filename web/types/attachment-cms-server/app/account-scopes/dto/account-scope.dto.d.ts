@@ -1,5 +1,5 @@
 export declare class AccountScopeDto {
-    readonly email: string;
+    email: string;
     accountId: number;
-    readonly scopeId: number;
+    scopeId: number;
 }

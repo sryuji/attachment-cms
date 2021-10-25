@@ -4,6 +4,7 @@ import { ContentHistory } from './content-history.entity';
 export declare class Release extends ApplicationEntity<Release> {
     scopeId: number;
     scope: Scope;
+    name: string;
     limitedReleaseToken: string;
     limitedReleaseTokenIssuedAt: Date;
     releasedAt: Date;

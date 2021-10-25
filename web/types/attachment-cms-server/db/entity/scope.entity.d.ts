@@ -6,7 +6,6 @@ export declare class Scope extends ApplicationEntity<Scope> {
     private _domain;
     get domain(): string;
     set domain(v: string);
-    testDomain: string;
     description: string;
     token: string;
     releases: Release[];
