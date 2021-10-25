@@ -43,8 +43,9 @@ nuxt.js の標準的なフォルダ構成に加えて追加されたファイル
   - データやルールに関するビジネスロジックを持つ function / class を置いてください
 - types
   - 独自 module の d.ts を配置
-  - attachment-cms-server プロジェクトで生成した entity, dto, form, serializer の d.ts ファイルをコピーし配置
-    - **`@Exclude` で response から除去された property も d.ts には含まれているので注意**
+  - attachment-cms-server プロジェクトで`dist/types/src`に生成した entity, dto, form, serializer の d.ts ファイルをコピーし配置
+  - ただし、**`@Exclude` により response から除去された property も d.ts には含まれているので注意**
+    - これは Response でのみ発生し、response の json property が定義されているか否かで判断できる
 - store
   - 各 module を class として定義している。クラスを分割したい場合、用途別に TypeScript の mixin を用いて分割すること
     https://js.studio-kingdom.com/typescript/handbook/mixins

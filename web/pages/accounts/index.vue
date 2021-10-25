@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-2">
+  <div class="container mx-auto">
     <h1>Account</h1>
     <div class="form-control max-w-xl">
       <label class="label">
@@ -18,9 +18,6 @@
           <span class="label-text">姓</span>
         </label>
         <input v-model="form.lastName" class="input input-bordered" type="text" />
-        <!-- <label class="label">
-          <a href="#" class="label-text-alt">Are you sure?</a>
-        </label> -->
       </div>
       <div class="form-control flex-auto max-w-sm">
         <label class="label">
@@ -34,14 +31,14 @@
 </template>
 
 <script lang="ts">
-import { Component, namespace, Vue } from 'nuxt-property-decorator'
+import { Component, namespace } from 'nuxt-property-decorator'
 import { accountsStore } from '~/store'
 import { AccountDto } from '~/types/attachment-cms-server/app/accounts/dto/account.dto'
 import { Account } from '~/types/attachment-cms-server/db/entity/account.entity'
 import { eventBus } from '~/utils/event-bus'
-import { convertDto } from '~/utils/object'
+import { convertToDto } from '~/utils/object'
 import FormValidation from '~/components/form-validation.vue'
-import { FormValidationCordinator } from '~/utils/form-validation-cordinator'
+import { Form } from '~/utils/form'
 
 const accountsModule = namespace('accounts')
 
@@ -53,33 +50,29 @@ const accountsModule = namespace('accounts')
   },
   components: { FormValidation },
 })
-export default class AccountPage extends Vue {
+export default class AccountPage extends Form {
   form: AccountDto = { lastName: '', firstName: '' }
   @accountsModule.State('account') account: Account
 
-  validator: FormValidationCordinator
-
-  created() {
-    this.validator = new FormValidationCordinator()
-    this.validator.initializeValidationEvent()
+  created(): void {
+    super.initializeForm()
   }
 
-  beforeDestroy() {
-    this.validator.finalizeValidationEvent()
+  beforeDestroy(): void {
+    super.finalizeForm()
   }
 
   async beforeMount() {
-    await accountsStore.getAccount()
+    await accountsStore.fetchAccount()
     this.resetForm()
   }
 
   resetForm() {
-    this.form = convertDto<AccountDto>(this.account, ['lastName', 'firstName'])
+    this.form = convertToDto<AccountDto>(this.account, ['lastName', 'firstName'])
   }
 
   async update() {
-    const valid = this.validator.validateAll()
-    if (!valid) return eventBus.notifyMessages('入力不備があります', 'warning')
+    if (!this.validateAll()) return
 
     await accountsStore.updateAccount({
       account: this.form,

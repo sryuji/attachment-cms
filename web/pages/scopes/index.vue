@@ -1,8 +1,8 @@
 <template>
   <div class="container mx-auto">
-    <h1>Scopes</h1>
+    <h1>Scope List</h1>
     <div v-for="scope in scopes" :key="scope.id" class="card shadow-md m-3">
-      <nuxt-link class="text-xl" :to="{ name: 'scopes-id', params: { id: scope.id } }">
+      <nuxt-link class="text-xl" :to="{ path: `scopes/${scope.id}/releases/` }">
         <div class="card-body text-center">
           {{ scope.name }}
         </div>
@@ -29,7 +29,8 @@ export default class ScopeListPage extends Vue {
   @scopesModule.State('scopes') scopes: Scope[]
 
   async beforeMount() {
-    await scopesStore.getScopes({ page: 1 })
+    await scopesStore.fetchScopes({})
+    if (!scopesStore.hasScopes) this.$router.replace({ name: 'scopes-new' })
   }
 }
 </script>

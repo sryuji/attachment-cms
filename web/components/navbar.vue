@@ -2,7 +2,7 @@
   <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
     <div class="flex-1 px-2 mx-2">
       <span> </span>
-      <nuxt-link :to="{ name: 'index' }" class="text-lg font-bold"> Attachment CMS</nuxt-link>
+      <nuxt-link :to="{ name: 'index' }" class="text-lg font-bold"> attachment CMS</nuxt-link>
     </div>
     <div class="flex-none hidden px-2 mx-2 lg:flex">
       <div v-if="!isLoggedIn" class="flex items-stretch">

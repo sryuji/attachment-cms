@@ -14,7 +14,8 @@ import {
 } from '~/utils/errors'
 import { authStore } from '~/store'
 
-type HandleErrorOptions = { attemptRefreshToken?: boolean }
+export type HandleErrorOptions = { attemptRefreshToken?: boolean }
+export type FindAllRequestParams = { page?: number; per?: number }
 
 export default abstract class ApiRepository {
   private axios: NuxtAxiosInstance
@@ -30,24 +31,34 @@ export default abstract class ApiRepository {
     return this.wrapRequest(this.axios.get(url, config), options)
   }
 
-  protected post(url: string, data: any, config?: AxiosRequestConfig) {
+  protected post(
+    url: string,
+    data: any,
+    config?: AxiosRequestConfig,
+    options: HandleErrorOptions = { attemptRefreshToken: true }
+  ) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.post(url, data, config))
+    return this.wrapRequest(this.axios.post(url, data, config), options)
   }
 
-  protected patch(url: string, data: any, config?: AxiosRequestConfig) {
+  protected patch(
+    url: string,
+    data: any,
+    config?: AxiosRequestConfig,
+    options: HandleErrorOptions = { attemptRefreshToken: true }
+  ) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.patch(url, data, config))
+    return this.wrapRequest(this.axios.patch(url, data, config), options)
   }
 
-  protected del(url: string, config?: AxiosRequestConfig) {
+  protected del(url: string, config?: AxiosRequestConfig, options: HandleErrorOptions = { attemptRefreshToken: true }) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.delete(url, config))
+    return this.wrapRequest(this.axios.delete(url, config), options)
   }
 
-  protected request(config: AxiosRequestConfig) {
+  protected request(config: AxiosRequestConfig, options: HandleErrorOptions = { attemptRefreshToken: true }) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.request(config))
+    return this.wrapRequest(this.axios.request(config), options)
   }
 
   private setDefaultConfig(config: AxiosRequestConfig, options?: { force: boolean }) {

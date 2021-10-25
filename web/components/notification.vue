@@ -26,11 +26,8 @@ export default class NotificationComponent extends Vue {
     let message
     switch (name) {
       case 'ServerValidationError':
-        if (err instanceof ServerValidationError) {
-          message = err.baseData.messages
-        } else {
-          message = 'サーバーにて入力エラーが検出されました。入力内容を再確認してください'
-        }
+        if (err instanceof ServerValidationError) message = err.baseData.message
+        if (!message) message = 'サーバーにて入力エラーが検出されました。入力内容を再確認してください'
         return this.showMessages(message, 'warning')
       case 'BadRequestError':
         return this.showMessages('権限がないため表示できません。', 'warning')

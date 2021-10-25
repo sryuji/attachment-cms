@@ -59,9 +59,9 @@ export default class extends VuexModule {
   }
 
   @Action
-  fetchRequiredDataOnLoggedIn(): Promise<void> {
+  async fetchRequiredDataOnLoggedIn(): Promise<void> {
     if (scopesStore.hasScopes) return Promise.resolve()
-    return scopesStore.getScopes({ page: 1 })
+    await scopesStore.fetchScopes({})
   }
 
   @Action

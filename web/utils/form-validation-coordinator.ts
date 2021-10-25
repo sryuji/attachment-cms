@@ -1,6 +1,6 @@
 import { eventBus } from '~/utils/event-bus'
 
-export class FormValidationCordinator {
+export class FormValidationCoordinator {
   validators: Record<string, Function>
 
   constructor() {

@@ -1,8 +1,8 @@
-import { FormValidationCordinator } from './form-validation-cordinator'
+import { FormValidationCoordinator } from './form-validation-coordinator'
 
-describe('FormValidationCordinator', () => {
+describe('FormValidationCoordinator', () => {
   describe('#initializeValidationEvent', () => {
-    const fvc = new FormValidationCordinator()
+    const fvc = new FormValidationCoordinator()
     fvc.initializeValidationEvent()
 
     test('initialize', () => {

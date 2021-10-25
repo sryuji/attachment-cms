@@ -19,7 +19,7 @@ export default class extends VuexModule {
   }
 
   @Action
-  async getAccount(): Promise<void> {
+  async fetchAccount(): Promise<void> {
     const data = await $api.accounts.findOne()
     this.setAccount(data.account)
   }
