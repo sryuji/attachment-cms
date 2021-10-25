@@ -9,7 +9,7 @@
           <li v-for="scope in scopes" :key="scope.id">
             <nuxt-link :to="{ path: `/scopes/${scope.id}/releases` }">{{ scope.name }}</nuxt-link>
           </li>
-          <li class="text-lg font-bold">
+          <li class="text-lg font-bold mt-5">
             <span> Others</span>
           </li>
           <li>
