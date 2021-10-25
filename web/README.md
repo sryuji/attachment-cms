@@ -75,11 +75,13 @@ $ yarn test
 $ yarn lint
 ```
 
-## 忘れそうになる vue.js / vuex との差異
+## ケーススタディ
 
-### nuxt が生成するルーティング名が解らなくなった場合
+主に nuxt 固有のケースについて記載し、vue.js, vuex の主たるノウハウは記載していません。
 
-Vue Devtool の Routing > Routes で全ルート確認できる
+### nuxt が生成するルーティングが解らなくなった場合
+
+Vue Devtool の Routing > Routes で全ルート確認できます。
 
 ### nuxt pages で使える特殊命名文字
 
@@ -109,3 +111,10 @@ https://github.com/nuxt/nuxt.js/issues/8669#issuecomment-764006062
   - 要認証な処理はここで処理させる事になる？？？
 
 参考: https://qiita.com/too/items/e8ffcf7de7d48dcb9a9b
+
+### vuex store にて、@Mutation から get accessor を this 経由で呼べない
+
+vuex の仕様. 同じ class 内での定義の場合、呼べそうに思うが、罠...
+同様に Mutation から Action も呼べません。
+
+共用したい場合、class の外に関数定義し、それを Getter と Mutation で共用してください。
