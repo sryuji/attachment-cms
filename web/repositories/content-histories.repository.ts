@@ -12,6 +12,7 @@ export class ContentHistoriesRepository extends ApiRepository {
   }
 
   findOne(id: number): Promise<ContentHistorySerializer> {
+    if (!id) throw new Error('Need id')
     return this.get(`/content-histories/${id}`)
   }
 
@@ -21,10 +22,12 @@ export class ContentHistoriesRepository extends ApiRepository {
 
   update(form: UpdateContentHistoryForm): Promise<ContentHistorySerializer> {
     const id = form.contentHistory.id
+    if (!id) throw new Error('Need id')
     return this.patch(`/content-histories/${id}`, form)
   }
 
   delete(id: number): Promise<void> {
+    if (!id) throw new Error('Need id')
     return this.del(`/content-histories/${id}`)
   }
 }

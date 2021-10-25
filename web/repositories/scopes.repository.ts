@@ -11,6 +11,7 @@ export class ScopesRepository extends ApiRepository {
   }
 
   findOne(id: number): Promise<ScopeSerializer> {
+    if (!id) throw new Error('Need id')
     return this.get(`/scopes/${id}`)
   }
 
@@ -20,10 +21,12 @@ export class ScopesRepository extends ApiRepository {
 
   update(form: ScopeForm): Promise<ScopeSerializer> {
     const id = form.scope.id
+    if (!id) throw new Error('Need id')
     return this.patch(`/scopes/${id}`, form)
   }
 
   delete(id: number): Promise<void> {
+    if (!id) throw new Error('Need id')
     return this.del(`/scopes/${id}`)
   }
 }

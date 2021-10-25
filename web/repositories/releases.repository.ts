@@ -15,6 +15,7 @@ export class ReleasesRepository extends ApiRepository {
   }
 
   findOne(id: number): Promise<ReleaseSerializer> {
+    if (!id) throw new Error('Need id')
     return this.get(`/releases/${id}`)
   }
 
@@ -24,15 +25,18 @@ export class ReleasesRepository extends ApiRepository {
 
   update(form: UpdateReleaseForm): Promise<ReleaseSerializer> {
     const id = form.release.id
+    if (!id) throw new Error('Need id')
     return this.patch(`/releases/${id}`, form)
   }
 
   publish(form: PublishReleaseForm): Promise<ReleaseSerializer> {
     const id = form.release.id
+    if (!id) throw new Error('Need id')
     return this.patch(`/releases/${id}/publish`, form)
   }
 
   delete(id: number): Promise<void> {
+    if (!id) throw new Error('Need id')
     return this.del(`/releases/${id}`)
   }
 }
