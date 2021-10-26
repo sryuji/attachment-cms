@@ -99,6 +99,8 @@ export default {
     config: {},
   },
 
+  loading: '~/components/loading.vue',
+
   // https://nuxtjs.org/docs/configuration-glossary/configuration-server/
   server: {
     port: 3001,
