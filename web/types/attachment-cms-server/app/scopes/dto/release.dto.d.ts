@@ -1,12 +1,13 @@
-import { BaseDto } from '../../base/base.dto';
-export declare class UpdateReleaseDto extends BaseDto {
+import { UpdatableDto } from '../../base/updatable.dto';
+export declare class UpdateReleaseDto extends UpdatableDto {
     name: string;
 }
-export declare class CreateReleaseDto extends UpdateReleaseDto {
+export declare class CreateReleaseDto {
+    name: string;
     scopeId: number;
     sourceReleaseId: number;
 }
-export declare class PublishReleaseDto extends BaseDto {
+export declare class PublishReleaseDto extends UpdatableDto {
     releasedAt: Date;
 }
 export declare class CreateReleaseForm {

@@ -1,5 +1,5 @@
-import { BaseDto } from '../../base/base.dto';
-export declare class ScopeDto extends BaseDto {
+export declare class ScopeDto {
+    id: number;
     name: string;
     domain: string;
     description: string;

@@ -1,10 +1,6 @@
-import { BaseDto } from '../../base/base.dto';
-export declare class UpdateContentHistoryDto extends BaseDto {
-    scopeId: number;
-    path: string;
-    selector: string;
-    content: string;
-    action: string;
+import { ContentHistoryDto } from './content-history.dto';
+export declare class UpdateContentHistoryDto extends ContentHistoryDto {
+    id?: number;
     inactive: boolean;
 }
 export declare class UpdateContentHistoryForm {

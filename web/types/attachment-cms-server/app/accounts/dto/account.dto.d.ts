@@ -1,5 +1,5 @@
-import { BaseDto } from '../../base/base.dto';
-export declare class AccountDto extends BaseDto {
+import { UpdatableDto } from '../../base/updatable.dto';
+export declare class AccountDto extends UpdatableDto {
     lastName: string;
     firstName: string;
 }
