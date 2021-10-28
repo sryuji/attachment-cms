@@ -30,6 +30,8 @@ export class FormValidationCoordinator {
   }
 
   validateAll(): boolean {
-    return Object.values(this.validators).every((validator) => validator())
+    // NOTE: 一度、mapをクッションさせて全てのvalidatorを実行させる
+    const validArray = Object.values(this.validators).map((validator) => validator())
+    return validArray.every((valid) => valid)
   }
 }
