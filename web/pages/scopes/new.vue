@@ -41,6 +41,7 @@ import { Form } from '~/utils/form'
 })
 export default class CreateScopePage extends Form {
   form: ScopeDto = {
+    id: null,
     name: '',
     domain: '',
     description: '',

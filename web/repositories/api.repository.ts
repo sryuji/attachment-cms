@@ -15,7 +15,6 @@ import {
 import { authStore } from '~/store'
 
 export type HandleErrorOptions = { attemptRefreshToken?: boolean }
-export type FindAllRequestParams = { page?: number; per?: number }
 
 export default abstract class ApiRepository {
   private axios: NuxtAxiosInstance

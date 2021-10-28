@@ -52,6 +52,8 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
+    // https://www.npmjs.com/package/@nuxtjs/fontawesome
+    '@nuxtjs/fontawesome',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -97,6 +99,12 @@ export default {
     exposeConfig: false,
     // tailwind.config.jsをoverrideするconfig
     config: {},
+  },
+
+  fontawesome: {
+    icons: {
+      solid: ['faCheckSquare', 'faBan'],
+    },
   },
 
   loading: '~/components/loading.vue',

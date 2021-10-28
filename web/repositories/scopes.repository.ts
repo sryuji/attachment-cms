@@ -1,12 +1,10 @@
-import ApiRepository, { FindAllRequestParams } from './api.repository'
+import ApiRepository from './api.repository'
 import { ScopeSerializer } from '~/types/attachment-cms-server/app/scopes/serializer/scope.serializer'
 import { ScopeForm } from '~/types/attachment-cms-server/app/scopes/dto/scope.dto'
 import { ScopesSerializer } from '~/types/attachment-cms-server/app/scopes/serializer/scopes.serializer'
 
 export class ScopesRepository extends ApiRepository {
-  findAll({ page, per }: FindAllRequestParams): Promise<ScopesSerializer> {
-    page = page || 1
-    per = per || 999
+  findAll({ page = 1, per = 999 }): Promise<ScopesSerializer> {
     return this.get(`/scopes`, { params: { page, per } })
   }
 

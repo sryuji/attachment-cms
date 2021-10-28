@@ -12,6 +12,8 @@
         <side-menu />
       </div>
     </div>
+
+    <confirmation />
   </div>
 </template>
 
@@ -20,10 +22,11 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import Notification from '~/components/notification.vue'
 import Navbar from '~/components/navbar.vue'
 import SideMenu from '~/components/side-menu.vue'
+import Confirmation from '~/components/confirmation.vue'
 import { authStore } from '~/store'
 import { UnauthorizedError } from '~/utils/errors'
 
-@Component({ components: { SideMenu, Navbar, Notification } })
+@Component({ components: { SideMenu, Navbar, Notification, Confirmation } })
 export default class DefaultLayout extends Vue {
   beforeMount() {
     const ignoreAuth = authStore.ignoreAuth

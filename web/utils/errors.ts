@@ -1,4 +1,4 @@
-type ConstructorOptions = {
+export type ConstructorOptions = {
   message?: string
   baseData?: any
   baseError?: Error

@@ -1,4 +1,4 @@
-import ApiRepository, { FindAllRequestParams } from './api.repository'
+import ApiRepository from './api.repository'
 import {
   CreateReleaseForm,
   PublishReleaseForm,
@@ -8,9 +8,7 @@ import { ReleaseSerializer } from '~/types/attachment-cms-server/app/scopes/seri
 import { ReleasesSerializer } from '~/types/attachment-cms-server/app/scopes/serializer/releases.serializer'
 
 export class ReleasesRepository extends ApiRepository {
-  findAll({ page, per }: FindAllRequestParams): Promise<ReleasesSerializer> {
-    page = page || 1
-    per = per || 20
+  findAll({ page = 1, per = 20 }): Promise<ReleasesSerializer> {
     return this.get(`/releases`, { params: { page, per } })
   }
 

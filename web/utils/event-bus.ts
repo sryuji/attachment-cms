@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import { NotificationType } from '~/services/constants'
+import { ConfirmationType, NotificationType } from '~/services/constants'
 
-type EventName = 'messages' | 'error' | 'register-form-validator' | 'unregister-form-validator'
+type EventName = 'messages' | 'error' | 'register-form-validator' | 'unregister-form-validator' | 'confirmation'
 /**
  * WARNING: Handlerをclass functionを受け渡すと、そのfunction内のthisがvue instanceになってしまう問題あり...() => {}形式で渡すように注意
  */
@@ -10,6 +10,7 @@ type EventHandler =
   | ((messages: string[] | string, type?: NotificationType, duration?: number) => void | Promise<void>)
   | ((validatorKey: string, validator: Function) => void | Promise<void>)
   | ((validatorKey: string) => void | Promise<void>)
+  | ((params: ConfirmationType, resolve: Function, reject: Function) => void | Promise<void>)
 
 class EventBus {
   private bus: Vue
@@ -42,6 +43,12 @@ class EventBus {
   unregisterFormValidator(validatorKey: string) {
     if (!validatorKey) throw new Error('Need validatorKey')
     this.bus.$emit('unregister-form-validator', validatorKey)
+  }
+
+  confirm(params: ConfirmationType): Promise<void> {
+    return new Promise((resolve: Function, reject: Function) => {
+      this.bus.$emit('confirmation', params, resolve, reject)
+    })
   }
 }
 const eventBus = new EventBus()

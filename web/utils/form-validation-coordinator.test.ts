@@ -10,7 +10,7 @@ describe('FormValidationCoordinator', () => {
     })
 
     test('when register-form-validator event', () => {
-      ;(fvc as any).registerValidator('test', () => {})
+      ;(fvc as any).registerValidatorHandler('test', () => {})
       expect((fvc as any).validators.test).toBeDefined()
     })
   })

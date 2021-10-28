@@ -51,7 +51,7 @@ const accountsModule = namespace('accounts')
   components: { FormValidation },
 })
 export default class AccountPage extends Form {
-  form: AccountDto = { lastName: '', firstName: '' }
+  form: AccountDto = { id: null, lastName: '', firstName: '' }
   @accountsModule.State('account') account: Account
 
   created(): void {
@@ -68,7 +68,7 @@ export default class AccountPage extends Form {
   }
 
   resetForm() {
-    this.form = convertToDto<AccountDto>(this.account, ['lastName', 'firstName'])
+    this.form = convertToDto<AccountDto>(this.account, ['id', 'lastName', 'firstName'])
   }
 
   async update() {

@@ -1,6 +1,5 @@
 import { Action, config, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import { CreateReleaseForm, UpdateReleaseForm } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
-import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-history.entity'
 import { Release } from '~/types/attachment-cms-server/db/entity/release.entity'
 import { $api } from '~/utils/api-accessor'
 
@@ -13,7 +12,6 @@ config.rawError = true
 })
 export default class extends VuexModule {
   releases: Release[] = []
-  conetentHistories: Record<number, ContentHistory[]> = {}
 
   get getRelease() {
     return (id: number) => this.releases.find((r) => r.id === id)
@@ -39,6 +37,13 @@ export default class extends VuexModule {
     }
   }
 
+  @Mutation
+  removeRelease(id: number): void {
+    const index = this.releases.findIndex((r) => r.id === id)
+    if (index < 0) return
+    this.releases.splice(index, 1)
+  }
+
   @Action
   async fetchReleases({ page = 1, per = 20 }): Promise<Release[]> {
     const data = await $api.releases.findAll({ page, per })
@@ -58,5 +63,11 @@ export default class extends VuexModule {
     const data = await $api.releases.update(form)
     this.setRelease(data.release)
     return data.release
+  }
+
+  @Action
+  async deleteRelease(id: number): Promise<void> {
+    await $api.releases.delete(id)
+    this.removeRelease(id)
   }
 }
