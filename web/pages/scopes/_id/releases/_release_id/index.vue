@@ -30,12 +30,14 @@
             <div class="flex-1 form-control">
               <h1>
                 <input
+                  v-if="!release.releasedAt"
                   v-model="updateReleaseDto.name"
                   type="text"
                   placeholder="Release name"
                   class="input font-semibold text-xl px-1"
                   @change="updateRelease"
                 />
+                <span v-else class="font-semibold text-xl">{{ release.name }}</span>
               </h1>
             </div>
             <div class="flex-initial">
@@ -52,17 +54,23 @@
                   <span class="ml-3">ページに対して、</span>
                 </div>
                 <div class="flex-col">
-                  <button class="btn btn-warning btn-sm" @click.prevent="openContentHistoryModal(content)">編集</button>
+                  <button
+                    v-if="!release.releasedAt"
+                    class="btn btn-warning btn-sm"
+                    @click.prevent="openContentHistoryModal(content)"
+                  >
+                    編集
+                  </button>
+                  <nuxt-link v-if="!scope.domain" :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm"
+                    >ドメインの登録してください</nuxt-link
+                  >
                   <a
-                    v-if="scope.domain"
+                    v-else-if="!release.releasedAt"
                     :href="`${scope.domain}${content.path}`"
                     target="_blank"
                     class="btn btn-sm ml-3"
                     :class="{ 'btn-disabled': !scope.domain || !content.path }"
                     >限定公開で確認</a
-                  >
-                  <nuxt-link v-else :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm"
-                    >ドメインの登録してください</nuxt-link
                   >
                 </div>
               </div>
@@ -78,14 +86,14 @@
               </div>
             </div>
 
-            <div class="my-6">
+            <div v-if="!release.releasedAt" class="my-6">
               <button class="btn btn-primary btn-block tracking-widest" @click.prevent="openContentHistoryModal(null)">
                 コンテンツの追加
               </button>
             </div>
           </div>
 
-          <div class="my-6">
+          <div v-if="!release.releasedAt" class="my-6">
             <h2 class="font-semibold text-xl">動作させるには？</h2>
             <div>
               <p class="">CMS機能を活用したい各htmlページのheadタグに下記のscriptタグを必ず設置してください。</p>
@@ -96,8 +104,11 @@
             </div>
           </div>
 
-          <div class="my-3 flex justify-between">
-            <nuxt-link class="btn btn-primary mr-3" :to="{ path: `/scopes/${scopeId}/releases/${releaseId}/publish` }"
+          <div v-if="!release.releasedAt" class="my-3 flex justify-between">
+            <nuxt-link
+              v-if="scope.domain"
+              class="btn btn-primary mr-3"
+              :to="{ path: `/scopes/${scopeId}/releases/${releaseId}/publish` }"
               >一般公開する</nuxt-link
             >
             <button class="btn btn-error" @click="deleteRelease">リリースを削除する</button>

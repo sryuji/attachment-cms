@@ -1,5 +1,9 @@
 import { Action, config, Module, Mutation, VuexModule } from 'vuex-module-decorators'
-import { CreateReleaseForm, UpdateReleaseForm } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
+import {
+  CreateReleaseForm,
+  PublishReleaseForm,
+  UpdateReleaseForm,
+} from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
 import { Release } from '~/types/attachment-cms-server/db/entity/release.entity'
 import { $api } from '~/utils/api-accessor'
 
@@ -69,5 +73,13 @@ export default class extends VuexModule {
   async deleteRelease(id: number): Promise<void> {
     await $api.releases.delete(id)
     this.removeRelease(id)
+  }
+
+  @Action
+  async publishRelease(form: PublishReleaseForm): Promise<Release> {
+    form.release.releasedAt = new Date()
+    const data = await $api.releases.publish(form)
+    this.setRelease(data.release)
+    return data.release
   }
 }
