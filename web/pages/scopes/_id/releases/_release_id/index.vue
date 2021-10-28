@@ -18,20 +18,9 @@
 
       <div v-if="!release || release.releasedAt" class="card shadow-md my-3">
         <div class="card-body">
-          <h1 class="text-xl font-semibold">Create next Release</h1>
-          <div class="form-control max-w-md">
-            <label class="label">
-              <div>
-                <span class="label-text">name</span>
-                <span class="badge badge-error">必須</span>
-              </div>
-            </label>
-            <input v-model="createReleaseDto.name" type="text" placeholder="" class="input input-bordered" />
-            <form-validation :value="createReleaseDto.name" rules="required" />
-          </div>
-          <div>
-            <button class="btn btn-primary my-3" @click="createRelease">登録</button>
-          </div>
+          <nuxt-link :to="{ path: `/scopes/${scope.id}/releases` }" class="btn btn-primary btn-block tracking-widest"
+            >次のリリースを作成</nuxt-link
+          >
         </div>
       </div>
 
@@ -108,7 +97,9 @@
           </div>
 
           <div class="my-3 flex justify-between">
-            <button class="btn btn-primary mr-3" @click="createRelease">一般公開する</button>
+            <nuxt-link class="btn btn-primary mr-3" :to="{ path: `/scopes/${scopeId}/releases/${releaseId}/publish` }"
+              >一般公開する</nuxt-link
+            >
             <button class="btn btn-error" @click="deleteRelease">リリースを削除する</button>
           </div>
         </div>
@@ -130,7 +121,7 @@ import { Component } from 'nuxt-property-decorator'
 import { NavigationGuardNext, Route } from 'vue-router/types'
 import ContentHistoryModal from './-content-history-modal.vue'
 import { scopesStore, releasesStore, contentHistoriesStore } from '~/store'
-import { CreateReleaseDto, UpdateReleaseDto } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
+import { UpdateReleaseDto } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
 import { Release } from '~/types/attachment-cms-server/db/entity/release.entity'
 import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
 import { Form } from '~/utils/form'
@@ -150,7 +141,6 @@ const attachmentScript = (token: string) => {
 })
 export default class ReleasePage extends Form {
   // State
-  createReleaseDto: CreateReleaseDto = { name: '', scopeId: null, sourceReleaseId: null }
   updateReleaseDto: UpdateReleaseDto = { id: null, name: '' }
   contentHistoryModal: Record<string, ContentHistory | boolean> = {
     open: false,
@@ -158,49 +148,18 @@ export default class ReleasePage extends Form {
   }
 
   // Lifecycle hooks
-  beforeRouteEnter(to: Route, from: Route, next: NavigationGuardNext) {
-    const releaseId = to.params.release_id
-    if (releaseId) return next()
-
-    const scopeId = parseInt(to.params.id)
-    const latestRelease = releasesStore.getLatestRelease(scopeId)
-    if (latestRelease) {
-      next({ path: `/scopes/${scopeId}/releases/${latestRelease.id}` })
-    } else {
-      next()
-    }
-  }
-
-  async beforeRouteUpdate(to: Route, from: Route, next: NavigationGuardNext) {
+  beforeRouteUpdate(to: Route, from: Route, next: NavigationGuardNext) {
     const releaseId = parseInt(to.params.release_id)
-
-    if (releaseId) {
-      this.fetchData(releaseId)
-      next()
-    } else {
-      const scopeId = parseInt(to.params.id)
-      let latestRelease = releasesStore.getLatestRelease(scopeId)
-      if (!latestRelease) await releasesStore.fetchReleases({})
-      latestRelease = releasesStore.getLatestRelease(scopeId)
-      if (latestRelease) {
-        next({ path: `/scopes/${scopeId}/releases/${latestRelease.id}` })
-      } else {
-        next()
-      }
-    }
+    this.fetchData(releaseId)
+    next()
   }
 
   created() {
     super.initializeForm()
   }
 
-  async beforeMount() {
-    if (this.releaseId) {
-      this.fetchData(this.releaseId)
-    } else {
-      !this.latestRelease && (await releasesStore.fetchReleases({}))
-      this.latestRelease && this.$router.replace({ path: `/scopes/${this.scopeId}/releases/${this.latestRelease.id}` })
-    }
+  beforeMount() {
+    this.fetchData(this.releaseId)
   }
 
   beforeDestroy() {
@@ -240,7 +199,7 @@ export default class ReleasePage extends Form {
   }
 
   get title(): string {
-    return this.release ? this.release.name : 'Create next Release'
+    return this.release && this.release.name
   }
 
   get attachmentCode(): string {
@@ -271,14 +230,6 @@ export default class ReleasePage extends Form {
 
   resetForm() {
     if (this.release) this.updateReleaseDto = convertToDtoWithForm(this.release, this.updateReleaseDto)
-  }
-
-  async createRelease() {
-    if (!this.validateAll()) return
-    this.createReleaseDto.scopeId = this.scopeId
-    this.createReleaseDto.sourceReleaseId = this.releaseId
-    const release = await releasesStore.createRelease({ release: this.createReleaseDto })
-    this.$router.replace({ path: `/scopes/${this.scopeId}/releases/${release.id}` })
   }
 
   async updateRelease() {
