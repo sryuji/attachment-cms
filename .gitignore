@@ -97,3 +97,5 @@ dist
 build
 tmp
 temp
+dist-ssr
+*.local
