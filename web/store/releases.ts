@@ -1,4 +1,6 @@
+import { isAfter } from 'date-fns'
 import { Action, config, Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import { Pager } from '~/types/attachment-cms-server/app/base/pager'
 import {
   CreateReleaseForm,
   PublishReleaseForm,
@@ -16,19 +18,41 @@ config.rawError = true
 })
 export default class extends VuexModule {
   releases: Release[] = []
+  latestRelease: Release = null
+  pager: Partial<Pager> = null
 
   get getRelease() {
     return (id: number) => this.releases.find((r) => r.id === id)
   }
 
-  get getLatestRelease() {
-    // NOTE: 最新が1件目の想定
-    return (scopeId: number) => this.releases.find((r) => r.scopeId === scopeId)
+  get page(): number {
+    if (!this.pager) return null
+    return this.pager.page
+  }
+
+  get offset(): number {
+    if (!this.page) return null
+    return (this.page - 1) * this.pager.per
+  }
+
+  get hasNextRelease(): boolean {
+    if (!this.page) return null
+    return this.pager.totalCount > this.offset + 1
+  }
+
+  get hasPrevRelease(): boolean {
+    if (!this.page) return null
+    return this.page > 1
   }
 
   @Mutation
-  setReleases(releases: Release[]) {
-    this.releases = releases
+  setLatestRelease(release: Release) {
+    this.latestRelease = release
+  }
+
+  @Mutation
+  setPager(pager: Partial<Pager>) {
+    this.pager = pager
   }
 
   @Mutation
@@ -36,8 +60,15 @@ export default class extends VuexModule {
     const record = this.releases.find((r) => r.id === data.id)
     if (record) {
       Object.assign(record, data)
-    } else {
+    } else if (!data.releasedAt) {
       this.releases.splice(0, 0, data)
+    } else {
+      const index = this.releases.findIndex((r) => r.releasedAt && isAfter(data.releasedAt, r.releasedAt))
+      if (index < 0) {
+        this.releases.push(data)
+      } else {
+        this.releases.splice(index, 0, data)
+      }
     }
   }
 
@@ -49,10 +80,26 @@ export default class extends VuexModule {
   }
 
   @Action
-  async fetchReleases({ page = 1, per = 20 }): Promise<Release[]> {
-    const data = await $api.releases.findAll({ page, per })
-    this.setReleases(data.releases)
+  async fetchReleases({ scopeId, page }: { scopeId: number; page: number }): Promise<Release[]> {
+    const data = await $api.releases.findAll({ scopeId, page, per: this.pager.per })
+    this.setPager(data.pager)
+    data.releases.forEach((r) => this.setRelease(r))
     return data.releases
+  }
+
+  @Action
+  async fetchLatestRelease(scopeId: number): Promise<Release> {
+    const data = await $api.releases.findLatest(scopeId)
+    this.setLatestRelease(data.release)
+    return data.release
+  }
+
+  @Action
+  async fetchRelease(id: number): Promise<Release> {
+    const data = await $api.releases.findOne(id)
+    this.setPager(data.pager)
+    this.setRelease(data.release)
+    return data.release
   }
 
   @Action

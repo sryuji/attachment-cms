@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import { Component } from 'nuxt-property-decorator'
-import { scopesStore, releasesStore, contentHistoriesStore } from '~/store'
+import { scopesStore, releasesStore } from '~/store'
 import { PublishReleaseDto } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
 import { Release } from '~/types/attachment-cms-server/db/entity/release.entity'
 import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
@@ -57,7 +57,6 @@ import { Form } from '~/utils/form'
 import FormValidation from '~/components/form-validation.vue'
 import { convertToDtoWithForm } from '~/utils/object'
 import { eventBus } from '~/utils/event-bus'
-import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-history.entity'
 import { ConfirmationCloseError } from '~/components/confirmation.vue'
 import { RouteCoordinator } from '~/utils/route-coordinator'
 
@@ -93,10 +92,6 @@ export default class PublishReleasePage extends Form {
     return scopesStore.getScope(this.scopeId)
   }
 
-  get contentHistories(): ContentHistory[] {
-    return contentHistoriesStore.contentHistories
-  }
-
   get releaseId(): number {
     return parseInt(this.$route.params.release_id)
   }
@@ -117,12 +112,8 @@ export default class PublishReleasePage extends Form {
   }
 
   async fetchData(releaseId: number) {
-    const release = releaseId && releasesStore.getRelease(releaseId)
-    const promise1: Promise<void | Release[]> = release ? Promise.resolve() : releasesStore.fetchReleases({})
-    const promise2: Promise<void | ContentHistory[]> = releaseId
-      ? contentHistoriesStore.fetchContentHistories(releaseId)
-      : Promise.resolve()
-    await Promise.all([promise1, promise2])
+    const release = releasesStore.getRelease(releaseId)
+    if (!release) await releasesStore.fetchRelease(releaseId)
     this.resetForm()
   }
 

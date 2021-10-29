@@ -16,7 +16,10 @@
         </div>
       </div>
 
-      <div v-if="!release || release.releasedAt" class="card shadow-md my-3">
+      <div
+        v-if="latestRelease && releaseId === latestRelease.id && latestRelease.releasedAt"
+        class="card shadow-md my-3"
+      >
         <div class="card-body">
           <nuxt-link :to="{ path: `/scopes/${scope.id}/releases` }" class="btn btn-primary btn-block tracking-widest"
             >次のリリースを作成</nuxt-link
@@ -24,6 +27,18 @@
         </div>
       </div>
 
+      <div class="flex justify-between mt-6">
+        <button v-if="hasPrevRelease" class="" @click="goPrevRelease">
+          <font-awesome-icon :icon="['fas', 'chevron-circle-left']" class="text-2xl" /><br />
+          <span>Prev</span>
+        </button>
+        <div v-else></div>
+        <button v-if="hasNextRelease" class="" @click="goNextRelease">
+          <font-awesome-icon :icon="['fas', 'chevron-circle-right']" class="text-2xl" /><br />
+          <span>Next</span>
+        </button>
+        <div v-else></div>
+      </div>
       <div v-if="release" class="card shadow-md my-3">
         <div class="card-body">
           <div class="flex">
@@ -128,7 +143,7 @@
 </template>
 
 <script lang="ts">
-import { Component } from 'nuxt-property-decorator'
+import { Component, namespace } from 'nuxt-property-decorator'
 import { NavigationGuardNext, Route } from 'vue-router/types'
 import ContentHistoryModal from './-content-history-modal.vue'
 import { scopesStore, releasesStore, contentHistoriesStore } from '~/store'
@@ -146,6 +161,7 @@ import { LABELS } from '~/services/labels'
 const attachmentScript = (token: string) => {
   return `&lt;script src=&quot;https://localhost:3001/lib/acms.js?token=${token}&quot;&gt;&lt;/script&gt;`
 }
+const releasesModule = namespace('releases')
 
 @Component({
   components: { FormValidation, ContentHistoryModal },
@@ -188,7 +204,7 @@ export default class ReleasePage extends Form {
   }
 
   get latestRelease(): Release {
-    return releasesStore.getLatestRelease(this.scopeId)
+    return releasesStore.latestRelease
   }
 
   get scope(): Scope {
@@ -222,6 +238,10 @@ export default class ReleasePage extends Form {
     return LABELS.contentHistory.action
   }
 
+  @releasesModule.Getter('hasNextRelease') hasNextRelease: boolean
+  @releasesModule.Getter('hasPrevRelease') hasPrevRelease: boolean
+  @releasesModule.Getter('page') page: number
+
   // methods
   head() {
     return {
@@ -231,7 +251,7 @@ export default class ReleasePage extends Form {
 
   async fetchData(releaseId: number) {
     const release = releaseId && releasesStore.getRelease(releaseId)
-    const promise1: Promise<void | Release[]> = release ? Promise.resolve() : releasesStore.fetchReleases({})
+    const promise1: Promise<void | Release> = release ? Promise.resolve() : releasesStore.fetchRelease(releaseId)
     const promise2: Promise<void | ContentHistory[]> = releaseId
       ? contentHistoriesStore.fetchContentHistories(releaseId)
       : Promise.resolve()
@@ -263,6 +283,18 @@ export default class ReleasePage extends Form {
   openContentHistoryModal(record: ContentHistory) {
     this.contentHistoryModal.record = record
     this.contentHistoryModal.open = true
+  }
+
+  async goNextRelease() {
+    const releases = await releasesStore.fetchReleases({ scopeId: this.scopeId, page: this.page + 1 })
+    const releaseId = releases[0].id
+    this.$router.push({ path: `/scopes/${this.scopeId}/releases/${releaseId}` })
+  }
+
+  async goPrevRelease() {
+    const releases = await releasesStore.fetchReleases({ scopeId: this.scopeId, page: this.page - 1 })
+    const releaseId = releases[0].id
+    this.$router.push({ path: `/scopes/${this.scopeId}/releases/${releaseId}` })
   }
 }
 </script>

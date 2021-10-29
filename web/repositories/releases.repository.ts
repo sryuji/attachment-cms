@@ -6,13 +6,19 @@ import {
 } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
 import { ReleaseSerializer } from '~/types/attachment-cms-server/app/scopes/serializer/release.serializer'
 import { ReleasesSerializer } from '~/types/attachment-cms-server/app/scopes/serializer/releases.serializer'
+import { ReleaseWithPagerSerializer } from '~/types/attachment-cms-server/app/scopes/serializer/release-with-pager.serializer'
 
 export class ReleasesRepository extends ApiRepository {
-  findAll({ page = 1, per = 20 }): Promise<ReleasesSerializer> {
-    return this.get(`/releases`, { params: { page, per } })
+  findAll({ scopeId, page = 1, per = 1 }: { scopeId: number; page: number; per: number }): Promise<ReleasesSerializer> {
+    return this.get(`/releases`, { params: { scopeId, page, per } })
   }
 
-  findOne(id: number): Promise<ReleaseSerializer> {
+  findLatest(scopeId: number): Promise<ReleaseSerializer> {
+    if (!scopeId) throw new Error('Need scopeId')
+    return this.get(`/releases/latest`, { params: { scopeId } })
+  }
+
+  findOne(id: number): Promise<ReleaseWithPagerSerializer> {
     if (!id) throw new Error('Need id')
     return this.get(`/releases/${id}`)
   }

@@ -5,7 +5,15 @@ import { UpdateContentHistoryForm } from '~/types/attachment-cms-server/app/cont
 import { CreateContentHistoryForm } from '~/types/attachment-cms-server/app/content-histories/dto/create-content-history.dto'
 
 export class ContentHistoriesRepository extends ApiRepository {
-  findAll(releaseId: number, { page = 1, per = 20 }): Promise<ContentHistoriesSerializer> {
+  findAll({
+    releaseId,
+    page = 1,
+    per = 20,
+  }: {
+    releaseId: number
+    page: number
+    per: number
+  }): Promise<ContentHistoriesSerializer> {
     return this.get(`/content-histories`, { params: { releaseId, page, per } })
   }
 

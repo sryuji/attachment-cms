@@ -103,7 +103,7 @@ export default {
 
   fontawesome: {
     icons: {
-      solid: ['faCheckSquare', 'faBan'],
+      solid: ['faCheckSquare', 'faBan', 'faChevronCircleLeft', 'faChevronCircleRight'],
     },
   },
 

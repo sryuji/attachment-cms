@@ -28,8 +28,11 @@
           <input v-model="createReleaseDto.name" type="text" placeholder="" class="input input-bordered" />
           <form-validation :value="createReleaseDto.name" rules="required" />
         </div>
-        <div>
+        <div class="flex justify-between">
           <button class="btn btn-primary my-3" @click="createRelease">登録</button>
+          <nuxt-link v-if="latestRelease" class="btn" :to="{ path: `/scopes/${scopeId}/releases/${latestRelease.id}` }"
+            >最新のリリースへ</nuxt-link
+          >
         </div>
       </div>
     </template>
@@ -61,7 +64,7 @@ export default class ReleasePage extends Form {
   // Lifecycle hooks
   beforeRouteEnter(to: Route, from: Route, next: NavigationGuardNext) {
     const scopeId = parseInt(to.params.id)
-    const latestRelease = releasesStore.getLatestRelease(scopeId)
+    const latestRelease = releasesStore.latestRelease
     if (latestRelease && !latestRelease.releasedAt) {
       next({ path: `/scopes/${scopeId}/releases/${latestRelease.id}` })
     } else {
@@ -71,11 +74,9 @@ export default class ReleasePage extends Form {
 
   async beforeRouteUpdate(to: Route, from: Route, next: NavigationGuardNext) {
     const scopeId = parseInt(to.params.id)
-    let latestRelease = releasesStore.getLatestRelease(scopeId)
-    if (!latestRelease) await releasesStore.fetchReleases({})
-    latestRelease = releasesStore.getLatestRelease(scopeId)
-    if (latestRelease && !latestRelease.releasedAt) {
-      next({ path: `/scopes/${scopeId}/releases/${latestRelease.id}` })
+    if (!releasesStore.latestRelease) await releasesStore.fetchLatestRelease(scopeId)
+    if (releasesStore.latestRelease && !releasesStore.latestRelease.releasedAt) {
+      next({ path: `/scopes/${scopeId}/releases/${releasesStore.latestRelease.id}` })
     } else {
       next()
     }
@@ -86,7 +87,7 @@ export default class ReleasePage extends Form {
   }
 
   async beforeMount() {
-    !this.latestRelease && (await releasesStore.fetchReleases({}))
+    !this.latestRelease && (await releasesStore.fetchLatestRelease(this.scopeId))
     if (this.latestRelease && !this.latestRelease.releasedAt) {
       this.$router.replace({ path: `/scopes/${this.scopeId}/releases/${this.latestRelease.id}` })
     }
@@ -102,7 +103,7 @@ export default class ReleasePage extends Form {
   }
 
   get latestRelease(): Release {
-    return releasesStore.getLatestRelease(this.scopeId)
+    return releasesStore.latestRelease
   }
 
   get scope(): Scope {

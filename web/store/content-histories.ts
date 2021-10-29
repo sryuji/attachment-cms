@@ -42,7 +42,7 @@ export default class extends VuexModule {
 
   @Action
   async fetchContentHistories(releaseId: number, page?: 1, per?: 20): Promise<ContentHistory[]> {
-    const data = await $api.contentHistories.findAll(releaseId, { page, per })
+    const data = await $api.contentHistories.findAll({ releaseId, page, per })
     this.setContentHistories(data.contentHistories)
     return data.contentHistories
   }
