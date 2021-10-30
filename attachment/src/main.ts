@@ -1,8 +1,4 @@
-import './style.css'
+import { AttachmentCMS } from './attachment-cms'
 
-const app = document.querySelector<HTMLDivElement>('#app')!
-
-app.innerHTML = `
-  <h1>Hello Vite!</h1>
-  <a href="https://vitejs.dev/guide/features.html" target="_blank">Documentation</a>
-`
+const cms = new AttachmentCMS('f6974698-a322-4e89-b32c-7f4ab5808fc9', 'http://localhost:3000')
+cms.run()
