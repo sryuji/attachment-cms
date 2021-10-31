@@ -5,10 +5,16 @@ export class AttachmentCMS {
   private token: string
   private contents: ContentDto[]
 
-  constructor(token: string, url?: string) {
+  constructor(token: string, baseUrl?: string) {
     const urlParams = new URLSearchParams(window.location.search)
-    this.token = urlParams.get('token') || token
-    this.url = url || 'https://attachment-cms.dev'
+    const queryToken = urlParams.get('token')
+    if (queryToken) {
+      this.token = queryToken
+      this.url = baseUrl ? `${baseUrl}/contents/limited` : 'https://attachment-cms.dev/contents/limited'
+    } else {
+      this.token = token
+      this.url = baseUrl ? `${baseUrl}/contents` : 'https://attachment-cms.dev/contents'
+    }
   }
 
   async run() {
@@ -36,7 +42,6 @@ export class AttachmentCMS {
     const currentPath = window.location.pathname
     return pathList
       .filter((path) => {
-        // TODO: API側で:wordは置換
         const regex = new RegExp(String.raw`^${path}$`, 'i')
         return currentPath.match(regex)
       })
@@ -46,7 +51,9 @@ export class AttachmentCMS {
 
   // https://developer.mozilla.org/ja/docs/Web/API/MutationRecord
   private observeElement() {
-    const bodyElement = document.querySelector('body')
+    const bodyElement: HTMLBodyElement = document.getElementsByTagName('body')[0]
+    console.log(bodyElement)
+    // document.querySelector('body')
     const mo = new MutationObserver((mutationsList: MutationRecord[]) => {
       console.log(mutationsList)
       this.applyContents()
@@ -54,7 +61,6 @@ export class AttachmentCMS {
     const config: MutationObserverInit = {
       attributes: false,
       attributeOldValue: false,
-      attributeFilter: [],
       characterData: true,
       characterDataOldValue: true,
       childList: true,

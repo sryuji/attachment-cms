@@ -21,8 +21,8 @@
     "noFallthroughCasesInSwitch": false,
     "importHelpers": true,
     "removeComments": true,
-    "types": ["vite/client"],
+    "types": ["vite/client", "@types/jest"],
     "typeRoots": ["./types", "./node_modules/@types"],
   },
-  "include": ["./src", "./types"]
+  "include": ["./src", "./types", "./test"]
 }
