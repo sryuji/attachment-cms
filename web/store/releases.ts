@@ -1,5 +1,6 @@
 import { isAfter } from 'date-fns'
 import { Action, config, Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import { parseDate } from '~/plugins/filters/date'
 import { Pager } from '~/types/attachment-cms-server/app/base/pager'
 import {
   CreateReleaseForm,
@@ -63,7 +64,9 @@ export default class extends VuexModule {
     } else if (!data.releasedAt) {
       this.releases.splice(0, 0, data)
     } else {
-      const index = this.releases.findIndex((r) => r.releasedAt && isAfter(data.releasedAt, r.releasedAt))
+      const index = this.releases.findIndex(
+        (r) => r.releasedAt && isAfter(parseDate(data.releasedAt), parseDate(r.releasedAt))
+      )
       if (index < 0) {
         this.releases.push(data)
       } else {
