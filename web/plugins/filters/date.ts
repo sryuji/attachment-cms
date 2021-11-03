@@ -1,3 +1,4 @@
+/* eslint-disable import/no-duplicates */
 import { format as dateFormat, parseISO, differenceInDays } from 'date-fns'
 import jaLocale from 'date-fns/locale/ja'
 import { isString } from '~/utils/string'

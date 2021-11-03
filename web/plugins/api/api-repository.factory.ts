@@ -1,6 +1,6 @@
 import { NuxtAppOptions } from '@nuxt/types'
 import { NuxtRuntimeConfig } from '@nuxt/types/config/runtime'
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
+import type { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { AccountsRepository } from '../../repositories/accounts.repository'
 import { AuthRepository } from '../../repositories/auth.repository'
 import { ApiRepositories } from './api-repositories.interface'

@@ -17,10 +17,11 @@
   "eslint.run": "onSave",
   "eslint.packageManager": "yarn",
   "eslint.options": {
-    "configFile": ".eslintrc.js"
+    "overrideConfigFile": ".eslintrc.js"
   },
   // prettier
-  "prettier.printWidth": 120
+  "prettier.printWidth": 120,
+  "jest.jestCommandLine": "yarn test"
 
   // 下記をユーザー別設定に追加
   // "vetur.useWorkspaceDependencies": true

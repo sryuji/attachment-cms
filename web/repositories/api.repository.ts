@@ -1,6 +1,6 @@
 import { NuxtAppOptions } from '@nuxt/types'
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { AxiosRequestConfig, AxiosError } from 'axios'
+import type { NuxtAxiosInstance } from '@nuxtjs/axios'
 import {
   BadRequestError,
   ForbiddenError,

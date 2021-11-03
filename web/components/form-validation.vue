@@ -7,11 +7,11 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'nuxt-property-decorator'
 // https://github.com/mikeerickson/validatorjs
-import Validator from 'validatorjs'
+import Validatorjs from 'validatorjs'
 import { eventBus } from '~/utils/event-bus'
 import { generateUUIDv4 } from '~/utils/string'
 
-Validator.useLang('ja')
+Validatorjs.useLang('ja')
 type ValueType = string | number | boolean
 
 /**
@@ -42,7 +42,7 @@ export default class FormValidation extends Vue {
   }
 
   validateValue(val: ValueType = this.value): boolean {
-    const validation = new Validator({ value: val }, { value: this.rules }, this.errorMessages)
+    const validation = new Validatorjs({ value: val }, { value: this.rules }, this.errorMessages)
     validation.setAttributeNames({ value: '入力' })
 
     if (validation.passes()) {

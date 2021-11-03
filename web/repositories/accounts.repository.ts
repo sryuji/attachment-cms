@@ -1,5 +1,5 @@
-import { AccountSerializer } from 'types/attachment-cms-server/app/accounts/serializer/account.serializer'
 import ApiRepository from './api.repository'
+import { AccountSerializer } from 'types/attachment-cms-server/app/accounts/serializer/account.serializer'
 import { AccountForm } from '~/types/attachment-cms-server/app/accounts/dto/account.form'
 
 export class AccountsRepository extends ApiRepository {
