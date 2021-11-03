@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
+    "esModuleInterop": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "strict": true,
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./*"]
+    },
+    "types": [
+      "@nuxt/types",
+      "@nuxtjs/axios",
+      "@nuxt/content",
+      "@nuxtjs/toast",
+      "universal-cookie",
+      "@types/jest",
+      "vue-router/types",
+      "vuex/types"
+    ],
+    "typeRoots": ["./types", "./node_modules/@types"],
+    // additional settings
+    "noImplicitAny": true, // any型禁止
+    "noImplicitThis": true, // 型なしthis禁止. class内は問題なし
+    "noImplicitReturns": true, //return値の型必須
+    "resolveJsonModule": true,
+    "strictNullChecks": false,
+    "noFallthroughCasesInSwitch": false,
+    "importHelpers": true
+  },
+  "exclude": ["node_modules", ".nuxt", "dist", "coverage"]
+}

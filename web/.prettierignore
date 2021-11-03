@@ -1,0 +1,6 @@
+.nuxt/
+coverage/
+node_modules/
+types/attachment-cms-server/
+.env
+yarn.lock
