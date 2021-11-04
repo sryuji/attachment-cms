@@ -1,6 +1,7 @@
 import { ArgumentsHost, Logger, Inject, ExceptionFilter } from '@nestjs/common'
+import { FastifyReply, FastifyRequest } from 'fastify'
 import { ConfigService } from '../config/config.service'
-import { Response } from 'express'
+import { outputResponseLog } from '../interceptor/logging.interceptor'
 
 export abstract class BaseExceptionFilter implements ExceptionFilter {
   protected config: ConfigService
@@ -25,20 +26,21 @@ export abstract class BaseExceptionFilter implements ExceptionFilter {
     options: Record<string, unknown> | undefined
   ) {
     const ctx = host.switchToHttp()
-    const response = ctx.getResponse<Response>()
-    response.status(status).json({
+    const request = ctx.getRequest<FastifyRequest>()
+    const response = ctx.getResponse<FastifyReply>()
+    response.code(status).send({
       statusCode: status,
       message: message,
       options: options,
     })
-    this.logResponse(response, message)
+    this.logResponse(request, response, message)
   }
 
-  private logResponse(res: Response, errorMessage: string | string[]) {
-    const delay = Date.now() - res.locals.requestStartTime // NOTE: LoggerMiddlewareから引き継いでいる
-    const code = res.statusCode
+  private logResponse(request: FastifyRequest, reply: FastifyReply, errorMessage: string | string[]) {
+    const code = reply.statusCode
     errorMessage = Array.isArray(errorMessage) ? errorMessage.join('. ') : errorMessage
-    const message = `Response ${code} response. ${delay}ms. ${errorMessage}`
+    const defaultMessage = outputResponseLog(reply)
+    const message = `${defaultMessage} ${errorMessage}`
     if (code && code < 400) {
       Logger.log(message)
     } else if (code && code < 500) {

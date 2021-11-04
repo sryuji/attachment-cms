@@ -51,7 +51,7 @@ export class ScopeSerializer extends BaseSerializer {
 下記のように明示的に Response しないと、処理後に response されない
 
 ```js
-res.status(HttpStatus.OK).json({})
+res.code(HttpStatus.OK).send({})
 ```
 
 https://docs.nestjs.com/controllers#library-specific-approach

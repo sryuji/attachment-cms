@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { Request } from 'express'
+import { FastifyRequest } from 'fastify'
 import { ConfigService } from '../../config/config.service'
 import { AccountScope } from '../../db/entity/account-scope.entity'
 import { Account } from '../../db/entity/account.entity'
@@ -13,7 +13,7 @@ export const REFRESH_TOKEN_COOKIE_KEY = 'RefreshToken'
 export class AuthService {
   constructor(private configService: ConfigService, private jwtService: JwtService) {}
 
-  async authenticateWithPassport(req: Request) {
+  async authenticateWithPassport(req: FastifyRequest) {
     if (!req.user) throw new UnauthorizedException()
     const authUser = req.user as AuthUserDto
     return this.generateJwtToken(authUser)
@@ -42,12 +42,12 @@ export class AuthService {
     return { jwtAccessToken, jwtRefreshToken }
   }
 
-  private async generateJwtAccessToken(authUser: AuthUserDto) {
+  async generateJwtAccessToken(authUser: AuthUserDto) {
     authUser.accountScopes = await AccountScope.find({ where: { accountId: authUser.sub } })
     return this.jwtService.sign(authUser.toJSON())
   }
 
-  async signOut(req: Request) {
+  async signOut(req: FastifyRequest) {
     if (!req.user) return
     const payload = req.user as AuthUserDto
     const account = await Account.findOne(payload.sub)

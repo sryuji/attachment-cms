@@ -1,17 +1,15 @@
 import { Injectable, NestMiddleware } from '@nestjs/common'
-import { Request, Response, NextFunction } from 'express'
-import { Logger } from '@nestjs/common'
-import { format } from 'date-fns'
+import { IncomingMessage, OutgoingMessage } from 'http'
 
-// middlewares -> guards -> interceptors -> pipeの順のため、
+/**
+ * Deprecated
+ *
+ * expressの時と異なり、FastifyRequestを受け取れないため、req.localsに値を設定できない
+ * ただ、Fastify側がresponse時間を提供してくれるのでそれを活用している
+ */
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
-    const now = Date.now()
-    res.locals.requestStartTime = now
-    const startTime = format(now, 'yyyy-MM-dd HH:mm:ss.SSS')
-    Logger.log(`Request ${req.method} ${req.originalUrl} at ${startTime}`)
-    Logger.log({ body: req.body })
+  use(req: IncomingMessage, res: OutgoingMessage, next: () => void) {
     next()
   }
 }

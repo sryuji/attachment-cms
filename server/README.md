@@ -14,7 +14,7 @@ $ yarn run start:dev
 
 `http://localhost:3000/api-docs/` で API ドキュメントの確認できます。
 
-また、`http://localhost:3000/api-docs-json/`で json schema をダウンロードできます。
+また、`http://localhost:3000/api-docs/json`で json schema をダウンロードできます。
 
 打鍵用の seed データは下記で導入できます
 

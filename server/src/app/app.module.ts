@@ -2,7 +2,6 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppController } from './app.controller'
 import { ScopesModule } from './scopes/scopes.module'
-import { LoggerMiddleware } from '../middleware/logger.middleware'
 import { ConfigModule } from '../config/config.module'
 import { TypeOrmConfigService } from '../config/typeorm.config.service'
 import { AnyExceptionFilter } from '../filter/any-exception.filter'
@@ -45,8 +44,8 @@ const isProduction = process.env.NODE_ENV === 'production'
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    const middlewares = [LoggerMiddleware]
-    if (!isProduction) middlewares.push(TestMiddleware)
-    consumer.apply(...middlewares).forRoutes('*')
+    if (!isProduction) {
+      consumer.apply(TestMiddleware).forRoutes('*')
+    }
   }
 }

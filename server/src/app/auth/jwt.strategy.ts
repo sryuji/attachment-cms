@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport'
 import { Injectable } from '@nestjs/common'
 import { AuthUserDto } from './dto/auth-user.dto'
 import { ConfigService } from '../../config/config.service'
-import { Request } from 'express'
+import { FastifyRequest } from 'fastify'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     this.config = config
   }
 
-  async validate(req: Request, payload: AuthUserDto, done: VerifiedCallback) {
+  async validate(req: FastifyRequest, payload: AuthUserDto, done: VerifiedCallback) {
     done(null, payload) // NOTE: このuserがreq.userに格納される
   }
 }

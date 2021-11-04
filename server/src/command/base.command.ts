@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from '../app/app.module'
 import { INestApplication } from '@nestjs/common'
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 
 export abstract class BaseCommand {
   protected app: INestApplication
@@ -19,7 +20,7 @@ export abstract class BaseCommand {
 
   protected async bootstrap() {
     if (this.app) return
-    this.app = await NestFactory.create(AppModule)
+    this.app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter())
   }
   protected async terminate() {
     return

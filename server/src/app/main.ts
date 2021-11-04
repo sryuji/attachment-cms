@@ -5,8 +5,10 @@ import { ValidationsError } from '../exception/validations.error'
 import { LoggingInterceptor } from '../interceptor/logging.interceptor'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import packageJson = require('../../package.json')
-import cookieParser = require('cookie-parser')
+import fastifyCookie from 'fastify-cookie'
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface'
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
+import fastify from 'fastify'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -19,8 +21,17 @@ const corsOptions: CorsOptions = {
 }
 
 async function bootstrap() {
-  const app: INestApplication = await NestFactory.create(AppModule)
-  app.use(cookieParser())
+  // NOTE: for req.locals
+  // https://github.com/fastify/fastify/issues/1193#issuecomment-425437236
+  const server = fastify({ logger: { level: 'warn' } })
+  server.decorateRequest('locals', null)
+  server.decorateRequest('user', null)
+  const fastifyAdapter = new FastifyAdapter(server)
+
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, fastifyAdapter)
+  app.register(fastifyCookie, {
+    secret: process.env.COOKIE_SECRET || 'secret',
+  })
   app.enableCors(corsOptions)
   app.useGlobalPipes(
     new ValidationPipe({
