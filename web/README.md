@@ -10,7 +10,7 @@ $ nvm use
 
 ```bash
 $ yarn install
-$ yarn nuxt
+$ yarn dev
 ```
 
 `http://localhost:3001/` で 動作確認できます。
