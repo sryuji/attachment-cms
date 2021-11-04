@@ -7,6 +7,7 @@ export declare class ContentHistory extends ApplicationEntity<ContentHistory> {
     releaseId: number;
     release: Release;
     path: string;
+    description: string;
     selector: string;
     content: string;
     action: string;

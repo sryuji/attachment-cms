@@ -19,6 +19,17 @@
       </div>
       <div class="form-control">
         <label class="label">
+          <span class="label-text">説明</span>
+        </label>
+        <input
+          v-model="contentHistoryDto.description"
+          type="text"
+          placeholder="何のためのCMS設定か説明を記載してください。任意です。"
+          class="input input-bordered"
+        />
+      </div>
+      <div class="form-control">
+        <label class="label">
           <span class="label-text">HTMLElementをSelectorで指定</span>
           <span class="badge badge-error">必須</span>
         </label>
@@ -80,6 +91,7 @@ export default class ContentHistoryModal extends Form {
     scopeId: null,
     releaseId: null,
     path: null,
+    description: null,
     selector: null,
     action: null,
     inactive: false,

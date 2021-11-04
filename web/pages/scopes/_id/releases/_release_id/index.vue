@@ -65,8 +65,8 @@
             <div v-for="content in contentHistories" :key="content.id" class="bg-grey-lighter p-6 mb-6 rounded-box">
               <div class="flex">
                 <div class="flex-grow">
-                  <span class="text-lg font-semibold bg-white rounded-box p-3">{{ content.path }}</span>
-                  <span class="ml-3">ページに対して、</span>
+                  <span class="text-xl font-semibold bg-white rounded-box p-3">{{ content.path }}</span>
+                  <span class="ml-3">ページで</span>
                 </div>
                 <div class="flex-col">
                   <button
@@ -91,11 +91,14 @@
               </div>
               <div class="mt-4 bg-white p-3 rounded-box">{{ content.selector }}</div>
               <div class="my-5">
-                で指定されるHTMLElementの
+                で指定されるHTMLElementに対して
                 <span class="bg-white p-3 rounded-box">{{ actionLabels[content.action] }}</span>
                 <span class="mx-3">Actionを発動します。</span>
               </div>
-              <div class="mt-3">HTMLデータは下記</div>
+              <div class="mt-3">
+                <span v-if="content.description" class="font-semibold">{{ content.description }}</span>
+                <span v-else>HTMLデータは下記</span>
+              </div>
               <div v-if="content.content" class="bg-white p-4 rounded-box">
                 <pre>{{ content.content }}</pre>
               </div>

@@ -1,5 +1,5 @@
 export declare class ScopeDto {
-    id: number;
+    id?: number;
     name: string;
     domain: string;
     description: string;
