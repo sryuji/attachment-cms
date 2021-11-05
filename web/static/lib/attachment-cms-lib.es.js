@@ -35,7 +35,7 @@ class AttachmentCMS {
     const url = `${this.url}?token=${this.token}`;
     const response = await fetch(url);
     const data = await response.json();
-    this.contents = this.extractMatchedContents(data);
+    this.contents = this.extractMatchedContents(data.contents);
   }
   extractMatchedContents(data) {
     const pathList = Object.keys(data);
@@ -47,7 +47,6 @@ class AttachmentCMS {
   }
   observeElement() {
     const bodyElement = document.getElementsByTagName("body")[0];
-    console.log(bodyElement);
     const mo = new MutationObserver((mutationsList) => {
       console.log(mutationsList);
       this.applyContents();
