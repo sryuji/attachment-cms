@@ -64,6 +64,7 @@ export default class ReleasePage extends Form {
   // Lifecycle hooks
   beforeRouteEnter(to: Route, from: Route, next: NavigationGuardNext) {
     const scopeId = parseInt(to.params.id)
+    releasesStore.cleanOtherScope(scopeId)
     const latestRelease = releasesStore.latestRelease
     if (latestRelease && !latestRelease.releasedAt) {
       next({ path: `/scopes/${scopeId}/releases/${latestRelease.id}` })
@@ -74,6 +75,7 @@ export default class ReleasePage extends Form {
 
   async beforeRouteUpdate(to: Route, from: Route, next: NavigationGuardNext) {
     const scopeId = parseInt(to.params.id)
+    releasesStore.cleanOtherScope(scopeId)
     if (!releasesStore.latestRelease) await releasesStore.fetchLatestRelease(scopeId)
     if (releasesStore.latestRelease && !releasesStore.latestRelease.releasedAt) {
       next({ path: `/scopes/${scopeId}/releases/${releasesStore.latestRelease.id}` })

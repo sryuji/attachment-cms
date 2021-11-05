@@ -24,6 +24,11 @@ export default class extends VuexModule {
   }
 
   @Mutation
+  cleanContentHistories() {
+    this.contentHistories = []
+  }
+
+  @Mutation
   setContentHistory(data: ContentHistory): void {
     const record = this.contentHistories.find((r) => r.id === data.id)
     if (record) {

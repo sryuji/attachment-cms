@@ -176,7 +176,15 @@ export default class ReleasePage extends Form {
   }
 
   // Lifecycle hooks
+  beforeRouteEnter(to: Route, from: Route, next: NavigationGuardNext) {
+    const scopeId = parseInt(to.params.id)
+    releasesStore.cleanOtherScope(scopeId)
+    next()
+  }
+
   beforeRouteUpdate(to: Route, from: Route, next: NavigationGuardNext) {
+    const scopeId = parseInt(to.params.id)
+    releasesStore.cleanOtherScope(scopeId)
     const releaseId = parseInt(to.params.release_id)
     this.fetchData(releaseId)
     next()

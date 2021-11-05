@@ -9,6 +9,7 @@ import {
 } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
 import { Release } from '~/types/attachment-cms-server/db/entity/release.entity'
 import { $api } from '~/utils/api-accessor'
+import { contentHistoriesStore } from '~/utils/store-accessor'
 
 config.rawError = true
 
@@ -44,6 +45,13 @@ export default class extends VuexModule {
   get hasPrevRelease(): boolean {
     if (!this.page) return null
     return this.page > 1
+  }
+
+  @Mutation
+  cleanReleases() {
+    this.latestRelease = null
+    this.releases = []
+    this.pager = null
   }
 
   @Mutation
@@ -135,5 +143,16 @@ export default class extends VuexModule {
     const data = await $api.releases.publish(form)
     this.setRelease(data.release)
     return data.release
+  }
+
+  @Action
+  cleanOtherScope(scopeId: number): void {
+    if (
+      (this.latestRelease && this.latestRelease.scopeId !== scopeId) ||
+      (this.releases.length > 0 && this.releases[0].scopeId !== scopeId)
+    ) {
+      this.cleanReleases()
+      contentHistoriesStore.cleanContentHistories()
+    }
   }
 }
