@@ -14,6 +14,11 @@
     </div>
 
     <confirmation />
+
+    <script type="text/javascript">
+      window.AttachmentConfig = { url: 'http://localhost:3000', token: '0601c7e9-af0b-4e1d-a0e7-fde28278e9c2' }
+    </script>
+    <script type="module" src="/dist/attachment-cms-lib.umd.js"></script>
   </div>
 </template>
 

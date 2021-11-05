@@ -39,7 +39,7 @@
         </button>
         <div v-else></div>
       </div>
-      <div v-if="release" class="card shadow-md my-3">
+      <div v-if="release" class="card shadow-md">
         <div class="card-body">
           <div class="flex">
             <div class="flex-1 form-control">
