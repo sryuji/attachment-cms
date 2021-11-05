@@ -109,6 +109,7 @@ export default class extends VuexModule {
   async createRelease(form: CreateReleaseForm): Promise<Release> {
     const data = await $api.releases.create(form)
     this.setRelease(data.release)
+    this.setLatestRelease(data.release)
     return data.release
   }
 
@@ -121,8 +122,11 @@ export default class extends VuexModule {
 
   @Action
   async deleteRelease(id: number): Promise<void> {
+    const release = this.getRelease(id)
+    if (!release) return
     await $api.releases.delete(id)
     this.removeRelease(id)
+    this.fetchLatestRelease(release.scopeId)
   }
 
   @Action

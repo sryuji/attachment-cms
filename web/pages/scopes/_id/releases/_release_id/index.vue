@@ -16,17 +16,6 @@
         </div>
       </div>
 
-      <div
-        v-if="latestRelease && releaseId === latestRelease.id && latestRelease.releasedAt"
-        class="card shadow-md my-3"
-      >
-        <div class="card-body">
-          <nuxt-link :to="{ path: `/scopes/${scope.id}/releases` }" class="btn btn-primary btn-block tracking-widest"
-            >次のリリースを作成</nuxt-link
-          >
-        </div>
-      </div>
-
       <div class="flex justify-between mt-6">
         <button v-if="hasPrevRelease" class="" @click="goPrevRelease">
           <font-awesome-icon :icon="['fas', 'chevron-circle-left']" class="text-2xl" /><br />
@@ -133,6 +122,14 @@
           </div>
         </div>
       </div>
+
+      <div v-if="isLatest && latestRelease.releasedAt" class="card shadow-md my-3">
+        <div class="card-body">
+          <nuxt-link :to="{ path: `/scopes/${scope.id}/releases` }" class="btn btn-primary btn-block tracking-widest"
+            >次のリリースを作成</nuxt-link
+          >
+        </div>
+      </div>
     </template>
 
     <content-history-modal
@@ -206,6 +203,10 @@ export default class ReleasePage extends Form {
     return releasesStore.getRelease(this.releaseId)
   }
 
+  get isLatest(): boolean {
+    return this.latestRelease && this.releaseId === this.latestRelease.id
+  }
+
   get latestRelease(): Release {
     return releasesStore.latestRelease
   }
@@ -253,6 +254,9 @@ export default class ReleasePage extends Form {
   }
 
   async fetchData(releaseId: number) {
+    // NOTE: 非同期で最新リリースは取得しにいく
+    !this.latestRelease && releasesStore.fetchLatestRelease(this.scopeId)
+
     const release = releaseId && releasesStore.getRelease(releaseId)
     const promise1: Promise<void | Release> = release ? Promise.resolve() : releasesStore.fetchRelease(releaseId)
     const promise2: Promise<void | ContentHistory[]> = releaseId
