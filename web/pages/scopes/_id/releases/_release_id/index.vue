@@ -71,7 +71,7 @@
                   >
                   <a
                     v-else-if="!release.releasedAt"
-                    :href="`${scope.domain}${content.path}`"
+                    :href="`${scope.domain}${content.path}?token=${release.limitedReleaseToken}`"
                     target="_blank"
                     class="btn btn-sm ml-3"
                     :class="{ 'btn-disabled': !scope.domain || !content.path }"
