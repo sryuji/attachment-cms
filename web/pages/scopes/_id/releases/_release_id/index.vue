@@ -45,8 +45,9 @@
               </h1>
             </div>
             <div class="flex-initial">
-              <span v-if="release.releasedAt" class="badge badge-success text-xl">公開中</span>
-              <span v-else class="badge badge-info text-xl">公開前</span>
+              <span v-if="isLatest && !release.releasedAt" class="badge badge-lg badge-warning text-2xl">公開前</span>
+              <span v-else-if="isLatest" class="badge badge-lg badge-success text-2xl">公開中</span>
+              <span v-else class="badge badge-lg badge-info text-2xl">公開終了</span>
             </div>
           </div>
 
