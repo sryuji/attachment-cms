@@ -5,39 +5,49 @@ var __publicField = (obj, key, value) => {
   return value;
 };
 class AttachmentCMS {
-  constructor(token, baseUrl) {
+  constructor(options) {
     __publicField(this, "url");
     __publicField(this, "token");
     __publicField(this, "contents");
+    __publicField(this, "id");
+    __publicField(this, "contentsResponse");
+    if (!options || !options.token)
+      throw new Error("Required token.");
+    const baseUrl = options && options.baseUrl || "https://attachment-cms.dev";
     const urlParams = new URLSearchParams(window.location.search);
     const queryToken = urlParams.get("token");
     if (queryToken) {
       this.token = queryToken;
-      this.url = baseUrl ? `${baseUrl}/contents/limited` : "https://attachment-cms.dev/contents/limited";
+      this.url = `${baseUrl}/contents/limited`;
     } else {
-      this.token = token;
-      this.url = baseUrl ? `${baseUrl}/contents` : "https://attachment-cms.dev/contents";
+      this.token = options.token;
+      this.url = `${baseUrl}/contents`;
     }
+    this.id = options && options.id || null;
   }
   async run() {
-    await this.fetchContents();
+    this.contentsResponse = await this.fetchContents();
+    this.contents = this.extractMatchedContents(this.contentsResponse.contents);
     if (document.readyState === "loading") {
       window.addEventListener("DOMContentLoaded", () => {
         this.applyContents();
         this.observeElement();
+        this.observeHistoryState();
       });
     } else {
       this.applyContents();
       this.observeElement();
+      this.observeHistoryState();
     }
   }
   async fetchContents() {
     const url = `${this.url}?token=${this.token}`;
     const response = await fetch(url);
-    const data = await response.json();
-    this.contents = this.extractMatchedContents(data.contents);
+    return response.json();
   }
   extractMatchedContents(data) {
+    if (!data)
+      return [];
     const pathList = Object.keys(data);
     const currentPath = window.location.pathname;
     return pathList.filter((path) => {
@@ -46,11 +56,12 @@ class AttachmentCMS {
     }).map((path) => data[path]).flat();
   }
   observeElement() {
-    const bodyElement = document.getElementsByTagName("body")[0];
-    const mo = new MutationObserver((mutationsList) => {
-      console.log(mutationsList);
-      this.applyContents();
-    });
+    const el = this.id ? document.getElementById(this.id) : document.getElementsByTagName("body")[0];
+    if (!el) {
+      this.id && console.warn(`No exists html element. id: ${this.id}`);
+      return;
+    }
+    const mo = new MutationObserver(() => this.applyContents());
     const config = {
       attributes: false,
       attributeOldValue: false,
@@ -59,7 +70,7 @@ class AttachmentCMS {
       childList: true,
       subtree: true
     };
-    mo.observe(bodyElement, config);
+    mo.observe(el, config);
   }
   applyContents() {
     this.contents.forEach((r) => {
@@ -88,9 +99,14 @@ class AttachmentCMS {
       }
     });
   }
+  observeHistoryState() {
+    window.onpopstate = () => {
+      this.contents = this.extractMatchedContents(this.contentsResponse.contents);
+      this.applyContents();
+    };
+  }
 }
-if (window.AttachmentConfig) {
-  const { url, token } = window.AttachmentConfig;
-  new AttachmentCMS(token, url).run();
+if (typeof window !== "undefined" && window.AttachmentConfig) {
+  new AttachmentCMS(window.AttachmentConfig).run();
 }
 export { AttachmentCMS };
