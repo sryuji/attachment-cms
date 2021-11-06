@@ -19,12 +19,15 @@
             <nuxt-link :to="{ name: 'accounts' }"> Account </nuxt-link>
           </li>
           <li>
-            <a href="" @click.prevent.stop="signOut"> Sign Out </a>
+            <a href="" @click.prevent.stop="signOut"> Sign out </a>
           </li>
         </template>
         <template v-else>
           <li>
-            <nuxt-link :to="{ name: 'auth-sign-in' }"> Sign In</nuxt-link>
+            <nuxt-link :to="{ name: 'auth-sign-in' }"> Sign in</nuxt-link>
+          </li>
+          <li>
+            <nuxt-link :to="{ name: 'auth-sign-up' }"> Sign up</nuxt-link>
           </li>
         </template>
       </ul>

@@ -1,6 +1,9 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="mb-6">Sign in</h1>
+    <h1 class="mb-6">Sign up</h1>
+    <div>
+      <p>TODO: 登録すると、自動的にデモサイトに招待されるように対応</p>
+    </div>
     <div>
       <img
         class="cursor-pointer"
@@ -18,7 +21,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
   meta: { auth: false },
   head() {
     return {
-      title: 'Sign In',
+      title: 'Sign Up',
     }
   },
 })

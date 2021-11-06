@@ -56,7 +56,8 @@
               <div class="flex">
                 <div class="flex-grow">
                   <span class="text-xl font-semibold bg-white rounded-box p-3">{{ content.path }}</span>
-                  <span class="ml-3">ページで</span>
+                  <span class="ml-3">ページの</span>
+                  <span class="ml-6 font-semibold">{{ content.description }}</span>
                 </div>
                 <div class="flex-col">
                   <button
@@ -85,13 +86,14 @@
                 <span class="bg-white p-3 rounded-box">{{ actionLabels[content.action] }}</span>
                 <span class="mx-3">Actionを発動します。</span>
               </div>
-              <div class="mt-3">
-                <span v-if="content.description" class="font-semibold">{{ content.description }}</span>
-                <span v-else>HTMLデータは下記</span>
-              </div>
-              <div v-if="content.content" class="bg-white p-4 rounded-box">
-                <pre>{{ content.content }}</pre>
-              </div>
+              <template v-if="content.content">
+                <div class="mt-3">
+                  <span>Actionで利用されるHTMLデータ</span>
+                </div>
+                <div class="bg-white p-4 rounded-box">
+                  <pre>{{ content.content }}</pre>
+                </div>
+              </template>
             </div>
 
             <div v-if="!release.releasedAt" class="my-6">

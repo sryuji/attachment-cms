@@ -8,7 +8,7 @@
     <div class="flex-none hidden px-2 mx-2 lg:flex">
       <div v-if="!isLoggedIn" class="flex items-stretch">
         <nuxt-link :to="{ name: 'auth-sign-in' }" class="btn btn-ghost btn-sm rounded-btn normal-case">
-          Sign In</nuxt-link
+          Sign in</nuxt-link
         >
       </div>
       <div v-else class="flex items-stretch">
