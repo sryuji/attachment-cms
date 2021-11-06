@@ -60,6 +60,9 @@ typings/
 .idea
 .history
 
+# nuxt.js build output
+.nuxt
+
 # additional
 dist
 build
