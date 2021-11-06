@@ -1,7 +1,9 @@
 {
-  "name": "nuxt-wayscript-airtable",
-  "version": "1.0.0",
+  "name": "attachment-cms-web",
+  "version": "0.1.0",
   "private": true,
+  "author": "sryuji",
+  "license": "UNLICENSED",
   "engines": {
     "node": "14.x"
   },

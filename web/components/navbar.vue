@@ -3,6 +3,7 @@
     <div class="flex-1 px-2 mx-2">
       <span> </span>
       <nuxt-link :to="{ name: 'index' }" class="text-lg font-bold"> attachment CMS</nuxt-link>
+      <span class="ml-2">( α-version )</span>
     </div>
     <div class="flex-none hidden px-2 mx-2 lg:flex">
       <div v-if="!isLoggedIn" class="flex items-stretch">
