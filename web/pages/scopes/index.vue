@@ -2,7 +2,7 @@
   <div class="container mx-auto">
     <h1>Scope List</h1>
     <div v-for="scope in scopes" :key="scope.id" class="card shadow-md m-6 bg-indigo-lightest">
-      <nuxt-link class="text-xl" :to="{ path: `scopes/${scope.id}/releases/` }">
+      <nuxt-link class="text-xl" :to="{ path: `/scopes/${scope.id}/releases/` }">
         <div class="card-body text-center font-semibold">
           {{ scope.name }}
         </div>
