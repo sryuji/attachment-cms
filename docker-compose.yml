@@ -1,0 +1,42 @@
+version: '3.9'
+
+networks:
+  acms_network:
+
+volumes:
+  acms_node_modules_volume: {}
+  acms_db_volume: {}
+
+services:
+  acms_db:
+    container_name: acms_db
+    image: 'postgres:13-alpine'
+    networks:
+      - acms_network
+    volumes:
+      - acms_db_volume:/var/lib/postgresql/data
+    ports:
+      - "35432:5432"
+    env_file:
+      - '.env'
+    restart: unless-stopped
+
+  acms_app:
+    container_name: acms_app
+    networks:
+      - acms_network
+    depends_on:
+      - acms_postgres
+    build:
+      dockerfile: './server/Dockerfile.development'
+    ports:
+      - '3000:3000'
+    working_dir: /app
+    volumes:
+      - './server/:/app'
+      - acms_node_modules_volume:/app/node_modules/
+    env_file:
+      - '.env'
+    tty: true
+    stdin_open: true
+    restart: unless-stopped

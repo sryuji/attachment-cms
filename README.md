@@ -1,5 +1,51 @@
 # attachment CMS Project
 
+
+## Getting started
+
+
+### Server
+Serverプロジェクトの起動
+
+```bash
+$ docker compose up -d --build
+$ docker compose exec acms_app yarn orm:migrate
+```
+
+動作確認データの投入.
+投入時、TEST_USER_EMAILに利用するGoogleアカウントを指定するとデータ閲覧に利用できる
+
+```bash
+$ docker compose exec -e TEST_USER_EMAIL=xxxx@gmail.com acms_app yarn seed:dev
+```
+
+その後は、
+
+```bash
+# Docker Containerの停止 & 削除
+$ docker-compose down
+
+# Docker Containerの停止/再開
+$ docker-compose stop
+$ docker-compose start
+```
+
+で行ってください。
+
+
+```bash
+$ docker-compose exec acms_db bash
+```
+
+### Web
+webは下記で起動してください
+
+```bash
+$ cd web
+$ nvm use
+$ yarn nuxt
+```
+
 ## Repository構成
 
 本repositoryでは下記３つのrepositoryをgit subtreeで１つにまとめています。
