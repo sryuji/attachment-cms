@@ -5,7 +5,7 @@
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content">
         <navbar />
-        <nuxt class="p-2" />
+        <nuxt />
       </div>
       <div class="drawer-side">
         <label for="my-drawer" class="drawer-overlay"></label>

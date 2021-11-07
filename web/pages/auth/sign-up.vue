@@ -1,15 +1,18 @@
 <template>
-  <div class="container mx-auto">
-    <h1 class="mb-6">Sign up</h1>
+  <div class="container mx-auto p-2 flex justify-center">
     <div>
-      <p>TODO: 登録すると、自動的にデモサイトに招待されるように対応</p>
-    </div>
-    <div>
-      <img
-        class="cursor-pointer"
-        src="~/assets/images/google/btn_google_signin_light_normal_web.png"
-        @click="moveGoogleAuthPage"
-      />
+      <h1 class="my-6">please sign up</h1>
+      <div class="my-6 text-lg">
+        <p>アカウント作成後、自動的にデモサイトを利用したCMS設定体験に招待されます。</p>
+        <p>TODO: まだ未達</p>
+      </div>
+      <div class="my-12">
+        <img
+          class="cursor-pointer"
+          src="~/assets/images/google/btn_google_signin_light_normal_web.png"
+          @click="moveGoogleAuthPage"
+        />
+      </div>
     </div>
   </div>
 </template>

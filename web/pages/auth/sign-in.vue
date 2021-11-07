@@ -1,12 +1,17 @@
 <template>
-  <div class="container mx-auto">
-    <h1 class="mb-6">Sign in</h1>
-    <div>
-      <img
-        class="cursor-pointer"
-        src="~/assets/images/google/btn_google_signin_light_normal_web.png"
-        @click="moveGoogleAuthPage"
-      />
+  <div class="container mx-auto p-2 flex justify-center">
+    <div class="min-w-96">
+      <h1 class="my-6">please sign in</h1>
+      <div class="my-6 text-lg">
+        <p>おかえりなさいませ</p>
+      </div>
+      <div class="mt-12">
+        <img
+          class="cursor-pointer object-contain"
+          src="~/assets/images/google/btn_google_signin_light_normal_web.png"
+          @click="moveGoogleAuthPage"
+        />
+      </div>
     </div>
   </div>
 </template>

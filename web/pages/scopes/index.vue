@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto">
+  <div class="container mx-auto p-2">
     <h1>Scope List</h1>
     <div v-for="scope in scopes" :key="scope.id" class="card shadow-md m-6 bg-indigo-lightest">
       <nuxt-link class="text-xl" :to="{ path: `/scopes/${scope.id}/releases/` }">

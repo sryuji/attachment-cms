@@ -10,11 +10,11 @@
         </div>
       </div>
     </div>
-    <div class="hero min-h-screen bg-base-300">
+    <div class="hero min-h-screen text-blue-lightest bg-blue">
       <div class="text-center hero-content">
         <div class="max-w-md">
           <h1 class="mb-5 text-3xl font-bold">いつでも、どのコンテンツでも<br />上書きで変更できる</h1>
-          <p class="mb-5">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+          <p class="mb-5">事前に対象コンテンツ単位にCMS機能を設置し、<br />リリースするといった作業は不要です。</p>
         </div>
       </div>
     </div>
@@ -22,31 +22,36 @@
       <div class="text-center hero-content">
         <div class="max-w-md">
           <h1 class="mb-5 text-4xl font-bold">後から簡単に<br />始められる</h1>
-          <p class="mb-5">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+          <p class="mb-5">ホームページに指定の設定をコピペするだけ</p>
         </div>
       </div>
     </div>
-    <div class="hero min-h-screen bg-base-300">
+    <div class="hero min-h-screen text-white bg-orange">
       <div class="text-center hero-content">
         <div class="max-w-md">
-          <h1 class="mb-5 text-3xl font-bold">CMSの用途以外に<br />こんな用途に使える</h1>
+          <h1 class="mb-5 text-3xl font-bold">XXXX</h1>
           <p class="mb-5">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
         </div>
       </div>
     </div>
-    <div class="hero min-h-screen bg-base-300">
+    <div class="hero min-h-screen bg-base-200">
       <div class="text-center hero-content">
         <div class="max-w-md">
-          <h1 class="mb-5 text-3xl font-bold">Chrome Addon. <br />Coming soon...</h1>
-          <p class="mb-5">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+          <h1 class="mb-5 text-3xl font-bold">Chrome Extension. <br />Coming soon...</h1>
+          <p class="mb-5">
+            ブラウザに表示されるホームページに対して、<br />直接、CMSの設定とコンテンツの変更の指示ができる
+          </p>
         </div>
       </div>
     </div>
-    <div class="hero min-h-screen bg-base-300">
+    <div class="hero min-h-screen text-white bg-green">
       <div class="text-center hero-content">
         <div class="max-w-md">
           <h1 class="mb-5 text-5xl font-bold">Let's Try !!</h1>
-          <p class="mb-5">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+          <p class="mb-5">
+            まずは試してみてください。<br />
+            手軽に体験できます。
+          </p>
           <nuxt-link class="btn btn-primary normal-case" :to="{ name: 'auth-sign-up' }">Sign up</nuxt-link>
         </div>
       </div>

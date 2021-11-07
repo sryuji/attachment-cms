@@ -1,5 +1,5 @@
 <template>
-  <div v-if="account" class="container mx-auto">
+  <div v-if="account" class="container mx-auto p-2">
     <h1>Account</h1>
     <div class="form-control max-w-xl">
       <label class="label">
