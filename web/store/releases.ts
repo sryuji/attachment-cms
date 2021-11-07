@@ -88,6 +88,7 @@ export default class extends VuexModule {
     const index = this.releases.findIndex((r) => r.id === id)
     if (index < 0) return
     this.releases.splice(index, 1)
+    if (this.latestRelease && this.latestRelease.id === id) this.latestRelease = null
   }
 
   @Action
@@ -134,7 +135,7 @@ export default class extends VuexModule {
     if (!release) return
     await $api.releases.delete(id)
     this.removeRelease(id)
-    this.fetchLatestRelease(release.scopeId)
+    await this.fetchLatestRelease(release.scopeId)
   }
 
   @Action
