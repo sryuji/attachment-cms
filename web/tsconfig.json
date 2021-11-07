@@ -20,6 +20,7 @@
       "@nuxtjs/axios",
       "@nuxt/content",
       "@nuxtjs/toast",
+      "@nuxtjs/sentry",
       "universal-cookie",
       "@types/jest",
       "vue-router/types",

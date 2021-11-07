@@ -64,6 +64,8 @@ export default {
     '@nuxt/content',
     // https://github.com/nuxt-community/community-modules/tree/master/packages/toast
     '@nuxtjs/toast',
+    // https://sentry.nuxtjs.org/
+    '@nuxtjs/sentry',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -112,5 +114,9 @@ export default {
   // https://nuxtjs.org/docs/configuration-glossary/configuration-server/
   server: {
     port: 3001,
+  },
+
+  sentry: {
+    dsn: process.env.SENTRY_DSN,
   },
 }

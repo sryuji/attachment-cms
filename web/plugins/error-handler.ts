@@ -1,11 +1,12 @@
 import Vue from 'vue'
+import * as Sentry from '@sentry/browser'
 import { eventBus } from '~/utils/event-bus'
 
 function notify(err: Error) {
-  // TODO: Sentry.captureException(error)
   if (process.client && ['localhost', '192.168'].find((s) => window.location.hostname.startsWith(s))) {
     err && console.error(err)
   }
+  Sentry.captureException(err)
 }
 
 function handleError(err: Error, vm?: Vue, info?: string) {
