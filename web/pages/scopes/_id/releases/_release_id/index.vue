@@ -182,10 +182,11 @@ import { LABELS } from '~/services/labels'
 
 const attachmentUmdScript = (token: string) => {
   return `
+&lt;link rel="preconnect" href="https://api.attachment-cms.dev" crossorigin&gt;
 &lt;script type="text/javascript"&gt;
   window.AttachmentConfig = { token: '0601c7e9-af0b-4e1d-a0e7-fde28278e9c2' }
 &lt;/script&gt;
-&lt;script type="module" src="https://attachment-cms.dev/lib/attachment-cms-lib.umd.js?token=${token}"&gt;&lt;/script&gt;
+&lt;script async type="module" src="https://attachment-cms.dev/lib/attachment-cms-lib.umd.js?token=${token}"&gt;&lt;/script&gt;
   `
 }
 const attachmentEsScript = (token: string) => {

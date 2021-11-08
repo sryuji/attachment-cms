@@ -29,7 +29,10 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'email=no,telephone=no,address=no' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'preconnect', href: 'https://api.attachment-cms.dev', crossorigin: 'anonymous' },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
