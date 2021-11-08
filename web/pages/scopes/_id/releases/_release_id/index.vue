@@ -100,13 +100,35 @@
           </div>
 
           <div v-if="!release.releasedAt" class="my-6">
-            <h2 class="font-semibold text-xl">動作させるには？</h2>
-            <div>
-              <p class="">CMS機能を活用したい各htmlページのheadタグに下記のscriptタグを必ず設置してください。</p>
+            <h2 class="font-semibold text-xl">設置について</h2>
+
+            <div class="tabs mt-6">
+              <a
+                class="tab tab-lifted"
+                :class="{ 'tab-active': installationTab === 'umd' }"
+                @click.prevent.stop="installationTab = 'umd'"
+                >script tagで設置</a
+              >
+              <a
+                class="tab tab-lifted"
+                :class="{ 'tab-active': installationTab === 'es' }"
+                @click.prevent.stop="installationTab = 'es'"
+                >ES Moduleで設置</a
+              >
             </div>
-            <div class="my-3">
+            <div v-if="installationTab === 'umd'">
+              <div class="mt-6">
+                <p class="">CMS機能を活用したい各htmlページのheadタグに下記のscriptタグを設置してください。</p>
+              </div>
               <!-- eslint-disable-next-line vue/no-v-html -->
-              <code class="p-6 font-mono text-xs rounded-box html" v-html="attachmentCode"> </code>
+              <pre> <code class="p-6 font-mono text-xs rounded-box html" v-html="attachmentUmdCode"> </code> </pre>
+            </div>
+            <div v-if="installationTab === 'es'">
+              <div class="mt-6">
+                <p class="">webpackなどでmoduleを管理されている場合はこちらをご利用ください</p>
+              </div>
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <pre> <code class="p-6 font-mono text-xs rounded-box html" v-html="attachmentEsCode"> </code> </pre>
             </div>
           </div>
 
@@ -158,8 +180,22 @@ import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-
 import { ConfirmationCloseError } from '~/components/confirmation.vue'
 import { LABELS } from '~/services/labels'
 
-const attachmentScript = (token: string) => {
-  return `&lt;script src=&quot;https://localhost:3001/lib/acms.js?token=${token}&quot;&gt;&lt;/script&gt;`
+const attachmentUmdScript = (token: string) => {
+  return `
+&lt;script type="text/javascript"&gt;
+  window.AttachmentConfig = { token: '0601c7e9-af0b-4e1d-a0e7-fde28278e9c2' }
+&lt;/script&gt;
+&lt;script type="module" src="https://attachment-cms.dev/lib/attachment-cms-lib.umd.js?token=${token}"&gt;&lt;/script&gt;
+  `
+}
+const attachmentEsScript = (token: string) => {
+  return `
+import { AttachmentCMS } from 'https://attachment-cms.dev/lib/attachment-cms-lib.es.js'
+
+new AttachmentCMS({
+  token: ${token},
+}).run()
+  `
 }
 const releasesModule = namespace('releases')
 
@@ -173,6 +209,8 @@ export default class ReleasePage extends Form {
     open: false,
     record: null,
   }
+
+  installationTab: 'umd' | 'es' = 'umd'
 
   // Lifecycle hooks
   beforeRouteEnter(to: Route, from: Route, next: NavigationGuardNext) {
@@ -241,9 +279,14 @@ export default class ReleasePage extends Form {
     return this.release && this.release.name
   }
 
-  get attachmentCode(): string {
+  get attachmentUmdCode(): string {
     if (!this.scope) return ''
-    return attachmentScript(this.scope.token)
+    return attachmentUmdScript(this.scope.token)
+  }
+
+  get attachmentEsCode(): string {
+    if (!this.scope) return ''
+    return attachmentEsScript(this.scope.token)
   }
 
   get actionLabels(): Record<string, string> {
