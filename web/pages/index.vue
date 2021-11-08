@@ -27,10 +27,26 @@
       </div>
     </div>
     <div class="hero min-h-screen text-white bg-orange">
-      <div class="text-center hero-content">
-        <div class="max-w-md">
-          <h1 class="mb-5 text-3xl font-bold">XXXX</h1>
-          <p class="mb-5">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+      <div class="text-center hero-content w-full">
+        <div class="w-full h-1/2">
+          <h1 class="mb-5 text-3xl font-bold">こんな場面で便利</h1>
+          <div class="my-12 flex justify-between space-x-9 items-stretch">
+            <div class="flex-col w-full">
+              <div class="bg-white text-orange rounded-box w-full h-full text-xl p-6">
+                <p>xxxx</p>
+              </div>
+            </div>
+            <div class="flex-col w-full">
+              <div class="bg-white text-orange rounded-box w-full h-full text-xl p-6">
+                <p>xxxx</p>
+              </div>
+            </div>
+            <div class="flex-col w-full">
+              <div class="bg-white text-orange rounded-box w-full h-full text-xl p-6">
+                <p>xxxx</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

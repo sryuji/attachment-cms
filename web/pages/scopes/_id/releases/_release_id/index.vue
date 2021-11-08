@@ -60,11 +60,7 @@
                   <span class="ml-6 font-semibold">{{ content.description }}</span>
                 </div>
                 <div class="flex-col">
-                  <button
-                    v-if="!release.releasedAt"
-                    class="btn btn-warning btn-sm"
-                    @click.prevent="openContentHistoryModal(content)"
-                  >
+                  <button class="btn btn-warning text-lg btn-sm" @click.prevent="openContentHistoryModal(content)">
                     編集
                   </button>
                   <nuxt-link v-if="!scope.domain" :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm"
@@ -140,6 +136,7 @@
       :release-id="releaseId"
       :scope-id="scopeId"
       :content-history="contentHistoryModal.record"
+      :is-released="release && release.releasedAt"
       @close="contentHistoryModal.open = false"
     ></content-history-modal>
   </div>

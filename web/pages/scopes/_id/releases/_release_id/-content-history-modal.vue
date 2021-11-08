@@ -7,13 +7,15 @@
       <div class="form-control">
         <label class="label">
           <span class="label-text">ドメイン以降の/から始まるPath</span>
-          <span class="badge badge-error">必須</span>
+          <span v-if="isReleased" class="badge badge-warning">リリース済のため更新不可</span>
+          <span v-else class="badge badge-error">必須</span>
         </label>
         <input
           v-model="contentHistoryDto.path"
           type="text"
           placeholder="/your/page/path"
           class="input input-bordered"
+          :disabled="isReleased"
         />
         <form-validation :value="contentHistoryDto.path" :rules="['required']" />
       </div>
@@ -31,22 +33,29 @@
       <div class="form-control">
         <label class="label">
           <span class="label-text">HTMLElementをSelectorで指定</span>
-          <span class="badge badge-error">必須</span>
+          <span v-if="isReleased" class="badge badge-warning">リリース済のため更新不可</span>
+          <span v-else class="badge badge-error">必須</span>
         </label>
         <input
           v-model="contentHistoryDto.selector"
           type="text"
           placeholder="#__layout > div > div.mx-auto.p-2 > div.card.shadow-md.my-3 > div > div.mb-6.mt-12 > div:nth-child(2) > p"
           class="input input-bordered"
+          :disabled="isReleased"
         />
         <form-validation :value="contentHistoryDto.selector" rules="required" />
       </div>
       <div class="form-control">
         <label class="label justify-start">
           <span class="label-text">HTMLElementに対するAction</span>
-          <span class="ml-3 badge badge-error">必須</span>
+          <span v-if="isReleased" class="badge badge-warning">リリース済のため更新不可</span>
+          <span v-else class="ml-3 badge badge-error">必須</span>
         </label>
-        <select v-model="contentHistoryDto.action" class="select select-bordered w-full max-w-md">
+        <select
+          v-model="contentHistoryDto.action"
+          class="select select-bordered w-full max-w-md"
+          :disabled="isReleased"
+        >
           <option v-for="(label, key) in actionLabels" :key="key" :value="key">{{ label }}</option>
         </select>
         <form-validation :value="contentHistoryDto.action" rules="required" />
@@ -80,6 +89,7 @@ import { UpdateContentHistoryDto } from '~/types/attachment-cms-server/app/conte
 import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-history.entity'
 import { convertToDtoWithForm } from '~/utils/object'
 import { LABELS } from '~/services/labels'
+import { eventBus } from '~/utils/event-bus'
 
 @Component({
   components: { FormValidation },
@@ -101,6 +111,7 @@ export default class ContentHistoryModal extends Form {
   @Prop() scopeId: number
   @Prop() releaseId: number
   @Prop() contentHistory?: ContentHistory
+  @Prop() isReleased: boolean
 
   // Lifecycle hooks
   created() {
@@ -139,6 +150,7 @@ export default class ContentHistoryModal extends Form {
     } else {
       await this.update()
     }
+    eventBus.notifyMessages('コンテンツを保存しました。')
     this.close()
   }
 

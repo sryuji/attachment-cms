@@ -5,7 +5,7 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { REDIRECT_TO, NotificationType } from '~/services/constants'
-import { RedirectError, ServerValidationError } from '~/utils/errors'
+import { ForbiddenError, RedirectError, ServerValidationError } from '~/utils/errors'
 import { eventBus } from '~/utils/event-bus'
 import { saveModel } from '~/utils/local-storage'
 
@@ -26,13 +26,15 @@ export default class NotificationComponent extends Vue {
     let message
     switch (name) {
       case 'ServerValidationError':
-        if (err instanceof ServerValidationError) message = err.baseData.message
+        if (err instanceof ServerValidationError && err.baseData) message = err.baseData.message
         if (!message) message = 'サーバーにて入力エラーが検出されました。入力内容を再確認してください'
         return this.showMessages(message, 'warning')
       case 'BadRequestError':
-        return this.showMessages('権限がないため表示できません。', 'warning')
+        return this.showMessages('サーバーへのリクエスト内容が不正です。', 'error')
       case 'ForbiddenError':
-        return this.showMessages('権限がないため表示できません。', 'warning')
+        if (err instanceof ForbiddenError) message = err.baseData && err.baseData.message
+        if (!message) message = '権限がないため表示できません。'
+        return this.showMessages(message, 'warning')
       case 'NotFoundError':
         return this.$router.replace({ name: 'notFound' }).catch((err) => err)
       case 'UnauthorizedError':
@@ -41,7 +43,7 @@ export default class NotificationComponent extends Vue {
         if (err instanceof RedirectError) this.redirectPage(err.baseData)
         return
       case 'ClientValidationError':
-        return this.showMessages(err.message || '入力エラーが検出されました。入力内容を再確認してください', 'warning')
+        return this.showMessages(err.message || '入力に不備がありました。入力内容を再確認してください', 'warning')
       case 'NetworkError':
         return this.showMessages('通信に失敗しました。 通信状況を確認した後、再実行してください。', 'error')
       case 'TimeoutError':
