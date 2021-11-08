@@ -168,6 +168,8 @@ class AttachmentCMS {
     this.id = options && options.id || null;
   }
   async run() {
+    if (typeof window === "undefined")
+      return;
     this.contentsResponse = await this.fetchContents();
     this.contents = this.extractMatchedContents(this.contentsResponse.contents);
     if (document.readyState === "loading") {
