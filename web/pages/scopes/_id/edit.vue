@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto p-2">
-    <h1>{{ title }}</h1>
+    <h1 class="">{{ title }}</h1>
     <div>
       <div class="form-control max-w-md">
         <label class="label">
@@ -75,6 +75,7 @@ export default class EditScopePage extends Form {
     this.routeCoordinator = this.routeCoordinator || new RouteCoordinator(this)
 
     if (!this.scope) await scopesStore.fetchScopes({})
+    this.title = `Edit Scope - ${this.scope.name}`
     this.resetForm()
   }
 

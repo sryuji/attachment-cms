@@ -105,20 +105,20 @@
           </div>
 
           <div v-if="!release.releasedAt" class="my-6">
-            <h2 class="font-semibold text-xl">設置について</h2>
+            <h2 class="font-semibold text-xl">Installation to Homepage</h2>
 
             <div class="tabs mt-6">
               <a
                 class="tab tab-lifted"
                 :class="{ 'tab-active': installationTab === 'umd' }"
                 @click.prevent.stop="installationTab = 'umd'"
-                >script tagで設置</a
+                >script tag</a
               >
               <a
                 class="tab tab-lifted"
                 :class="{ 'tab-active': installationTab === 'es' }"
                 @click.prevent.stop="installationTab = 'es'"
-                >ES Moduleで設置</a
+                >ES Module</a
               >
             </div>
             <div v-if="installationTab === 'umd'">
