@@ -7,6 +7,8 @@ import { ApiRepositories } from './api-repositories.interface'
 import { ScopesRepository } from '~/repositories/scopes.repository'
 import { ReleasesRepository } from '~/repositories/releases.repository'
 import { ContentHistoriesRepository } from '~/repositories/content-histories.repository'
+import { AccountScopesRepository } from '~/repositories/account-scopes.repository'
+import { ScopeInvitationsRepository } from '~/repositories/scope-invitation.repository'
 
 export default class ApiRepositoryFactory {
   private axios: NuxtAxiosInstance
@@ -26,6 +28,8 @@ export default class ApiRepositoryFactory {
       scopes: new ScopesRepository(this.axios, this.app),
       releases: new ReleasesRepository(this.axios, this.app),
       contentHistories: new ContentHistoriesRepository(this.axios, this.app),
+      accountScopes: new AccountScopesRepository(this.axios, this.app),
+      scopeInvitations: new ScopeInvitationsRepository(this.axios, this.app),
     }
   }
 

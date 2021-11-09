@@ -48,7 +48,7 @@ export function deleteModel(key: string): boolean | void {
   }
 }
 
-export function fetchProperty(key: string, path: string | string[]): Model | void {
+export function fetchProperty(key: string, path: string | string[]): any | void {
   const model = fetchModel(key)
   if (!model) return
   return get(model, path)

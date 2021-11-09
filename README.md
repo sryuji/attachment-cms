@@ -31,6 +31,11 @@ $ docker-compose start
 ```
 
 で行ってください。
+ログは下記で確認できます。
+
+```bash
+$ docker logs acms_app -f
+```
 
 
 ```bash
