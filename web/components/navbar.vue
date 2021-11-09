@@ -13,7 +13,7 @@
       </div>
       <div v-else class="flex items-stretch">
         <nuxt-link :to="{ name: 'scopes' }" class="btn btn-ghost btn-sm rounded-btn normal-case">
-          Scope List
+          Project List
         </nuxt-link>
       </div>
     </div>

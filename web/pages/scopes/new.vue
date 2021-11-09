@@ -47,7 +47,7 @@ export default class CreateScopePage extends Form {
     description: '',
   }
 
-  title = 'Create new Scope'
+  title = 'Create new Project'
   head() {
     return {
       title: this.title,

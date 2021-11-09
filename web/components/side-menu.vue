@@ -4,7 +4,7 @@
       <ul class="menu m-2 p-4 shadow-lg bg-base-100 rounded-box">
         <template v-if="isLoggedIn">
           <li class="text-lg font-bold">
-            <span> Scope List </span>
+            <span> Project List </span>
           </li>
           <li v-for="scope in scopes" :key="scope.id">
             <nuxt-link :to="{ path: `/scopes/${scope.id}/releases` }">{{ scope.name }}</nuxt-link>
@@ -13,7 +13,7 @@
             <span> Others</span>
           </li>
           <li>
-            <nuxt-link :to="{ path: `/scopes/new` }"> Create new Scope </nuxt-link>
+            <nuxt-link :to="{ path: `/scopes/new` }"> Create new Project </nuxt-link>
           </li>
           <li>
             <nuxt-link :to="{ name: 'accounts' }"> Account </nuxt-link>

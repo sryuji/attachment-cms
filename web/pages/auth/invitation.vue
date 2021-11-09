@@ -5,8 +5,8 @@
 
       <template v-if="scopeInvitation">
         <div class="my-6 text-lg">
-          <p>Google認証後、自動的にScopeに招待されます。</p>
-          <p>Scopeは、CMS管理するコンテンツをひとまとまりに管理しています。</p>
+          <p>Google認証後、自動的にProjectに招待されます。</p>
+          <p>Projectでは、CMS管理対象となるコンテンツとそれらのリリースを管理しています。</p>
         </div>
         <div class="my-12">
           <img
