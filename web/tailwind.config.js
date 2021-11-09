@@ -103,6 +103,7 @@ module.exports = {
     fontFamily: {
       body: [
         'Avenir',
+        'Georgia',
         'Helvetica Neue',
         'Helvetica',
         'Arial',

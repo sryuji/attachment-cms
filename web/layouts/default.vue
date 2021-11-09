@@ -1,4 +1,4 @@
-<template>
+<template class="font-body">
   <div id="attachment-cms">
     <notification />
     <div class="font-body h-screen w-full drawer drawer-end">

@@ -10,13 +10,14 @@
 
 
 <script lang="ts">
+import { NuxtError } from '@nuxt/types'
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 
 @Component
 export default class ErrorLayout extends Vue {
   layout: string = 'default'
   @Prop()
-  error?: object
+  error?: NuxtError
 
   beforeMount() {}
 }
