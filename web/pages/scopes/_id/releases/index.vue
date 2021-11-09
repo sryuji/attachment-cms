@@ -2,7 +2,7 @@
   <div class="container mx-auto p-2">
     <template v-if="scope">
       <div class="flex">
-        <div class="text-left">
+        <div class="flex-col text-left">
           <div>
             <span class="text-2xl">{{ scope.name }}</span>
           </div>
@@ -11,7 +11,7 @@
           </div>
           <p class="text-sm text-grey-dark">{{ scope.description }}</p>
         </div>
-        <div>
+        <div class="flex-shrink-0">
           <nuxt-link :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-xs normal-case">編集</nuxt-link>
         </div>
       </div>

@@ -2,7 +2,7 @@
   <div class="container mx-auto p-2">
     <template v-if="scope">
       <div class="flex">
-        <div class="text-left">
+        <div class="text-left flex-col">
           <div>
             <span class="text-2xl">{{ scope.name }}</span>
           </div>
@@ -11,12 +11,15 @@
           </div>
           <p class="text-sm text-grey-dark">{{ scope.description }}</p>
         </div>
-        <div>
-          <nuxt-link :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-xs normal-case">編集</nuxt-link>
+        <div class="flex-shrink-0">
+          <nuxt-link :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm normal-case">編集</nuxt-link>
+        </div>
+        <div class="flex-shrink-0">
+          <nuxt-link :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm normal-case">メンバー</nuxt-link>
         </div>
       </div>
 
-      <div class="flex justify-between mt-6">
+      <div class="flex justify-between mt-6 mx-3">
         <button v-if="hasPrevRelease" class="" @click="goPrevRelease">
           <font-awesome-icon :icon="['fas', 'chevron-circle-left']" class="text-2xl" /><br />
           <span>Prev</span>
@@ -30,8 +33,8 @@
       </div>
       <div v-if="release" class="card shadow-md">
         <div class="card-body">
-          <div class="flex">
-            <div class="flex-1 form-control">
+          <div class="flex flex-wrap">
+            <div class="flex-grow form-control">
               <h1>
                 <input
                   v-if="!release.releasedAt"
@@ -44,7 +47,7 @@
                 <span v-else class="font-semibold text-xl">{{ release.name }}</span>
               </h1>
             </div>
-            <div class="flex-initial">
+            <div class="flex-shrink-0">
               <span v-if="isLatest && !release.releasedAt" class="badge badge-lg badge-warning text-2xl">公開前</span>
               <span v-else-if="isLatest" class="badge badge-lg badge-success text-2xl">公開中</span>
               <span v-else class="badge badge-lg badge-info text-2xl">公開終了</span>
@@ -53,13 +56,15 @@
 
           <div class="my-3">
             <div v-for="content in contentHistories" :key="content.id" class="bg-grey-lighter p-6 mb-6 rounded-box">
-              <div class="flex">
-                <div class="flex-grow">
+              <div class="flex flex-wrap">
+                <div class="flex-shrink-0">
                   <span class="text-xl font-semibold bg-white rounded-box p-3">{{ content.path }}</span>
                   <span class="ml-3">ページの</span>
-                  <span class="ml-6 font-semibold">{{ content.description }}</span>
                 </div>
-                <div class="flex-col">
+                <div class="flex-1 ml-3">
+                  <span class="font-semibold">{{ content.description }}</span>
+                </div>
+                <div class="flex-shrink-0 ml-3 leading-10">
                   <button class="btn btn-warning text-lg btn-sm" @click.prevent="openContentHistoryModal(content)">
                     編集
                   </button>
@@ -77,8 +82,8 @@
                 </div>
               </div>
               <div class="mt-4 bg-white p-3 rounded-box">{{ content.selector }}</div>
-              <div class="my-5">
-                で指定されるHTMLElementに対して
+              <div class="my-5 leading-9">
+                <span>で指定されるHTMLElementに対して</span>
                 <span class="bg-white p-3 rounded-box">{{ actionLabels[content.action] }}</span>
                 <span class="mx-3">Actionを発動します。</span>
               </div>
@@ -87,7 +92,7 @@
                   <span>Actionで利用されるHTMLデータ</span>
                 </div>
                 <div class="bg-white p-4 rounded-box">
-                  <pre>{{ content.content }}</pre>
+                  <pre class="whitespace-pre-wrap">{{ content.content }}</pre>
                 </div>
               </template>
             </div>
