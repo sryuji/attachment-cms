@@ -15,7 +15,8 @@
     "generate": "nuxt generate",
     "lint:es": "eslint --ext \".ts,.js,.vue\" .",
     "lint": "yarn lint:es",
-    "test": "jest"
+    "test": "jest",
+    "cp:types": "cp -Rf ../server/dist/types/src/* ./types/attachment-cms-server/"
   },
   "dependencies": {
     "@nuxt/content": "^1.15.0",
