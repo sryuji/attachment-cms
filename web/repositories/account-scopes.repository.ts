@@ -11,6 +11,10 @@ export class AccountScopesRepository extends ApiRepository {
     await this.del(`/account-scopes/${id}`)
   }
 
+  async deleteByScopeId(scopeId: number): Promise<void> {
+    await this.del(`/account-scopes`, { params: { scopeId } })
+  }
+
   async findAll({ scopeId }: { scopeId: number }): Promise<AccountScopesSerializer> {
     return await this.get(`/account-scopes`, { params: { scopeId } })
   }

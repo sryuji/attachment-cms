@@ -1,5 +1,7 @@
 import { Route } from 'vue-router/types'
 import { Action, Module, VuexModule, config, Mutation } from 'vuex-module-decorators'
+import { removeAccessToken } from '~/services/authentication.helper'
+import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
 import { $api } from '~/utils/api-accessor'
 import { accountsStore, scopesStore } from '~/utils/store-accessor'
 
@@ -13,8 +15,11 @@ config.rawError = true
 export default class extends VuexModule {
   accessToken: string = null
   isCheckedAuth: boolean = false
+  /**
+   * middlewareでページ単位の認証フラグを確認し、ここに反映して情報共有される
+   */
   ignoreAuth: boolean = false
-  redirectTo: Route
+  redirectTo: Route = null
 
   get isLoggedIn() {
     return !!this.accessToken
@@ -26,8 +31,10 @@ export default class extends VuexModule {
   }
 
   @Mutation
-  clearAccessToken() {
+  clearAuthState() {
     this.accessToken = null
+    this.isCheckedAuth = false
+    this.ignoreAuth = false
   }
 
   @Mutation
@@ -60,8 +67,9 @@ export default class extends VuexModule {
 
   @Action
   async fetchRequiredDataOnLoggedIn(): Promise<void> {
-    if (scopesStore.hasScopes) return Promise.resolve()
-    await scopesStore.fetchScopes({})
+    const promise1: Promise<Scope[] | void> = scopesStore.hasScopes ? Promise.resolve() : scopesStore.fetchScopes({})
+    const promise2: Promise<void> = accountsStore.hasAccount ? Promise.resolve() : accountsStore.fetchAccount()
+    await Promise.all([promise1, promise2])
   }
 
   @Action
@@ -72,7 +80,8 @@ export default class extends VuexModule {
 
   @Action
   clearAuth(): void {
-    this.clearAccessToken()
+    removeAccessToken()
+    this.clearAuthState()
     accountsStore.setAccount(null)
     scopesStore.clearScopes()
   }

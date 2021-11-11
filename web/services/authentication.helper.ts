@@ -19,6 +19,10 @@ export type AccessTokenDto = {
   accessTokenMaxAge: number
 }
 
+/**
+ * このCookieは、Nuxt.jsで認証時のSSRの処理を行う場合に必要となるため、LocalStorageでなくcookie管理しています
+ * @param {AccessTokenDto} data
+ */
 export function generateAccessTokenCookie(data: AccessTokenDto): void {
   const cookies = new Cookies()
   const cookieOptions: CookieSetOptions = {
@@ -30,9 +34,19 @@ export function generateAccessTokenCookie(data: AccessTokenDto): void {
   cookies.set(ACCESS_TOKEN_COOKIE_KEY, data.accessToken, cookieOptions)
 }
 
+/**
+ * AccessTokenをauth storeにstore
+ * @param {IncomingMessage} req
+ * @returns {boolean} accessTokenの有無
+ */
 export function restoreAccessToken(req?: IncomingMessage): boolean {
   const cookies = req ? new Cookies(req.headers.cookie) : new Cookies()
   const accessToken: string = cookies.get(ACCESS_TOKEN_COOKIE_KEY) || null
   authStore.setAccessToken(accessToken)
   return !!accessToken
+}
+
+export function removeAccessToken(): void {
+  const cookies = new Cookies()
+  cookies.remove(ACCESS_TOKEN_COOKIE_KEY)
 }

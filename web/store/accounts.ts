@@ -18,6 +18,10 @@ export default class extends VuexModule {
     this.account = account
   }
 
+  get hasAccount(): boolean {
+    return !!(this.account && this.account.id)
+  }
+
   @Action
   async fetchAccount(): Promise<void> {
     const data = await $api.accounts.findOne()

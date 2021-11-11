@@ -1,5 +1,5 @@
 import { NuxtAppOptions } from '@nuxt/types'
-import { AxiosRequestConfig, AxiosError } from 'axios'
+import { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios'
 import type { NuxtAxiosInstance } from '@nuxtjs/axios'
 import {
   BadRequestError,
@@ -13,6 +13,7 @@ import {
   UnauthorizedError,
 } from '~/utils/errors'
 import { authStore } from '~/store'
+import { AUTH_ACCESS_TOKEN_HEADER } from '~/services/constants'
 
 export type HandleErrorOptions = { attemptRefreshToken?: boolean }
 
@@ -79,6 +80,7 @@ export default abstract class ApiRepository {
   ): Promise<any> {
     try {
       const response = await request
+      this.applyServerInstruction(response)
       return Promise.resolve(response.data)
     } catch (error: any) {
       const data = await this.handleError(error, options)
@@ -127,5 +129,18 @@ export default abstract class ApiRepository {
 
     this.setDefaultConfig(config, { force: true })
     return this.request(config)
+  }
+
+  private applyServerInstruction(response: AxiosResponse) {
+    const authAccessTokenHeader = response.headers[AUTH_ACCESS_TOKEN_HEADER]
+    this.handleAuthAccessToken(authAccessTokenHeader)
+  }
+
+  private handleAuthAccessToken(authAccessTokenHeader: string) {
+    switch (authAccessTokenHeader) {
+      case 'clear':
+        authStore.clearAuth()
+        break
+    }
   }
 }

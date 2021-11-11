@@ -64,12 +64,8 @@
             <td>{{ accountScope.account.email }}</td>
             <td>{{ accountScope.account.lastName }} {{ accountScope.account.firstName }}</td>
             <td>
-              <button
-                v-if="accountScope.accountId === me.id"
-                class="btn btn-sm btn-error"
-                @click="deleteAccountScope(accountScope.id)"
-              >
-                プロジェクトから離脱
+              <button class="btn btn-sm btn-error" @click="deleteAccountScope(accountScope.id)">
+                プロジェクトから削除
               </button>
             </td>
           </tr>
@@ -165,9 +161,9 @@ export default class memberPage extends Form {
 
   async deleteAccountScope(id: number) {
     try {
-      await eventBus.confirm({ title: 'この招待を削除しても良いですか？' })
+      await eventBus.confirm({ title: '削除しても良いですか？' })
       await this.$api.accountScopes.delete(id)
-      eventBus.notifyMessages('プロジェクトを離脱しました。')
+      eventBus.notifyMessages('プロジェクトを離脱させました。')
       this.$router.replace({ path: '/' })
     } catch (err) {
       if (err instanceof ConfirmationCloseError) return
