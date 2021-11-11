@@ -14,6 +14,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import { INVITATION_KEY, REDIRECT_TO } from '~/services/constants'
 import { deleteModel, fetchModel, fetchProperty } from '~/utils/local-storage'
 import { authStore } from '~/store'
+import { eventBus } from '~/utils/event-bus'
 
 @Component({
   meta: { auth: false },
@@ -37,11 +38,12 @@ export default class AuthSignInPageComponent extends Vue {
   }
 
   async joinScopeByInvitation() {
-    const token: string = fetchProperty(INVITATION_KEY, 'token')
-    if (!token) return
-
     try {
+      const token: string = fetchProperty(INVITATION_KEY, 'token')
+      if (!token) return
+
       await this.$api.scopeInvitations.join(token)
+      eventBus.notifyMessages('プロジェクトに参加しました。')
     } finally {
       deleteModel(INVITATION_KEY)
     }

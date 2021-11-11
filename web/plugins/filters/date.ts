@@ -9,7 +9,7 @@ export function parseDate(value: string | Date): Date {
   return parseISO(value)
 }
 
-export function formatDate(value: string | Date, format = 'YYYY/MM/DD'): string {
+export function formatDate(value: string | Date, format = 'yyyy/MM/dd'): string {
   if (!value) return ''
   if (isString(value)) value = parseDate(value)
   return dateFormat(value, format, { locale: jaLocale })
@@ -21,7 +21,7 @@ export function formatTime(value: string | Date, format = 'HH:mm'): string {
   return dateFormat(value, format)
 }
 
-export function formatDatetime(value: string | Date, format = 'MM/DD HH:mm'): string {
+export function formatDatetime(value: string | Date, format = 'MM/dd HH:mm'): string {
   if (!value) return ''
   if (isString(value)) value = parseDate(value)
   return dateFormat(value, format, { locale: jaLocale })

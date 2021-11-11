@@ -15,25 +15,33 @@
           <nuxt-link :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm normal-case">編集</nuxt-link>
         </div>
         <div class="flex-shrink-0">
-          <nuxt-link :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm normal-case">メンバー</nuxt-link>
+          <nuxt-link :to="{ path: `/scopes/${scope.id}/member` }" class="ml-3 btn btn-sm normal-case"
+            >メンバー</nuxt-link
+          >
         </div>
       </div>
 
       <div class="flex justify-between mt-6 mx-3">
         <button v-if="hasPrevRelease" class="" @click="goPrevRelease">
           <font-awesome-icon :icon="['fas', 'chevron-circle-left']" class="text-2xl" /><br />
-          <span>Prev</span>
+          <span>Next</span>
         </button>
         <div v-else></div>
         <button v-if="hasNextRelease" class="" @click="goNextRelease">
           <font-awesome-icon :icon="['fas', 'chevron-circle-right']" class="text-2xl" /><br />
-          <span>Next</span>
+          <span>Prev</span>
         </button>
         <div v-else></div>
       </div>
       <div v-if="release" class="card shadow-md">
         <div class="card-body">
-          <div class="flex flex-wrap">
+          <div class="flex flex-wrap items-center">
+            <div v-if="release.releasedAt" class="flex-shrink-0 mr-6 badge badge-success h-8 p-3">
+              <div class="">
+                <span class="text-lg font-semibold">{{ release.releasedAt | formatDate('yy/MM/dd') }}</span>
+                <span class="text-sm leading-none"> release</span>
+              </div>
+            </div>
             <div class="flex-grow form-control">
               <h1>
                 <input
@@ -64,7 +72,10 @@
                 <div class="flex-1 ml-3">
                   <span class="font-semibold">{{ content.description }}</span>
                 </div>
-                <div class="flex-shrink-0 ml-3 leading-10">
+                <div
+                  v-if="!release.releasedAt || release.id === latestRelease.id"
+                  class="flex-shrink-0 ml-3 leading-10"
+                >
                   <button class="btn btn-warning text-lg btn-sm" @click.prevent="openContentHistoryModal(content)">
                     編集
                   </button>
@@ -126,14 +137,14 @@
                 <p class="">CMS機能を活用したい各htmlページのheadタグに下記のscriptタグを設置してください。</p>
               </div>
               <!-- eslint-disable-next-line vue/no-v-html -->
-              <pre> <code class="p-6 font-mono text-xs rounded-box html" v-html="attachmentUmdCode"> </code> </pre>
+              <pre> <code class="select-all p-6 font-mono text-xs rounded-box html" v-html="attachmentUmdCode"> </code> </pre>
             </div>
             <div v-if="installationTab === 'es'">
               <div class="mt-6">
                 <p class="">webpackなどでmoduleを管理されている場合はこちらをご利用ください</p>
               </div>
               <!-- eslint-disable-next-line vue/no-v-html -->
-              <pre> <code class="p-6 font-mono text-xs rounded-box html" v-html="attachmentEsCode"> </code> </pre>
+              <pre> <code class="select-all p-6 font-mono text-xs rounded-box html" v-html="attachmentEsCode"> </code> </pre>
             </div>
           </div>
 

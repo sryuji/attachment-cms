@@ -75,7 +75,7 @@ export default class EditScopePage extends Form {
     this.routeCoordinator = this.routeCoordinator || new RouteCoordinator(this)
 
     if (!this.scope) await scopesStore.fetchScopes({})
-    this.title = `Edit Project - ${this.scope.name}`
+    this.title = `${this.scope.name}`
     this.resetForm()
   }
 

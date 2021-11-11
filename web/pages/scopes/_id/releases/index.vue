@@ -12,7 +12,12 @@
           <p class="text-sm text-grey-dark">{{ scope.description }}</p>
         </div>
         <div class="flex-shrink-0">
-          <nuxt-link :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-xs normal-case">編集</nuxt-link>
+          <nuxt-link :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm normal-case">編集</nuxt-link>
+        </div>
+        <div class="flex-shrink-0">
+          <nuxt-link :to="{ path: `/scopes/${scope.id}/member` }" class="ml-3 btn btn-sm normal-case"
+            >メンバー</nuxt-link
+          >
         </div>
       </div>
 

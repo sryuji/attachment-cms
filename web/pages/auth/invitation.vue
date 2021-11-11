@@ -1,12 +1,11 @@
 <template>
-  <div class="container mx-auto p-2 flex justify-center">
+  <div class="container p-2 flex justify-center">
     <div>
       <h1 class="my-6">attachment CMSへの招待</h1>
-
-      <template v-if="scopeInvitation">
+      <template v-if="!loading && scopeInvitation">
         <div class="my-6 text-lg">
-          <p>Google認証後、自動的にProjectに招待されます。</p>
-          <p>Projectでは、CMS管理対象となるコンテンツとそれらのリリースを管理しています。</p>
+          <p>Google認証後、招待主のProjectに招待されます。</p>
+          <p>CMSコンテンツの管理は、コンテンツとそれらのリリースをProject毎に管理されます。</p>
         </div>
         <div class="my-12">
           <img
@@ -16,10 +15,10 @@
           />
         </div>
       </template>
-      <template v-else>
+      <template v-else-if="!loading">
         <div class="my-6 text-lg text-red">
-          <p>招待に失敗しました。</p>
-          <p>URLに不備がないか確認してください。</p>
+          <p>この招待は、無効です。</p>
+          <p>URLの不備、もしくは、招待が無効化されていないかを招待主に確認してください。</p>
         </div>
       </template>
     </div>
@@ -41,6 +40,7 @@ import { saveModel } from '~/utils/local-storage'
   },
 })
 export default class extends Vue {
+  loading: boolean = true
   token: string = null
   scopeInvitation: ScopeInvitation = null
 
@@ -50,6 +50,7 @@ export default class extends Vue {
     const data = await this.$api.scopeInvitations.findOne(this.token)
     this.scopeInvitation = data.scopeInvitation
     saveModel(INVITATION_KEY, { token: this.token })
+    this.loading = false
   }
 
   mounted() {}

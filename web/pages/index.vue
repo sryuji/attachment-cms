@@ -22,7 +22,7 @@
       <div class="text-center hero-content">
         <div class="max-w-md">
           <h1 class="mb-5 text-4xl font-bold">後から簡単に<br />始められる</h1>
-          <p class="mb-5">ホームページに指定の設定をコピペするだけ</p>
+          <p class="mb-5">ホームページに指定のコードをコピペするだけ</p>
         </div>
       </div>
     </div>

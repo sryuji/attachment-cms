@@ -4,16 +4,8 @@ import { ScopeInvitationsSerializer } from '~/types/attachment-cms-server/app/sc
 import { ScopeInvitationForm } from '~/types/attachment-cms-server/app/scopes/dto/scope-invitation.form'
 
 export class ScopeInvitationsRepository extends ApiRepository {
-  findAll({
-    scopeId,
-    page = 1,
-    per = 999,
-  }: {
-    scopeId: number
-    page: number
-    per: number
-  }): Promise<ScopeInvitationsSerializer> {
-    return this.get(`/scope-invitations`, { params: { scopeId, page, per } })
+  findAll({ scopeId }: { scopeId: number }): Promise<ScopeInvitationsSerializer> {
+    return this.get(`/scope-invitations`, { params: { scopeId, page: 1, per: 999 } })
   }
 
   findOne(token: string): Promise<ScopeInvitationSerializer> {
