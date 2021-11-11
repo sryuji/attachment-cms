@@ -22,6 +22,18 @@ export default class extends VuexModule {
     return !!(this.account && this.account.id)
   }
 
+  get accountScope() {
+    return (scopeId: number) => this.account.accountScopes.find((r) => r.scopeId === scopeId)
+  }
+
+  get role() {
+    return (scopeId: number) => this.accountScope(scopeId)?.role
+  }
+
+  get isOwner() {
+    return (scopeId: number) => this.role(scopeId) === 'owner'
+  }
+
   @Action
   async fetchAccount(): Promise<void> {
     const data = await $api.accounts.findOne()

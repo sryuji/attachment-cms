@@ -6,4 +6,5 @@ export declare class AccountScope extends ApplicationEntity<AccountScope> {
     account: Account;
     scopeId: number;
     scope: Scope;
+    role: string;
 }
