@@ -1,4 +1,4 @@
 export declare class UpdateAccountScopeDto {
     id: number;
-    action: string;
+    role: string;
 }
