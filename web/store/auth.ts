@@ -1,6 +1,5 @@
 import { Route } from 'vue-router/types'
 import { Action, Module, VuexModule, config, Mutation } from 'vuex-module-decorators'
-import { removeAccessToken } from '~/services/authentication.helper'
 import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
 import { $api } from '~/utils/api-accessor'
 import { accountsStore, scopesStore } from '~/utils/store-accessor'
@@ -80,7 +79,6 @@ export default class extends VuexModule {
 
   @Action
   clearAuth(): void {
-    removeAccessToken()
     this.clearAuthState()
     accountsStore.setAccount(null)
     scopesStore.clearScopes()

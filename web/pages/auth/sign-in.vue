@@ -1,16 +1,17 @@
 <template>
   <div class="container mx-auto p-2 flex justify-center">
-    <div class="min-w-96">
-      <h1 class="my-6">please sign in</h1>
-      <div class="my-6 text-lg">
-        <p>おかえりなさいませ</p>
-      </div>
-      <div class="mt-12">
-        <img
-          class="cursor-pointer object-contain"
-          src="~/assets/images/google/btn_google_signin_light_normal_web.png"
-          @click="moveGoogleAuthPage"
-        />
+    <div class="card w-full sm:w-1/2 shadow-2xl bg-grey-lighter">
+      <div class="card-body text-xl">
+        <p>Please sign in.</p>
+        <div class="justify-end card-actions">
+          <button class="">
+            <img
+              class="cursor-pointer object-contain"
+              src="~/assets/images/google/btn_google_signin_light_normal_web.png"
+              @click="moveGoogleAuthPage"
+            />
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -18,17 +19,25 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
+import { NavigationGuardNext, Route } from 'vue-router'
+import { authStore } from '~/store'
 
 @Component({
   meta: { auth: false },
   head() {
     return {
-      title: 'Sign In',
+      title: 'Sign in',
     }
   },
 })
 export default class extends Vue {
-  mounted() {}
+  // Lifecycle hooks
+  beforeRouteEnter(to: Route, from: Route, next: NavigationGuardNext) {
+    if (authStore.isLoggedIn) next('/scopes')
+    next()
+  }
+
+  // method
   moveGoogleAuthPage(): void {
     window.location.href = `${this.$config.API_BASE_URL}/auth/google`
   }

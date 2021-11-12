@@ -1,7 +1,7 @@
-<template class="font-body">
-  <div id="attachment-cms">
+<template>
+  <div id="attachment-cms" class="font-body">
     <notification />
-    <div class="font-body h-screen w-full drawer drawer-end">
+    <div class="h-screen w-full drawer drawer-end">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content">
         <navbar />

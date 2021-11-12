@@ -1,8 +1,6 @@
-import Cookies from 'universal-cookie'
 import ApiRepository from './api.repository'
 import { UnauthorizedError } from '~/utils/errors'
-import { ACCESS_TOKEN_COOKIE_KEY } from '~/services/constants'
-import { AccessTokenDto, generateAccessTokenCookie } from '~/services/authentication.helper'
+import { AccessTokenDto, generateAccessTokenCookie, removeAccessToken } from '~/services/authentication.helper'
 
 export class AuthRepository extends ApiRepository {
   async refreshAccessToken(): Promise<AccessTokenDto> {
@@ -14,8 +12,7 @@ export class AuthRepository extends ApiRepository {
   }
 
   async signOut(): Promise<void> {
-    const cookies = new Cookies()
-    cookies.remove(ACCESS_TOKEN_COOKIE_KEY)
+    removeAccessToken()
     await this.del('/auth')
   }
 }

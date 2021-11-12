@@ -48,5 +48,9 @@ export function restoreAccessToken(req?: IncomingMessage): boolean {
 
 export function removeAccessToken(): void {
   const cookies = new Cookies()
-  cookies.remove(ACCESS_TOKEN_COOKIE_KEY)
+  const cookieOptions: CookieSetOptions = {
+    path: '/',
+    secure: location.protocol === 'https:',
+  }
+  cookies.remove(ACCESS_TOKEN_COOKIE_KEY, cookieOptions)
 }
