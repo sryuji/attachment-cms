@@ -56,6 +56,7 @@
           <tr>
             <th><span class="normal-case">email</span></th>
             <th>氏名</th>
+            <th><span class="normal-case">権限</span></th>
             <th></th>
           </tr>
         </thead>
@@ -63,6 +64,15 @@
           <tr v-for="accountScope in accountScopes" :key="accountScope.id">
             <td>{{ accountScope.account.email }}</td>
             <td>{{ accountScope.account.lastName }} {{ accountScope.account.firstName }}</td>
+            <td>
+              <select
+                class="select select-bordered max-w-xs"
+                :value="accountScope.role"
+                @change="updateAccountScope(accountScope, $event)"
+              >
+                <option v-for="role in Object.values(roles)" :key="role" :value="role">{{ role }}</option>
+              </select>
+            </td>
             <td>
               <button class="btn btn-sm btn-error" @click="deleteAccountScope(accountScope.id)">
                 プロジェクトから削除
@@ -72,6 +82,9 @@
         </tbody>
       </table>
     </div>
+    <p class="my-3 text-warning">
+      ※ 権限の変更が反映されるのは30分程の時間を要します。急ぎの場合は、一度、Sign outしてください。
+    </p>
     <div class="my-9">
       <button class="btn" @click="goBack">戻る</button>
     </div>
@@ -142,6 +155,10 @@ export default class memberPage extends Form {
     return accountsStore.account
   }
 
+  get roles() {
+    return { member: 'member', owner: 'owner' }
+  }
+
   goBack() {
     this.routeCoordinator.backPage({ path: `/scopes` })
   }
@@ -169,6 +186,13 @@ export default class memberPage extends Form {
       if (err instanceof ConfirmationCloseError) return
       throw err
     }
+  }
+
+  async updateAccountScope(accountScope: AccountScope, event: Event) {
+    const target = event.target as HTMLInputElement
+    accountScope.role = target.value
+    await this.$api.accountScopes.update(accountScope.id, { accountScope })
+    eventBus.notifyMessages('更新しました。')
   }
 
   async invite(email: string) {
