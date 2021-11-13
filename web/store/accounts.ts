@@ -23,7 +23,8 @@ export default class extends VuexModule {
   }
 
   get accountScope() {
-    return (scopeId: number) => this.account.accountScopes.find((r) => r.scopeId === scopeId)
+    return (scopeId: number) =>
+      this.account.accountScopes && this.account.accountScopes.find((r) => r.scopeId === scopeId)
   }
 
   get role() {

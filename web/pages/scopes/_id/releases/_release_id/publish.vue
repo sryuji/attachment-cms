@@ -31,9 +31,13 @@
           </div>
 
           <div class="my-6">
-            <p>下記の点を注意した上で、一般公開を行ってください。</p>
-            <ul class="list-disc ml-6">
-              <li>xxxxx</li>
+            <p class="mb-6">注意事項</p>
+            <ul class="list-disc ml-6 text-lg">
+              <li>「限定公開で確認」ボタンから表示を確認してから一般公開を行ってください</li>
+              <li>リリース後、各コンテンツに対する変更は「挿入するHTMLデータ」「説明」のみです。</li>
+              <li>
+                リリース後、各コンテンツの「Path」「Selector」「Action」の変更をしたい場合は新たにリリースを作成する必要があります
+              </li>
             </ul>
           </div>
 

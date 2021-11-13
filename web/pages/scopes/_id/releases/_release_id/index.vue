@@ -1,25 +1,7 @@
 <template>
   <div class="container mx-auto p-2">
     <template v-if="scope">
-      <div class="flex">
-        <div class="text-left flex-col">
-          <div>
-            <span class="text-2xl">{{ scope.name }}</span>
-          </div>
-          <div>
-            <span class="text-sm">{{ scope.domain }}</span>
-          </div>
-          <p class="text-sm text-grey-dark">{{ scope.description }}</p>
-        </div>
-        <div class="flex-shrink-0">
-          <nuxt-link :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm normal-case">編集</nuxt-link>
-        </div>
-        <div class="flex-shrink-0">
-          <nuxt-link :to="{ path: `/scopes/${scope.id}/member` }" class="ml-3 btn btn-sm normal-case"
-            >メンバー</nuxt-link
-          >
-        </div>
-      </div>
+      <scope-header :scope="scope"></scope-header>
 
       <div class="flex justify-between mt-6 mx-3">
         <button v-if="hasPrevRelease" class="" @click="goPrevRelease">
@@ -84,7 +66,7 @@
                   >
                   <a
                     v-else-if="!release.releasedAt"
-                    :href="`${scope.domain}${content.path}?token=${release.limitedReleaseToken}`"
+                    :href="`${scope.domain}${content.path}?acmst=${release.limitedReleaseToken}`"
                     target="_blank"
                     class="btn btn-sm ml-3"
                     :class="{ 'btn-disabled': !scope.domain || !content.path }"
@@ -183,6 +165,7 @@
 <script lang="ts">
 import { Component, namespace } from 'nuxt-property-decorator'
 import { NavigationGuardNext, Route } from 'vue-router/types'
+import ScopeHeader from '../../-scope-header.vue'
 import ContentHistoryModal from './-content-history-modal.vue'
 import { scopesStore, releasesStore, contentHistoriesStore } from '~/store'
 import { UpdateReleaseDto } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
@@ -217,7 +200,7 @@ new AttachmentCMS({
 const releasesModule = namespace('releases')
 
 @Component({
-  components: { FormValidation, ContentHistoryModal },
+  components: { FormValidation, ContentHistoryModal, ScopeHeader },
 })
 export default class ReleasePage extends Form {
   // State

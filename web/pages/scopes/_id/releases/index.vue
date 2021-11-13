@@ -1,26 +1,7 @@
 <template>
   <div class="container mx-auto p-2">
     <template v-if="scope">
-      <div class="flex">
-        <div class="flex-col text-left">
-          <div>
-            <span class="text-2xl">{{ scope.name }}</span>
-          </div>
-          <div>
-            <span class="text-sm">{{ scope.domain }}</span>
-          </div>
-          <p class="text-sm text-grey-dark">{{ scope.description }}</p>
-        </div>
-        <div class="flex-shrink-0">
-          <nuxt-link :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm normal-case">編集</nuxt-link>
-        </div>
-        <div class="flex-shrink-0">
-          <nuxt-link :to="{ path: `/scopes/${scope.id}/member` }" class="ml-3 btn btn-sm normal-case"
-            >メンバー</nuxt-link
-          >
-        </div>
-      </div>
-
+      <scope-header :scope="scope"></scope-header>
       <div class="card-body">
         <h1 class="text-xl font-semibold">Create next Release</h1>
         <div class="form-control max-w-md">
@@ -47,6 +28,7 @@
 <script lang="ts">
 import { Component } from 'nuxt-property-decorator'
 import { NavigationGuardNext, Route } from 'vue-router/types'
+import ScopeHeader from '../-scope-header.vue'
 import { scopesStore, releasesStore } from '~/store'
 import { CreateReleaseDto } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
 import { Release } from '~/types/attachment-cms-server/db/entity/release.entity'
@@ -56,7 +38,7 @@ import FormValidation from '~/components/form-validation.vue'
 import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-history.entity'
 
 @Component({
-  components: { FormValidation },
+  components: { FormValidation, ScopeHeader },
 })
 export default class ReleasePage extends Form {
   // State
