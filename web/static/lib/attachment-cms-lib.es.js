@@ -148,28 +148,32 @@ function toNumber(value) {
 var lodash_throttle = throttle;
 class AttachmentCMS {
   constructor(options) {
-    __publicField(this, "url");
-    __publicField(this, "token");
+    __publicField(this, "baseUrl");
+    __publicField(this, "defaultToken");
+    __publicField(this, "queryToken");
     __publicField(this, "contents");
     __publicField(this, "id");
     __publicField(this, "contentsResponse");
     if (!options || !options.token)
-      throw new Error("Required token.");
-    const baseUrl = options && options.baseUrl || "https://api.attachment-cms.dev";
-    const urlParams = new URLSearchParams(window.location.search);
-    const queryToken = urlParams.get("token");
-    if (queryToken) {
-      this.token = queryToken;
-      this.url = `${baseUrl}/contents/limited`;
-    } else {
-      this.token = options.token;
-      this.url = `${baseUrl}/contents`;
-    }
+      throw new Error("Required acmst query parameter as token.");
+    this.baseUrl = options && options.baseUrl || "https://api.attachment-cms.dev";
+    this.defaultToken = options.token;
     this.id = options && options.id || null;
   }
+  get isClient() {
+    return typeof window === "undefined";
+  }
+  get url() {
+    return this.queryToken ? `${this.baseUrl}/contents/limited` : `${this.baseUrl}/contents`;
+  }
+  get token() {
+    return this.queryToken || this.defaultToken;
+  }
   async run() {
-    if (typeof window === "undefined")
+    if (this.isClient)
       return;
+    this.queryToken = this.getQueryToken();
+    this.showLimitedMode();
     this.contentsResponse = await this.fetchContents();
     this.contents = this.extractMatchedContents(this.contentsResponse.contents);
     if (document.readyState === "loading") {
@@ -183,6 +187,25 @@ class AttachmentCMS {
       this.observeElement();
       this.observeHistoryState();
     }
+  }
+  getQueryToken() {
+    let qtoken = sessionStorage.getItem("acmst");
+    if (qtoken)
+      return qtoken;
+    const urlParams = new URLSearchParams(window.location.search);
+    qtoken = urlParams.get("acmst");
+    if (qtoken)
+      sessionStorage.setItem("acmst", qtoken);
+    return qtoken;
+  }
+  showLimitedMode() {
+    if (!this.queryToken)
+      return;
+    const el = document.getElementsByTagName("body")[0];
+    const content = `<div style="position: fixed; bottom: 20px; right: 30px;background-color: #46F28D; box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5); border-radius: 6px;">
+    <p style="padding: 10px; font-weight: 600;">\u9650\u5B9A\u516C\u958B<br/>by attachment CMS</p>
+    </div>`;
+    this.insertLastChildToElement(el, content);
   }
   async fetchContents() {
     const url = `${this.url}?token=${this.token}`;
@@ -277,6 +300,7 @@ class AttachmentCMS {
   observeHistoryState() {
     window.onpopstate = () => {
       this.contents = this.extractMatchedContents(this.contentsResponse.contents);
+      console.log("observeHistoryState", this.contents);
       this.applyContents();
     };
   }
