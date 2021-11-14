@@ -2,6 +2,7 @@ import { Action, Mutation, Module, VuexModule, config } from 'vuex-module-decora
 import { AccountForm } from '~/types/attachment-cms-server/app/accounts/dto/account.form'
 import { Account } from '~/types/attachment-cms-server/db/entity/account.entity'
 import { $api } from '~/utils/api-accessor'
+import { Sentry } from '~/utils/sentry'
 
 config.rawError = true
 
@@ -39,6 +40,9 @@ export default class extends VuexModule {
   async fetchAccount(): Promise<void> {
     const data = await $api.accounts.findOne()
     this.setAccount(data.account)
+    Sentry.configureScope((scope) => {
+      scope.setUser({ id: `${this.account.id}`, email: this.account.email })
+    })
   }
 
   @Action

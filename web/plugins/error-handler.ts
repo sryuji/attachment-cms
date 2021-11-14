@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import * as Sentry from '@sentry/browser'
 import { eventBus } from '~/utils/event-bus'
+import { Sentry } from '~/utils/sentry'
 
 function notify(err: Error) {
   if (process.client && ['localhost', '192.168'].find((s) => window.location.hostname.startsWith(s))) {

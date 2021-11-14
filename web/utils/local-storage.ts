@@ -1,16 +1,17 @@
 import get from 'lodash/get'
 import set from 'lodash/set'
 import unset from 'lodash/unset'
+import * as Sentry from '@sentry/browser'
 
 function notifyUnavailableLocalStorage(exception?: unknown) {
-  // Sentry.withScope((scope) => {
-  //   scope.setLevel(Sentry.Severity.Warning)
-  //   if (typeof exception === 'string') {
-  //     Sentry.captureMessage(exception || 'No LocalStorage')
-  //   } else {
-  //     Sentry.captureException(exception)
-  //   }
-  // })
+  Sentry.withScope((scope) => {
+    scope.setLevel(Sentry.Severity.Warning)
+    if (typeof exception === 'string') {
+      Sentry.captureMessage(exception || 'No LocalStorage')
+    } else {
+      Sentry.captureException(exception)
+    }
+  })
 }
 
 type Value = object | string
