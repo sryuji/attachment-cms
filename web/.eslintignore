@@ -1,2 +1,7 @@
 .vscode/*
+.nuxt/*
 types/attachment-cms-server/*
+coverage/*
+node_modules/*
+static/lib/*
+dist/*
