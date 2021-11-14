@@ -178,7 +178,7 @@ class AttachmentCMS {
     this.baseUrl = options && options.baseUrl || "https://api.attachment-cms.dev";
     this.defaultToken = options.token;
     this.id = options && options.id || null;
-    this.throttleApplyContents = lodash_throttle(this.applyContents, 200);
+    this.throttleApplyContents = lodash_throttle(this.applyContents, options && options.throttleMs || 200);
   }
   get isClient() {
     return typeof window === "undefined";
@@ -257,7 +257,7 @@ class AttachmentCMS {
       childList: true,
       subtree: true
     };
-    mo.observe(document, config);
+    mo.observe(el, config);
   }
   applyContents() {
     this.contents.forEach((r) => {
