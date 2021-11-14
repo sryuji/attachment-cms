@@ -146,6 +146,24 @@ function toNumber(value) {
   return isBinary || reIsOctal.test(value) ? freeParseInt(value.slice(2), isBinary ? 2 : 8) : reIsBadHex.test(value) ? NAN : +value;
 }
 var lodash_throttle = throttle;
+function extendHistoryEvent() {
+  window.history.pushState = new Proxy(window.history.pushState, {
+    apply: (target, thisArg, argArray) => {
+      const event = new Event("pushstate");
+      const result = target.apply(thisArg, argArray);
+      window.dispatchEvent(event);
+      return result;
+    }
+  });
+  window.history.replaceState = new Proxy(window.history.replaceState, {
+    apply: (target, thisArg, argArray) => {
+      const event = new Event("replacestate");
+      const result = target.apply(thisArg, argArray);
+      window.dispatchEvent(event);
+      return result;
+    }
+  });
+}
 class AttachmentCMS {
   constructor(options) {
     __publicField(this, "baseUrl");
@@ -154,11 +172,13 @@ class AttachmentCMS {
     __publicField(this, "contents");
     __publicField(this, "id");
     __publicField(this, "contentsResponse");
+    __publicField(this, "throttleApplyContents");
     if (!options || !options.token)
       throw new Error("Required acmst query parameter as token.");
     this.baseUrl = options && options.baseUrl || "https://api.attachment-cms.dev";
     this.defaultToken = options.token;
     this.id = options && options.id || null;
+    this.throttleApplyContents = lodash_throttle(this.applyContents, 200);
   }
   get isClient() {
     return typeof window === "undefined";
@@ -226,20 +246,18 @@ class AttachmentCMS {
     const el = this.id ? document.getElementById(this.id) : document.getElementsByTagName("body")[0];
     if (!el) {
       this.id && console.warn(`No exists html element. id: ${this.id}`);
-      return;
+      throw new Error("No found observed element.");
     }
     const mo = new MutationObserver(() => {
-      lodash_throttle(this.applyContents, 1e3);
+      this.throttleApplyContents();
     });
     const config = {
       attributes: false,
-      attributeOldValue: false,
       characterData: true,
-      characterDataOldValue: true,
       childList: true,
       subtree: true
     };
-    mo.observe(el, config);
+    mo.observe(document, config);
   }
   applyContents() {
     this.contents.forEach((r) => {
@@ -298,11 +316,13 @@ class AttachmentCMS {
     el.insertAdjacentHTML("afterend", content);
   }
   observeHistoryState() {
-    window.onpopstate = () => {
+    extendHistoryEvent();
+    const callback = () => {
       this.contents = this.extractMatchedContents(this.contentsResponse.contents);
-      console.log("observeHistoryState", this.contents);
-      this.applyContents();
     };
+    window.addEventListener("popstate", callback);
+    window.addEventListener("pushstate", callback);
+    window.addEventListener("replacestate", callback);
   }
 }
 if (typeof window !== "undefined" && window.AttachmentConfig) {
