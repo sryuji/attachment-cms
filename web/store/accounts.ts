@@ -40,9 +40,12 @@ export default class extends VuexModule {
   async fetchAccount(): Promise<void> {
     const data = await $api.accounts.findOne()
     this.setAccount(data.account)
-    Sentry.configureScope((scope) => {
-      scope.setUser({ id: `${this.account.id}`, email: this.account.email })
-    })
+
+    if (this.account) {
+      Sentry.configureScope((scope) => {
+        scope.setUser({ id: `${this.account.id}`, email: this.account.email })
+      })
+    }
   }
 
   @Action
