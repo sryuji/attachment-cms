@@ -10,8 +10,8 @@ export default {
   // https://nuxtjs.org/docs/directory-structure/nuxt-config#runtimeconfig
   // NOTE: 下記の値はclient sideでContext.$configで値取得できる
   publicRuntimeConfig: {
-    API_BASE_URL: process.env.API_BASE_URL,
-    WEB_BASE_URL: process.env.WEB_BASE_URL,
+    API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:3000',
+    WEB_BASE_URL: process.env.WEB_BASE_URL || 'http://localhost:3001',
   },
 
   // Target: https://go.nuxtjs.dev/config-target
@@ -73,8 +73,8 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: process.env.API_BASE_URL,
-    browserBaseURL: process.env.WEB_BASE_URL,
+    baseURL: process.env.API_BASE_URL || 'http://localhost:3000',
+    browserBaseURL: process.env.WEB_BASE_URL || 'http://localhost:3001',
   },
 
   // Content module configuration: https://go.nuxtjs.dev/config-content
