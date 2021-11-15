@@ -26,7 +26,7 @@ services:
     networks:
       - acms_network
     depends_on:
-      - acms_postgres
+      - acms_db
     build:
       dockerfile: './server/Dockerfile.development'
     ports:
