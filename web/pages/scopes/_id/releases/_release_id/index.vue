@@ -72,6 +72,9 @@
                     :class="{ 'btn-disabled': !scope.domain || !content.path }"
                     >限定公開で確認</a
                   >
+                  <a v-else :href="`${scope.domain}${content.path}`" target="_blank" class="btn btn-sm ml-3"
+                    >サイトを確認</a
+                  >
                 </div>
               </div>
               <div class="mt-4 bg-white p-3 rounded-box">{{ content.selector }}</div>
