@@ -126,5 +126,11 @@ export default {
 
   sentry: {
     dsn: process.env.SENTRY_DSN,
+    publishRelease: true,
+    sourceMapStyle: 'hidden-source-map',
+    config: {
+      release: process.env.VERCEL_GIT_COMMIT_SHA,
+      environment: process.env.NODE_ENV,
+    },
   },
 }
