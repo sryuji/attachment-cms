@@ -144,7 +144,9 @@
 
       <div v-if="isLatest && latestRelease.releasedAt" class="card shadow-md my-3">
         <div class="card-body">
-          <nuxt-link :to="{ path: `/scopes/${scope.id}/releases` }" class="btn btn-primary btn-block tracking-widest"
+          <nuxt-link
+            :to="{ path: `/scopes/${scope.id}/releases/new` }"
+            class="btn btn-primary btn-block tracking-widest"
             >次のリリースを作成</nuxt-link
           >
         </div>
