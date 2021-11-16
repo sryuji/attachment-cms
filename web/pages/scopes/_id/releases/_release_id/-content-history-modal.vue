@@ -1,5 +1,5 @@
 <template>
-  <div class="modal modal-open">
+  <div class="modal modal-open m-3">
     <div class="modal-box max-w-4xl">
       <div class="mb-2">
         <h1 class="text-2xl">コンテンツの<span v-if="isNew">登録</span><span v-else>更新</span></h1>

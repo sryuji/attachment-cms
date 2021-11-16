@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-2">
+  <div class="container mx-auto py-2">
     <template v-if="scope">
       <scope-header :scope="scope"></scope-header>
       <div class="card-body">

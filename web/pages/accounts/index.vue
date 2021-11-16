@@ -1,5 +1,5 @@
 <template>
-  <div v-if="account" class="container mx-auto p-2">
+  <div v-if="account" class="container mx-auto py-2 px-4">
     <h1>Account</h1>
     <div class="form-control max-w-xl">
       <label class="label">
@@ -7,8 +7,8 @@
       </label>
       <input :value="account.email" class="input input-bordered" disabled="disabled" type="text" />
       <label class="label">
-        <p class="label-text-alt">
-          現在、Emailの変更はできません。別のGMailアカウントに紐付け切り替えする機能を検討中です。
+        <p class="label-text-alt mx-3">
+          現在、Emailの変更はできません。別のGoogleアカウントに紐付け切り替えする機能を検討中です。
         </p>
       </label>
     </div>
@@ -34,12 +34,6 @@
       <h2>参加中のProject</h2>
       <template v-if="scopes.length > 0">
         <table class="table w-full table-zebra mt-3">
-          <thead>
-            <tr>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
           <tbody>
             <tr v-for="scope in scopes" :key="scope.id">
               <td>{{ scope.name }}</td>

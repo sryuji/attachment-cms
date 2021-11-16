@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-2">
+  <div class="container mx-auto py-2 px-4">
     <h1>{{ title }}</h1>
 
     <div v-if="scopeInvitations.length > 0" class="overflow-x-auto mt-10">

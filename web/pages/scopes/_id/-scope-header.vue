@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex px-4">
     <div class="text-left flex-col">
       <div>
         <span class="text-2xl">{{ scope.name }}</span>

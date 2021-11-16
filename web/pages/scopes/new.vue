@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-2">
+  <div class="container mx-auto py-2 px-4">
     <h1>{{ title }}</h1>
     <div>
       <div class="form-control max-w-md">

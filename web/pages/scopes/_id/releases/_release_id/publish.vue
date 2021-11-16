@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-2">
+  <div class="container mx-auto py-2 px-4">
     <template v-if="scope">
       <div class="flex">
         <div class="text-left">
