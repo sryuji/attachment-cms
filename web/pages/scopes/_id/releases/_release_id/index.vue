@@ -135,7 +135,7 @@
 
           <div v-if="!release.releasedAt" class="my-3 flex justify-between">
             <nuxt-link
-              v-if="scope.domain"
+              v-if="scope.domain && contentHistories.length > 0"
               class="btn btn-primary mr-3"
               :to="{ path: `/scopes/${scopeId}/releases/${releaseId}/publish` }"
               >一般公開する</nuxt-link
