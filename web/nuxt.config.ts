@@ -22,6 +22,7 @@ export default {
     gtm: {
       id: process.env.GTM_ID,
       pageTracking: true,
+      enabled: true,
     },
   },
 
@@ -138,5 +139,7 @@ export default {
   gtm: {
     id: process.env.GTM_ID,
     pageTracking: true,
+    scriptDefer: true,
+    enabled: process.env.NODE_ENV === 'production',
   },
 }

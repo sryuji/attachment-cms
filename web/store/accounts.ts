@@ -42,7 +42,7 @@ export default class extends VuexModule {
     const data = await $api.accounts.findOne()
     this.setAccount(data.account)
 
-    if (this.account) {
+    if (this.account.id) {
       Sentry.configureScope((scope) => {
         scope.setUser({ id: `${this.account.id}`, email: this.account.email })
       })
