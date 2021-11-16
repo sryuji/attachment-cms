@@ -1,12 +1,5 @@
 <template>
-  <div class="container mx-auto p-2">
-    <h1 class="mb-6"></h1>
-    <div>
-      <div>
-        <p class="text-xl">authenticating...</p>
-      </div>
-    </div>
-  </div>
+  <div class="container mx-auto p-2"></div>
 </template>
 
 <script lang="ts">
@@ -24,16 +17,22 @@ import { eventBus } from '~/utils/event-bus'
 })
 export default class AuthSignInPageComponent extends Vue {
   async beforeMount(): Promise<void> {
-    // NOTE: 認証フローは、 // sign-in.vue -> /auth/googole -> google認証 -> /auth/google/redirect -> (refreshToken cookie)  -> callback.vue -> GET accessToken with refreshToken cookie
-    await authStore.refreshAccessToken()
-    await this.joinScopeByInvitation()
+    await this.$nextTick()
+    this.$nuxt.$loading.start()
+    try {
+      // NOTE: 認証フローは、 // sign-in.vue -> /auth/googole -> google認証 -> /auth/google/redirect -> (refreshToken cookie)  -> callback.vue -> GET accessToken with refreshToken cookie
+      await authStore.refreshAccessToken()
+      await this.joinScopeByInvitation()
 
-    const route = fetchModel(REDIRECT_TO) as any
-    if (route && (route.path || route.name)) {
-      this.$router.replace(route)
-      deleteModel(REDIRECT_TO)
-    } else {
-      this.$router.replace({ name: 'scopes' })
+      const route = fetchModel(REDIRECT_TO) as any
+      if (route && (route.path || route.name)) {
+        this.$router.replace(route)
+        deleteModel(REDIRECT_TO)
+      } else {
+        this.$router.replace({ name: 'scopes' })
+      }
+    } finally {
+      this.$nuxt.$loading.finish()
     }
   }
 
