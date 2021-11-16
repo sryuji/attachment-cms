@@ -1,5 +1,6 @@
 import Sass from 'sass'
 import Fiber from 'fibers'
+import { sentryConfig } from './utils/sentry'
 
 if (!process.env.API_BASE_URL) process.env.API_BASE_URL = 'http://localhost:3000'
 if (!process.env.WEB_BASE_URL) process.env.WEB_BASE_URL = 'http://localhost:3001'
@@ -124,13 +125,5 @@ export default {
     port: 3001,
   },
 
-  sentry: {
-    dsn: process.env.SENTRY_DSN,
-    publishRelease: true,
-    sourceMapStyle: 'hidden-source-map',
-    config: {
-      release: process.env.VERCEL_GIT_COMMIT_SHA,
-      environment: process.env.NODE_ENV,
-    },
-  },
+  sentry: sentryConfig,
 }
