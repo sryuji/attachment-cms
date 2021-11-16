@@ -1,11 +1,14 @@
 import Sass from 'sass'
 import Fiber from 'fibers'
 
+if (!process.env.API_BASE_URL) process.env.API_BASE_URL = 'http://localhost:3000'
+if (!process.env.WEB_BASE_URL) process.env.WEB_BASE_URL = 'http://localhost:3001'
+
 export default {
   // https://nuxtjs.org/docs/configuration-glossary/configuration-env/
   env: {
-    API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:3000',
-    WEB_BASE_URL: process.env.WEB_BASE_URL || 'http://localhost:3001',
+    API_BASE_URL: process.env.API_BASE_URL,
+    WEB_BASE_URL: process.env.WEB_BASE_URL,
     SENTRY_DSN: process.env.SENTRY_DSN,
   },
 
