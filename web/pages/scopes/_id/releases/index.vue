@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto py-2">
-    <template v-if="scope">
+    <template v-if="scope && !$nuxt.$loading.loading">
       <scope-header :scope="scope"></scope-header>
       <div class="card-body">
         <h1 class="text-xl font-semibold">Create next Release</h1>
@@ -76,9 +76,15 @@ export default class ReleasePage extends Form {
   }
 
   async beforeMount() {
-    !this.latestRelease && (await releasesStore.fetchLatestRelease(this.scopeId))
-    if (this.latestRelease && !this.latestRelease.releasedAt) {
-      this.$router.replace({ path: `/scopes/${this.scopeId}/releases/${this.latestRelease.id}` })
+    await this.$nextTick()
+    this.$nuxt.$loading.start()
+    try {
+      !this.latestRelease && (await releasesStore.fetchLatestRelease(this.scopeId))
+      if (this.latestRelease && !this.latestRelease.releasedAt) {
+        this.$router.replace({ path: `/scopes/${this.scopeId}/releases/${this.latestRelease.id}` })
+      }
+    } finally {
+      this.$nuxt.$loading.finish()
     }
   }
 
