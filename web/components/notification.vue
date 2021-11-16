@@ -5,6 +5,7 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { REDIRECT_TO, NotificationType } from '~/services/constants'
+import { authStore } from '~/store'
 import { ForbiddenError, RedirectError, ServerValidationError } from '~/utils/errors'
 import { eventBus } from '~/utils/event-bus'
 import { saveModel } from '~/utils/local-storage'
@@ -84,6 +85,7 @@ export default class NotificationComponent extends Vue {
 
   handleUnauthorizedError(): void {
     this.showMessages('ログインしてください。', 'warning')
+    authStore.clearAuth()
     saveModel(REDIRECT_TO, this.$route as any)
     this.$router.replace({ name: 'auth-sign-in' }).catch((err) => err)
   }

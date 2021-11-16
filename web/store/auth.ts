@@ -1,7 +1,9 @@
 import { Route } from 'vue-router/types'
 import { Action, Module, VuexModule, config, Mutation } from 'vuex-module-decorators'
-import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
+import { removeAccessToken } from '~/services/authentication.helper'
+import { JWT_AVAILABLE_REFRESH, JWT_KEY } from '~/services/constants'
 import { $api } from '~/utils/api-accessor'
+import { deleteModel, fetchProperty, saveProperty } from '~/utils/local-storage'
 import { accountsStore, scopesStore } from '~/utils/store-accessor'
 
 config.rawError = true
@@ -60,15 +62,29 @@ export default class extends VuexModule {
   async refreshAccessToken(): Promise<void> {
     const data = await $api.auth.refreshAccessToken()
     this.setAccessToken(data.accessToken)
+    saveProperty(JWT_KEY, JWT_AVAILABLE_REFRESH, true)
 
     this.fetchRequiredDataOnLoggedIn()
   }
 
   @Action
   async fetchRequiredDataOnLoggedIn(): Promise<void> {
-    const promise1: Promise<Scope[] | void> = scopesStore.hasScopes ? Promise.resolve() : scopesStore.fetchScopes({})
+    const promise1: Promise<void> = scopesStore.hasScopes ? Promise.resolve() : accountsStore.fetchAccount()
     const promise2: Promise<void> = accountsStore.hasAccount ? Promise.resolve() : accountsStore.fetchAccount()
-    await Promise.all([promise1, promise2])
+    const promises = [promise1, promise2]
+
+    try {
+      if (this.isLoggedIn) {
+        await Promise.all(promises)
+        return
+      }
+
+      const hasRefresh = fetchProperty(JWT_KEY, JWT_AVAILABLE_REFRESH)
+      if (hasRefresh) await Promise.all(promises)
+    } catch (err) {
+      removeAccessToken()
+      this.clearAuth()
+    }
   }
 
   @Action
@@ -80,6 +96,7 @@ export default class extends VuexModule {
   @Action
   clearAuth(): void {
     this.clearAuthState()
+    deleteModel(JWT_KEY)
     accountsStore.setAccount(null)
     scopesStore.clearScopes()
   }
