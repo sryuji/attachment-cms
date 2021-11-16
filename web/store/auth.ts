@@ -70,18 +70,18 @@ export default class extends VuexModule {
 
   @Action
   async fetchRequiredDataOnLoggedIn(): Promise<void> {
-    const promise1: Promise<Scope[] | void> = scopesStore.hasScopes ? Promise.resolve() : scopesStore.fetchScopes({})
-    const promise2: Promise<void> = accountsStore.hasAccount ? Promise.resolve() : accountsStore.fetchAccount()
-    const promises = [promise1, promise2]
+    const promise1: () => Promise<Scope[] | void> = () =>
+      scopesStore.hasScopes ? Promise.resolve() : scopesStore.fetchScopes({})
+    const promise2: () => Promise<void> = () =>
+      accountsStore.hasAccount ? Promise.resolve() : accountsStore.fetchAccount()
 
     try {
       if (this.isLoggedIn) {
-        await Promise.all(promises)
+        await Promise.all([promise1(), promise2()])
         return
       }
-
       const hasRefresh = fetchProperty(JWT_KEY, JWT_AVAILABLE_REFRESH)
-      if (hasRefresh) await Promise.all(promises)
+      if (hasRefresh) await Promise.all([promise1(), promise2()])
     } catch (err) {
       removeAccessToken()
       this.clearAuth()
