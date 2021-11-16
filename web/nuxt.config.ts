@@ -11,6 +11,7 @@ export default {
     API_BASE_URL: process.env.API_BASE_URL,
     WEB_BASE_URL: process.env.WEB_BASE_URL,
     SENTRY_DSN: process.env.SENTRY_DSN,
+    GTM_ID: process.env.GTM_ID,
   },
 
   // https://nuxtjs.org/docs/directory-structure/nuxt-config#runtimeconfig
@@ -18,6 +19,10 @@ export default {
   publicRuntimeConfig: {
     API_BASE_URL: process.env.API_BASE_URL,
     WEB_BASE_URL: process.env.WEB_BASE_URL,
+    gtm: {
+      id: process.env.GTM_ID,
+      pageTracking: true,
+    },
   },
 
   // Target: https://go.nuxtjs.dev/config-target
@@ -48,6 +53,7 @@ export default {
   plugins: [
     { src: './plugins/error-handler' },
     { src: './plugins/api' },
+    { src: './plugins/gtm' },
     { src: './plugins/filters' },
     { src: './plugins/directives' },
   ],
@@ -75,6 +81,8 @@ export default {
     '@nuxtjs/toast',
     // https://sentry.nuxtjs.org/
     '@nuxtjs/sentry',
+    // https://github.com/nuxt-community/gtm-module
+    '@nuxtjs/gtm',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -126,4 +134,9 @@ export default {
   },
 
   sentry: sentryConfig,
+
+  gtm: {
+    id: process.env.GTM_ID,
+    pageTracking: true,
+  },
 }
