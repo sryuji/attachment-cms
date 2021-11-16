@@ -95,5 +95,52 @@ $ git push lib `git subtree split --prefix=lib master`:master --force
 
 ## リリースについて
 
-子Repositoryで個別にリリース作業を行います。
+### server repository
 
+1. `sryuji/attachment-cms-server.git`のmasterにpush
+
+`sryuji/attachment-cms.git`のmaster branchにpush /mergeした後、
+下記でChild repositoryである`attachment-cms-server`にpush
+
+```bash
+$ git subtree push --prefix=server server master
+```
+
+2. Google Cloud Buildが自動的にビルドを開始し、ビルド後、Container Registryにdocker imageが登録される
+3. Google Cloud Runに自動的に2.でビルドされたimageがデプロイされる
+  + 環境変数などは予めCloud Runの設定で与えている
+
+
+### web repository
+
+1. `sryuji/attachment-cms-web.git`のmasterにpush
+
+`sryuji/attachment-cms.git`のmaster branchにpush /mergeした後、
+下記でChild repositoryである`attachment-cms-server`にpush
+
+```bash
+$ git subtree push --prefix=web web master
+```
+
+2. Vercelが自動的にビルドを開始し、ビルドし、デプロイされる
+  + 環境変数などはVercelから設定可
+  + CDNにも自動展開される
+
+
+### lib repository
+
+1. Localのlib projectフォルダにて下記を行う
+
+```bash
+$ cd lib
+$ yarn lint && yarn build && yarn build:types
+```
+
+2. web Project配下に生成されたjs libraryをcommit & pushする
+3. `sryuji/attachment-cms-web.git`のmasterにpush
+
+```bash
+$ git subtree push --prefix=web web master
+```
+
+以降、web repositoryと同様. web repositoryと一緒に公開される
