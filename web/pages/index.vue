@@ -17,7 +17,7 @@
           <p class="my-5 text-xl">
             コンテンツ単位の事前準備は不要！<br /><br />
             「この項目も管理対象にしておけば良かった...」<br />
-            といった事も起きません。
+            といった事は起きません。
           </p>
         </div>
       </div>
@@ -25,15 +25,15 @@
     <div class="hero min-h-screen bg-green text-green-lightest">
       <div class="text-center hero-content">
         <div class="max-w-lg">
-          <h1 class="mb-5 text-4xl font-bold">後から簡単に<br />少しずつ始められる</h1>
+          <h1 class="mb-5 text-4xl font-bold">今あるホームページに<br />かんたん設置</h1>
           <p class="mb-5 text-xl">
-            ホームページに指定のコードをコピペするだけ。<br />
-            Google Analyticsや広告タグのように設置できます。
+            ホームページにタグをコピペするだけ<br />
+            Google Analyticsや広告タグのように開始できます。
           </p>
         </div>
       </div>
     </div>
-    <div class="hero min-h-screen text-white bg-orange">
+    <!-- <div class="hero min-h-screen text-white bg-orange">
       <div class="text-center hero-content w-full">
         <div class="w-full h-1/2">
           <h1 class="mb-5 text-4xl font-bold">こんな場面で便利</h1>
@@ -66,19 +66,17 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="hero min-h-screen bg-grey-lighter">
+    </div> -->
+    <div class="hero min-h-screen bg-yellow-lighter text-yellow-darkest">
       <div class="text-center hero-content">
         <div class="max-w-lg">
           <h1 class="mb-5 text-4xl font-bold">Chrome extension <br /></h1>
           <p class="mb-5 text-2xl font-bold">coming soon !!</p>
-          <p class="mb-5 text-xl">
-            ブラウザに表示されるホームページに対して、<br />直接、設定とコンテンツの変更指示ができます。
-          </p>
+          <p class="mb-5 text-xl">ホームページに対して、<br />直接、設定とコンテンツの指示ができます。</p>
         </div>
       </div>
     </div>
-    <div class="hero min-h-screen text-white bg-green">
+    <div class="hero min-h-screen text-white bg-orange">
       <div class="text-center hero-content">
         <div class="max-w-lg">
           <h1 class="mb-5 text-5xl font-bold">Let's Try !!</h1>
