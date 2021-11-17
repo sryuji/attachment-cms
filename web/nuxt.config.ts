@@ -2,9 +2,6 @@ import Sass from 'sass'
 import Fiber from 'fibers'
 import { sentryConfig } from './utils/sentry'
 
-if (!process.env.API_BASE_URL) process.env.API_BASE_URL = 'http://localhost:3000'
-if (!process.env.WEB_BASE_URL) process.env.WEB_BASE_URL = 'http://localhost:3001'
-
 export default {
   // https://nuxtjs.org/docs/configuration-glossary/configuration-env/
   env: {
@@ -15,10 +12,11 @@ export default {
   },
 
   // https://nuxtjs.org/docs/directory-structure/nuxt-config#runtimeconfig
-  // NOTE: 下記の値はclient sideでContext.$configで値取得できる
+  // NOTE: 下記の値はclient sideでContext.$configで値取得できる.
+  // また、ここでの定義はenvを含めたnuxt.config内の設定値に動作時にmappingされるため、環境変数などで上書きできる
   publicRuntimeConfig: {
-    API_BASE_URL: process.env.API_BASE_URL,
-    WEB_BASE_URL: process.env.WEB_BASE_URL,
+    API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:3000',
+    WEB_BASE_URL: process.env.WEB_BASE_URL || 'http://localhost:3001',
     gtm: {
       id: process.env.GTM_ID,
       pageTracking: true,
