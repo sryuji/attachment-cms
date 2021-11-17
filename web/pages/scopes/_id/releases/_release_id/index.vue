@@ -70,7 +70,7 @@
                     target="_blank"
                     class="btn btn-sm ml-3"
                     :class="{ 'btn-disabled': !scope.domain || !content.path }"
-                    >限定公開で確認</a
+                    >プレビュー</a
                   >
                   <a v-else :href="`${scope.domain}${content.path}`" target="_blank" class="btn btn-sm ml-3"
                     >サイトを確認</a
@@ -129,7 +129,7 @@
                 <p class="">webpackなどでmoduleを管理されている場合はこちらをご利用ください</p>
               </div>
               <!-- eslint-disable-next-line vue/no-v-html -->
-              <pre> <code class="select-all p-6 font-mono text-xs rounded-box html" v-html="attachmentEsCode"> </code> </pre>
+              <pre> <code class="p-6 font-mono text-xs rounded-box html" v-html="attachmentEsCode"> </code> </pre>
             </div>
           </div>
 
@@ -188,7 +188,7 @@ const attachmentUmdScript = (token: string) => {
   return `
 &lt;link rel="preconnect" href="https://api.attachment-cms.dev" crossorigin&gt;
 &lt;script type="text/javascript"&gt;
-  window.AttachmentConfig = { token: ${token} }
+  window.AttachmentConfig = { token: "${token}" }
 &lt;/script&gt;
 &lt;script async type="module" src="https://attachment-cms.dev/lib/attachment-cms-lib.umd.js"&gt;&lt;/script&gt;
   `
@@ -198,7 +198,7 @@ const attachmentEsScript = (token: string) => {
 import { AttachmentCMS } from 'https://attachment-cms.dev/lib/attachment-cms-lib.es.js'
 
 new AttachmentCMS({
-  token: ${token},
+  token: "${token}",
 }).run()
   `
 }
