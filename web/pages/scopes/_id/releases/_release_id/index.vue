@@ -55,7 +55,7 @@
                   <span class="font-semibold">{{ content.description }}</span>
                 </div>
                 <div
-                  v-if="!release.releasedAt || release.id === latestRelease.id"
+                  v-if="!release.releasedAt || (latestRelease && release.id === latestRelease.id)"
                   class="flex-shrink-0 ml-3 leading-10"
                 >
                   <button class="btn btn-warning text-lg btn-sm" @click.prevent="openContentHistoryModal(content)">
