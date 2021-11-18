@@ -83,11 +83,19 @@ export default class NotificationComponent extends Vue {
   }
 
   handleUnauthorizedError(): void {
-    const rootName = 'auth-refresh'
-    if (this.$route.name !== rootName) {
-      saveModel(REDIRECT_TO, this.$route as any)
+    const routeName = 'auth-refresh'
+    if (this.$route.name !== routeName) {
+      const route = {
+        name: this.$route.name,
+        path: this.$route.path,
+        query: this.$route.query,
+        meta: this.$route.meta,
+        params: this.$route.params,
+      }
+      saveModel(REDIRECT_TO, route)
       // NOTE: 複数API kickで401 errorが複数出た場合、Navigation重複が起きerrorになる事があるため、ここでのerrは握りつぶす
-      this.$router.replace({ name: rootName }).catch((err) => err)
+      // eslint-disable-next-line node/handle-callback-err
+      this.$router.replace({ name: routeName }).catch((err) => Promise.resolve())
     }
   }
 
