@@ -86,7 +86,8 @@ export default class NotificationComponent extends Vue {
     const rootName = 'auth-refresh'
     if (this.$route.name !== rootName) {
       saveModel(REDIRECT_TO, this.$route as any)
-      this.$router.replace({ name: rootName })
+      // NOTE: 複数API kickで401 errorが複数出た場合、Navigation重複が起きerrorになる事があるため、ここでのerrは握りつぶす
+      this.$router.replace({ name: rootName }).catch((err) => err)
     }
   }
 

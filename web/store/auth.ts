@@ -71,7 +71,7 @@ export default class extends VuexModule {
     } catch (err: any) {
       this.clearAuth()
       deleteModel(JWT_KEY)
-      throw new UnauthorizedError({ baseError: err })
+      throw err
     }
   }
 
