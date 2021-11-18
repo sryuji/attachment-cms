@@ -4,7 +4,8 @@ import { removeAccessToken } from '~/services/authentication.helper'
 import { JWT_AVAILABLE_REFRESH, JWT_KEY } from '~/services/constants'
 import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
 import { $api } from '~/utils/api-accessor'
-import { deleteModel, fetchProperty, saveProperty } from '~/utils/local-storage'
+import { UnauthorizedError } from '~/utils/errors'
+import { deleteModel, fetchProperty } from '~/utils/local-storage'
 import { accountsStore, scopesStore } from '~/utils/store-accessor'
 
 config.rawError = true
@@ -61,43 +62,39 @@ export default class extends VuexModule {
 
   @Action
   async refreshAccessToken(): Promise<void> {
-    const data = await $api.auth.refreshAccessToken()
-    this.setAccessToken(data.accessToken)
-    saveProperty(JWT_KEY, JWT_AVAILABLE_REFRESH, true)
+    const availableRefresh = fetchProperty(JWT_KEY, JWT_AVAILABLE_REFRESH)
+    if (!availableRefresh) throw new UnauthorizedError()
 
-    this.fetchRequiredDataOnLoggedIn()
+    try {
+      const data = await $api.auth.refreshAccessToken()
+      this.setAccessToken(data.accessToken)
+    } catch (err: any) {
+      this.clearAuth()
+      deleteModel(JWT_KEY)
+      throw new UnauthorizedError({ baseError: err })
+    }
   }
 
   @Action
   async fetchRequiredDataOnLoggedIn(): Promise<void> {
-    const promise1: () => Promise<Scope[] | void> = () =>
-      scopesStore.hasScopes ? Promise.resolve() : scopesStore.fetchScopes({})
-    const promise2: () => Promise<void> = () =>
-      accountsStore.hasAccount ? Promise.resolve() : accountsStore.fetchAccount()
+    if (!this.isLoggedIn) await this.refreshAccessToken()
 
-    try {
-      if (this.isLoggedIn) {
-        await Promise.all([promise1(), promise2()])
-        return
-      }
-      const hasRefresh = fetchProperty(JWT_KEY, JWT_AVAILABLE_REFRESH)
-      if (hasRefresh) await Promise.all([promise1(), promise2()])
-    } catch (err) {
-      removeAccessToken()
-      this.clearAuth()
-    }
+    const promise1: Promise<Scope[] | void> = scopesStore.hasScopes ? Promise.resolve() : scopesStore.fetchScopes({})
+    const promise2: Promise<void> = accountsStore.hasAccount ? Promise.resolve() : accountsStore.fetchAccount()
+    await Promise.all([promise1, promise2])
   }
 
   @Action
   async signOut(): Promise<void> {
     await $api.auth.signOut()
     this.clearAuth()
+    deleteModel(JWT_KEY)
   }
 
   @Action
   clearAuth(): void {
     this.clearAuthState()
-    deleteModel(JWT_KEY)
+    removeAccessToken()
     accountsStore.setAccount(null)
     scopesStore.clearScopes()
   }

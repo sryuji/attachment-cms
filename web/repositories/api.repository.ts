@@ -15,8 +15,6 @@ import {
 import { authStore } from '~/store'
 import { AUTH_ACCESS_TOKEN_HEADER } from '~/services/constants'
 
-export type HandleErrorOptions = { attemptRefreshToken?: boolean }
-
 export default abstract class ApiRepository {
   private axios: NuxtAxiosInstance
   private app: NuxtAppOptions
@@ -26,39 +24,29 @@ export default abstract class ApiRepository {
     this.app = app
   }
 
-  protected get(url: string, config?: AxiosRequestConfig, options: HandleErrorOptions = { attemptRefreshToken: true }) {
+  protected get(url: string, config?: AxiosRequestConfig) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.get(url, config), options)
+    return this.wrapRequest(this.axios.get(url, config))
   }
 
-  protected post(
-    url: string,
-    data: any,
-    config?: AxiosRequestConfig,
-    options: HandleErrorOptions = { attemptRefreshToken: true }
-  ) {
+  protected post(url: string, data: any, config?: AxiosRequestConfig) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.post(url, data, config), options)
+    return this.wrapRequest(this.axios.post(url, data, config))
   }
 
-  protected patch(
-    url: string,
-    data: any,
-    config?: AxiosRequestConfig,
-    options: HandleErrorOptions = { attemptRefreshToken: true }
-  ) {
+  protected patch(url: string, data: any, config?: AxiosRequestConfig) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.patch(url, data, config), options)
+    return this.wrapRequest(this.axios.patch(url, data, config))
   }
 
-  protected del(url: string, config?: AxiosRequestConfig, options: HandleErrorOptions = { attemptRefreshToken: true }) {
+  protected del(url: string, config?: AxiosRequestConfig) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.delete(url, config), options)
+    return this.wrapRequest(this.axios.delete(url, config))
   }
 
-  protected request(config: AxiosRequestConfig, options: HandleErrorOptions = { attemptRefreshToken: true }) {
+  protected request(config: AxiosRequestConfig) {
     config = this.setDefaultConfig(config)
-    return this.wrapRequest(this.axios.request(config), options)
+    return this.wrapRequest(this.axios.request(config))
   }
 
   private setDefaultConfig(config: AxiosRequestConfig, options?: { force: boolean }) {
@@ -74,21 +62,18 @@ export default abstract class ApiRepository {
     return config
   }
 
-  private async wrapRequest(
-    request: Promise<any>,
-    options: HandleErrorOptions = { attemptRefreshToken: false }
-  ): Promise<any> {
+  private async wrapRequest(request: Promise<any>): Promise<any> {
     try {
       const response = await request
       this.applyServerInstruction(response)
       return Promise.resolve(response.data)
     } catch (error: any) {
-      const data = await this.handleError(error, options)
+      const data = await this.handleError(error)
       return Promise.resolve(data)
     }
   }
 
-  private handleError(error: AxiosError, options: HandleErrorOptions): Promise<any> {
+  private handleError(error: AxiosError): Promise<any> {
     const response = error.response
     const isTimeout = error.code === 'ECONNABORTED'
 
@@ -104,7 +89,7 @@ export default abstract class ApiRepository {
     if (status === 400) {
       throw new BadRequestError({ message: error.message, baseData })
     } else if (status === 401) {
-      return this.handleUnauthorizedError(error, baseData, options)
+      throw new UnauthorizedError({ message: error.message, baseData })
     } else if (status === 403) {
       throw new ForbiddenError({ message: error.message, baseData })
     } else if (status === 404) {
@@ -116,19 +101,6 @@ export default abstract class ApiRepository {
     } else {
       throw new ServerError({ message: error.message, baseData, baseError: error })
     }
-  }
-
-  private async handleUnauthorizedError(error: AxiosError, baseData: any, options: HandleErrorOptions): Promise<any> {
-    const attemptRefreshToken = options && options.attemptRefreshToken
-    if (process.server || !attemptRefreshToken) throw new UnauthorizedError({ baseData, baseError: error })
-
-    const config = error.config
-    await authStore.refreshAccessToken().catch((err) => {
-      throw new UnauthorizedError({ baseData, baseError: err })
-    })
-
-    this.setDefaultConfig(config, { force: true })
-    return this.request(config)
   }
 
   private applyServerInstruction(response: AxiosResponse) {

@@ -4,7 +4,7 @@ import { AccessTokenDto, generateAccessTokenCookie, removeAccessToken } from '~/
 
 export class AuthRepository extends ApiRepository {
   async refreshAccessToken(): Promise<AccessTokenDto> {
-    const data = await this.get('/auth/refresh', {}, { attemptRefreshToken: false })
+    const data = await this.get('/auth/refresh', {})
     if (!data || !data.accessToken) throw new UnauthorizedError()
 
     generateAccessTokenCookie(data)

@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { Component, namespace } from 'nuxt-property-decorator'
-import { accountsStore, authStore } from '~/store'
+import { accountsStore, scopesStore, authStore } from '~/store'
 import { AccountDto } from '~/types/attachment-cms-server/app/accounts/dto/account.dto'
 import { Account } from '~/types/attachment-cms-server/db/entity/account.entity'
 import { eventBus } from '~/utils/event-bus'
@@ -87,7 +87,9 @@ export default class AccountPage extends Form {
   }
 
   async beforeMount() {
-    await authStore.fetchRequiredDataOnLoggedIn()
+    const promise1: Promise<Scope[] | void> = scopesStore.hasScopes ? Promise.resolve() : scopesStore.fetchScopes({})
+    const promise2: Promise<void> = accountsStore.hasAccount ? Promise.resolve() : accountsStore.fetchAccount()
+    await Promise.all([promise1, promise2])
     this.resetForm()
   }
 

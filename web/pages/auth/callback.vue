@@ -4,8 +4,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { INVITATION_KEY, REDIRECT_TO } from '~/services/constants'
-import { deleteModel, fetchModel, fetchProperty } from '~/utils/local-storage'
+import { INVITATION_KEY, JWT_AVAILABLE_REFRESH, JWT_KEY, REDIRECT_TO } from '~/services/constants'
+import { deleteModel, fetchModel, fetchProperty, saveProperty } from '~/utils/local-storage'
 import { authStore } from '~/store'
 import { eventBus } from '~/utils/event-bus'
 
@@ -21,6 +21,7 @@ export default class AuthSignInPageComponent extends Vue {
     this.$nuxt.$loading.start()
     try {
       // NOTE: 認証フローは、 // sign-in.vue -> /auth/googole -> google認証 -> /auth/google/redirect -> (refreshToken cookie)  -> callback.vue -> GET accessToken with refreshToken cookie
+      saveProperty(JWT_KEY, JWT_AVAILABLE_REFRESH, true)
       await authStore.refreshAccessToken()
       await this.joinScopeByInvitation()
 
