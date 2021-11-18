@@ -24,6 +24,7 @@ export default class AuthSignInPageComponent extends Vue {
       saveProperty(JWT_KEY, JWT_AVAILABLE_REFRESH, true)
       await authStore.refreshAccessToken()
       await this.joinScopeByInvitation()
+      authStore.fetchRequiredDataOnLoggedIn()
 
       const route = fetchModel(REDIRECT_TO) as any
       if (route && (route.path || route.name)) {

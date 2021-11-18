@@ -24,6 +24,7 @@ export default class AuthRefreshPage extends Vue {
     this.$nuxt.$loading.start()
     try {
       await authStore.refreshAccessToken()
+      authStore.fetchRequiredDataOnLoggedIn()
 
       const route = fetchModel(REDIRECT_TO) as any
       if (route && (route.path || route.name)) {
