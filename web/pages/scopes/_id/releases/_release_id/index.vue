@@ -336,7 +336,9 @@ export default class ReleasePage extends Form {
     try {
       await eventBus.confirm({ title: 'このリリースを削除しても良いですか？' })
       await releasesStore.deleteRelease(this.releaseId)
-      this.$router.replace({ path: `/scopes/${this.scopeId}/releases` })
+      const baseNextPath = `/scopes/${this.scopeId}/releases`
+      const nextPath = this.latestRelease ? `${baseNextPath}/${this.latestRelease.id}` : `${baseNextPath}/new`
+      this.$router.replace({ path: nextPath })
     } catch (err) {
       if (err instanceof ConfirmationCloseError) return
       throw err
