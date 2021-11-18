@@ -190,7 +190,7 @@ const attachmentUmdScript = (token: string) => {
 &lt;script type="text/javascript"&gt;
   window.AttachmentConfig = { token: "${token}" }
 &lt;/script&gt;
-&lt;script async type="module" src="https://attachment-cms.dev/lib/attachment-cms-lib.umd.js"&gt;&lt;/script&gt;
+&lt;script defer type="module" src="https://attachment-cms.dev/lib/attachment-cms-lib.umd.js"&gt;&lt;/script&gt;
   `
 }
 const attachmentEsScript = (token: string) => {
