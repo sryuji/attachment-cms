@@ -2,10 +2,9 @@
   <div class="container mx-auto p-2 flex justify-center">
     <div class="card w-full sm:w-1/2 shadow-2xl bg-grey-lighter">
       <div class="card-body">
-        <p class="text-xl">Please sign up.</p>
-        <p class="mt-3">
-          Sign up後、お試し用のProjectに自動的に招待されます。<br />
-          本サービスを設置したhtmlページにて機能をお試し頂けます。
+        <p class="mt-3 text-2xl">
+          <span>登録後、お試し用のProjectに招待されます。</span><br /><br />
+          <span>ご自由にお試しください。</span><br />
         </p>
         <div class="justify-end card-actions">
           <button class="">
