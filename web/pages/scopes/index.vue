@@ -15,6 +15,7 @@
 import { Component, namespace, Vue } from 'nuxt-property-decorator'
 import { scopesStore } from '~/store'
 import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
+import { waitUntilValueComes } from '~/utils/vue-helper'
 
 const scopesModule = namespace('scopes')
 
@@ -29,7 +30,7 @@ export default class ScopeListPage extends Vue {
   @scopesModule.State('scopes') scopes: Scope[]
 
   async beforeMount() {
-    await scopesStore.fetchScopes({})
+    await waitUntilValueComes(() => scopesStore.hasScopes)
     if (!scopesStore.hasScopes) this.$router.replace({ name: 'scopes-new' })
   }
 }
