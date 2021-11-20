@@ -2,6 +2,7 @@ import ApiRepository from './api.repository'
 import { ScopeSerializer } from '~/types/attachment-cms-server/app/scopes/serializer/scope.serializer'
 import { ScopeForm } from '~/types/attachment-cms-server/app/scopes/dto/scope.dto'
 import { ScopesSerializer } from '~/types/attachment-cms-server/app/scopes/serializer/scopes.serializer'
+import { ClientValidationError } from '~/utils/errors'
 
 export class ScopesRepository extends ApiRepository {
   findAll({ page = 1, per = 999 }): Promise<ScopesSerializer> {
@@ -9,7 +10,7 @@ export class ScopesRepository extends ApiRepository {
   }
 
   findOne(id: number): Promise<ScopeSerializer> {
-    if (!id) throw new Error('Need id')
+    if (!id) throw new ClientValidationError({ message: 'Need id' })
     return this.get(`/scopes/${id}`)
   }
 

@@ -3,6 +3,7 @@ import { ContentHistoriesSerializer } from '~/types/attachment-cms-server/app/co
 import { ContentHistorySerializer } from '~/types/attachment-cms-server/app/content-histories/serializer/content-history.serializer'
 import { UpdateContentHistoryForm } from '~/types/attachment-cms-server/app/content-histories/dto/update-content-history.dto'
 import { CreateContentHistoryForm } from '~/types/attachment-cms-server/app/content-histories/dto/create-content-history.dto'
+import { ClientValidationError } from '~/utils/errors'
 
 export class ContentHistoriesRepository extends ApiRepository {
   findAll({
@@ -18,7 +19,7 @@ export class ContentHistoriesRepository extends ApiRepository {
   }
 
   findOne(id: number): Promise<ContentHistorySerializer> {
-    if (!id) throw new Error('Need id')
+    if (!id) throw new ClientValidationError({ message: 'Need id' })
     return this.get(`/content-histories/${id}`)
   }
 
