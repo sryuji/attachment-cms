@@ -17,22 +17,14 @@
 
 <script lang="ts">
 import { Component, Emit, Vue } from 'nuxt-property-decorator'
-import Confirmation from '~/components/confirmation.vue'
 import { ConfirmationType } from '~/services/constants'
-import { ConstructorOptions, ExtendableError } from '~/utils/errors'
+import { ConfirmationCloseError } from '~/utils/errors'
 import { eventBus } from '~/utils/event-bus'
 
-export class ConfirmationCloseError extends ExtendableError {
-  constructor(options?: ConstructorOptions) {
-    super(options)
-    this.name = 'ServerError'
-  }
-}
-
 @Component({
-  components: { Confirmation },
+  components: {},
 })
-export default class ContentHistoryModal extends Vue {
+export default class Confirmation extends Vue {
   open: boolean = false
   title: string = ''
   message: string = ''

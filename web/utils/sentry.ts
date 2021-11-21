@@ -67,6 +67,7 @@ const sentryConfig = {
       'CancelProcessError',
       'NetworkError',
       'TimeoutError',
+      'ConfirmationCloseError',
     ],
   },
 }

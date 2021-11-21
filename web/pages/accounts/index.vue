@@ -60,7 +60,7 @@ import { convertToDto } from '~/utils/object'
 import FormValidation from '~/components/form-validation.vue'
 import { Form } from '~/utils/form'
 import { Scope } from '~/types/attachment-cms-server/db/entity/scope.entity'
-import { ConfirmationCloseError } from '~/components/confirmation.vue'
+import { ConfirmationCloseError } from '~/utils/errors'
 
 const accountsModule = namespace('accounts')
 const scopesModule = namespace('scopes')

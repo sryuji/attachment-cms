@@ -96,3 +96,10 @@ export class TimeoutError extends ExtendableError {
     this.name = 'TimeoutError'
   }
 }
+
+export class ConfirmationCloseError extends ExtendableError {
+  constructor(options?: ConstructorOptions) {
+    super(options)
+    this.name = 'ConfirmationCloseError'
+  }
+}

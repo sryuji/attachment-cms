@@ -181,7 +181,7 @@ import FormValidation from '~/components/form-validation.vue'
 import { convertToDtoWithForm } from '~/utils/object'
 import { eventBus } from '~/utils/event-bus'
 import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-history.entity'
-import { ConfirmationCloseError } from '~/components/confirmation.vue'
+import { ConfirmationCloseError } from '~/utils/errors'
 import { LABELS } from '~/services/labels'
 
 const attachmentUmdScript = (token: string) => {

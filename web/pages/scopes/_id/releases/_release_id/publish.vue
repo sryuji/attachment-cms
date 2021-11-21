@@ -61,7 +61,7 @@ import { Form } from '~/utils/form'
 import FormValidation from '~/components/form-validation.vue'
 import { convertToDtoWithForm } from '~/utils/object'
 import { eventBus } from '~/utils/event-bus'
-import { ConfirmationCloseError } from '~/components/confirmation.vue'
+import { ConfirmationCloseError } from '~/utils/errors'
 import { RouteCoordinator } from '~/utils/route-coordinator'
 
 @Component({

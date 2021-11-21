@@ -103,7 +103,7 @@ import { AccountScopesSerializer } from '~/types/attachment-cms-server/app/accou
 import { ScopeInvitationsSerializer } from '~/types/attachment-cms-server/app/scopes/serializer/scope-invitations.serializer'
 import { ScopeInvitationResponse } from '~/types/attachment-cms-server/app/scopes/serializer/scope-invtation.response'
 import { AccountScope } from '~/types/attachment-cms-server/db/entity/account-scope.entity'
-import { ConfirmationCloseError } from '~/components/confirmation.vue'
+import { ConfirmationCloseError } from '~/utils/errors'
 import { ScopeInvitation } from '~/types/attachment-cms-server/db/entity/scope-invitation.entity'
 
 @Component({
