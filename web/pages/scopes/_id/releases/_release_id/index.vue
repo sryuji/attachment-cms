@@ -24,14 +24,14 @@
                 <span class="text-sm leading-none"> release</span>
               </div>
             </div>
-            <div class="flex-grow form-control">
+            <div class="flex-grow form-control mr-6">
               <h1>
                 <input
                   v-if="!release.releasedAt"
                   v-model="updateReleaseDto.name"
                   type="text"
                   placeholder="Release name"
-                  class="input font-semibold text-xl px-1"
+                  class="input font-semibold text-xl px-1 w-full"
                   @change="updateRelease"
                 />
                 <span v-else class="font-semibold text-xl">{{ release.name }}</span>
@@ -46,7 +46,7 @@
 
           <div class="my-3">
             <div v-for="content in contentHistories" :key="content.id" class="bg-grey-lighter p-6 mb-6 rounded-box">
-              <div class="flex flex-wrap">
+              <div class="sm:flex sm:flex-wrap">
                 <div class="flex-shrink-0">
                   <span class="text-xl font-semibold bg-white rounded-box p-3">{{ content.path }}</span>
                   <span class="ml-3">ページの</span>
