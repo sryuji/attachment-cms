@@ -27,46 +27,59 @@
         <div class="max-w-lg">
           <h1 class="mb-5 text-4xl font-bold">今あるホームページに<br />かんたん設置</h1>
           <p class="mb-5 text-xl">
-            ホームページにタグをコピペするだけ<br />
+            ホームページにタグをコピペだけ<br />
             Google Analyticsや広告タグのように開始できます。
           </p>
         </div>
       </div>
     </div>
-    <!-- <div class="hero min-h-screen text-white bg-orange">
+    <div class="hero min-h-screen text-white bg-green-light">
       <div class="text-center hero-content w-full">
         <div class="w-full h-1/2">
-          <h1 class="mb-5 text-4xl font-bold">こんな場面で便利</h1>
+          <h1 class="mb-5 text-4xl font-bold">こんなケースでも使える</h1>
           <div
             class="
               my-12
               text-lg
               flex flex-col
-              space-x-0 space-y-6
-              sm:space-x-9 sm:space-y-0 sm:flex-row
+              space-x-0 space-y-12
+              sm:space-x-12 sm:space-y-0 sm:flex-row
               justify-between
               items-stretch
+              text-left
             "
           >
             <div class="w-full">
-              <div class="bg-white text-orange rounded-box w-full h-full text-xl p-6">
-                <p>xxxx</p>
+              <div class="bg-white text-orange rounded-box w-full h-full text-xl p-12">
+                <p>
+                  wordpressなど他CMSを使っていてるホームページ。<br />
+                  <br />
+                  vue, reactなどを使っていてもOK。 様々な環境で使えます。<br />
+                </p>
               </div>
             </div>
             <div class="w-full">
-              <div class="bg-white text-orange rounded-box w-full h-full text-xl p-6">
-                <p>xxxx</p>
+              <div class="bg-white text-orange rounded-box w-full h-full text-xl p-12">
+                <p>
+                  管理画面のヘルプなど、 日々、ブラッシュアップしたい！ でも、そんな対象が大量にある<br />
+                  <br />
+                  そんなコンテンツに最適です。<br />
+                </p>
               </div>
             </div>
             <div class="w-full">
-              <div class="bg-white text-orange rounded-box w-full h-full text-xl p-6">
-                <p>xxxx</p>
+              <div class="bg-white text-orange rounded-box w-full h-full text-xl p-12">
+                <p>
+                  SSG環境でも活用<br />
+                  <br />
+                  headless CMSのような利用方法も可能です。
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     <div class="hero min-h-screen bg-yellow-lighter text-yellow-darkest">
       <div class="text-center hero-content">
         <div class="max-w-lg">
