@@ -6,12 +6,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'nuxt-property-decorator'
-// https://github.com/mikeerickson/validatorjs
-import Validatorjs from 'validatorjs'
 import { eventBus } from '~/utils/event-bus'
 import { generateUUIDv4 } from '~/utils/string'
+import { Validatorjs } from '~/utils/validatorjs'
 
-Validatorjs.useLang('ja')
 type ValueType = string | number | boolean
 
 /**

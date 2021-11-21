@@ -65,16 +65,14 @@
                     >ドメインの登録してください</nuxt-link
                   >
                   <a
-                    v-else-if="!release.releasedAt"
-                    :href="`${scope.domain}${content.path}?acmst=${release.limitedReleaseToken}`"
-                    target="_blank"
+                    v-else
                     class="btn btn-sm ml-3"
                     :class="{ 'btn-disabled': !scope.domain || !content.path }"
-                    >プレビュー</a
+                    @click.prevent="showWebsite(content.path)"
                   >
-                  <a v-else :href="`${scope.domain}${content.path}`" target="_blank" class="btn btn-sm ml-3"
-                    >サイトを確認</a
-                  >
+                    <span v-if="!release.releasedAt">プレビュー</span>
+                    <span v-else>サイトを確認</span>
+                  </a>
                 </div>
               </div>
               <div class="mt-4 bg-white p-3 rounded-box">{{ content.selector }}</div>
@@ -164,11 +162,32 @@
       :is-released="release && release.releasedAt"
       @close="contentHistoryModal.open = false"
     ></content-history-modal>
+    <confirmation-modal ref="urlConfirmation" v-slot="{ data }" title="URLを入力してください。">
+      <div>
+        <div>
+          <p class="">:word を利用したPath入力した場合、有効なURLを入力して頂く必要があります。</p>
+        </div>
+        <div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">URL</span>
+              <span class="badge badge-error">必須</span>
+            </label>
+            <input v-model="data.url" type="text" class="input input-bordered" />
+            <form-validation
+              :value="data.url"
+              :rules="['required', 'http_protocol', 'regex:/^(?!.*:word).+$/']"
+              :error-messages="{ regex: ':wordを含まない正しいURLに書き換えてください。' }"
+            />
+          </div>
+        </div>
+      </div>
+    </confirmation-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, namespace } from 'nuxt-property-decorator'
+import { Component, namespace, Ref } from 'nuxt-property-decorator'
 import { NavigationGuardNext, Route } from 'vue-router/types'
 import ScopeHeader from '../../-scope-header.vue'
 import ContentHistoryModal from './-content-history-modal.vue'
@@ -182,6 +201,7 @@ import { convertToDtoWithForm } from '~/utils/object'
 import { eventBus } from '~/utils/event-bus'
 import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-history.entity'
 import { ConfirmationCloseError } from '~/utils/errors'
+import ConfirmationModal from '~/components/confirmation-modal.vue'
 import { LABELS } from '~/services/labels'
 
 const attachmentUmdScript = (token: string) => {
@@ -205,7 +225,7 @@ new AttachmentCMS({
 const releasesModule = namespace('releases')
 
 @Component({
-  components: { FormValidation, ContentHistoryModal, ScopeHeader },
+  components: { FormValidation, ContentHistoryModal, ScopeHeader, ConfirmationModal },
 })
 export default class ReleasePage extends Form {
   // State
@@ -301,6 +321,7 @@ export default class ReleasePage extends Form {
   @releasesModule.Getter('hasNextRelease') hasNextRelease: boolean
   @releasesModule.Getter('hasPrevRelease') hasPrevRelease: boolean
   @releasesModule.Getter('page') page: number
+  @Ref() readonly urlConfirmation!: ConfirmationModal<Record<'url', string>>
 
   // methods
   head() {
@@ -348,6 +369,23 @@ export default class ReleasePage extends Form {
   openContentHistoryModal(record: ContentHistory) {
     this.contentHistoryModal.record = record
     this.contentHistoryModal.open = true
+  }
+
+  async showWebsite(path: string) {
+    try {
+      let url = `${this.scope.domain}${path}`
+      if (path.match(/:word/)) {
+        let data = { url }
+        data = await this.urlConfirmation.confirm(data)
+        const urlParser = new URL(data.url)
+        url = `${urlParser.origin}${urlParser.pathname}`
+      }
+      if (!this.release.releasedAt) url += `?acmst=${this.release.limitedReleaseToken}`
+      window.open(url, '_blank')
+    } catch (err) {
+      if (err instanceof ConfirmationCloseError) return
+      throw err
+    }
   }
 
   async goNextRelease() {
