@@ -1,5 +1,5 @@
 <template>
-  <div v-if="open" class="modal modal-open">
+  <div v-if="open" class="modal modal-open confirmation">
     <div class="modal-box max-w-4xl">
       <div class="mb-2">
         <h1 class="text-2xl">{{ title }}</h1>
@@ -78,3 +78,10 @@ export default class Confirmation extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.confirmation-modal {
+  align-items: center;
+  padding: 0.5rem;
+}
+</style>
