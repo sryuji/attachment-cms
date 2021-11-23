@@ -164,6 +164,7 @@ function extendHistoryEvent() {
     }
   });
 }
+const BASE_HTML_ID = "acms-content";
 class AttachmentCMS {
   constructor(options) {
     __publicField(this, "baseUrl");
@@ -222,7 +223,7 @@ class AttachmentCMS {
     if (!this.queryToken)
       return;
     const el = document.getElementsByTagName("body")[0];
-    const content = `<div style="position: fixed; bottom: 20px; right: 30px;background-color: #46F28D; box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5); border-radius: 6px;">
+    const content = `<div id="${BASE_HTML_ID}-limited-mark" style="position: fixed; bottom: 20px; right: 30px;background-color: #46F28D; box-shadow: 0 10px 25px 0 rgba(0, 0, 0, .5); border-radius: 6px;">
     <p style="padding: 10px; font-weight: 600;">\u9650\u5B9A\u516C\u958B<br/>by attachment CMS</p>
     </div>`;
     this.insertLastChildToElement(el, content);
@@ -262,58 +263,49 @@ class AttachmentCMS {
   }
   applyContents() {
     this.contents.forEach((r) => {
-      const el = document.querySelector(r.selector);
-      if (!el)
+      const target = document.querySelector(r.selector);
+      if (!target)
         return;
-      if (r.content && !r.content.startsWith("<")) {
-        r.content = `<div>${r.content}</div>`;
-      }
+      const htmlId = `${BASE_HTML_ID}-${r.id}`;
+      const processed = document.getElementById(htmlId);
+      if (processed)
+        return;
       switch (r.action) {
         case "innerHTML":
-          if (el.innerHTML === r.content)
-            return;
-          el.innerHTML = r.content;
+          target.innerHTML = r.content;
           break;
         case "remove":
-          el.parentNode.removeChild(el);
+          this.removeElement(target, htmlId);
           break;
         case "insertBefore":
-          this.insertBeforeElement(el, r.content);
+          this.insertBeforeElement(target, r.content);
           break;
         case "insertChildAfterBegin":
-          this.insertFirstChildToElement(el, r.content);
+          this.insertFirstChildToElement(target, r.content);
           break;
         case "insertChildBeforeEnd":
-          this.insertLastChildToElement(el, r.content);
+          this.insertLastChildToElement(target, r.content);
           break;
         case "insertAfter":
-          this.insertAfterElement(el, r.content);
+          this.insertAfterElement(target, r.content);
           break;
       }
     });
   }
+  removeElement(el, htmlId) {
+    el.id = htmlId;
+    el.setAttribute("style", "display: none;");
+  }
   insertBeforeElement(el, content) {
-    const prevNode = el.previousSibling;
-    if (prevNode && prevNode.innerHTML === content)
-      return;
     el.insertAdjacentHTML("beforebegin", content);
   }
   insertFirstChildToElement(el, content) {
-    const firstChild = el.firstChild;
-    if (firstChild && firstChild.innerHTML === content)
-      return;
     el.insertAdjacentHTML("afterbegin", content);
   }
   insertLastChildToElement(el, content) {
-    const lastChild = el.lastChild;
-    if (lastChild && lastChild.innerHTML === content)
-      return;
     el.insertAdjacentHTML("beforeend", content);
   }
   insertAfterElement(el, content) {
-    const lastChild = el.lastChild;
-    if (lastChild && lastChild.innerHTML === content)
-      return;
     el.insertAdjacentHTML("afterend", content);
   }
   observeHistoryState() {
