@@ -1,0 +1,139 @@
+.acms-plugin-basic {
+  // colors
+  &.bg-orange {
+    background-color: #de751f;
+    border-color: #de751f;
+    color: #fff5eb;
+  }
+
+  &.bg-red {
+    background-color: #cc1f1a;
+    border-color: #cc1f1a;
+    color: #fcebea;
+  }
+
+  &.bg-green {
+    background-color: #1f9d55;
+    border-color: #1f9d55;
+    color: #e3fcec;
+  }
+
+  &.bg-blue {
+    background-color: #2779bd;
+    border-color: #2779bd;
+    color: #eff8ff;
+  }
+
+  &.bg-black {
+    background-color: #22292f;
+    border-color: #22292f;
+    color: #f1f5f8;
+  }
+
+  &.bg-white {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #22292f;
+  }
+
+  &.text-orange {
+    color: #de751f; // #613b1f
+  }
+
+  &.text-red {
+    color: #cc1f1a; // #621b18
+  }
+
+  &.text-green {
+    color: #1f9d55; // #1a4731
+  }
+
+  &.text-blue {
+    color: #2779bd; // #1c3d5a
+  }
+
+  &.text-black {
+    color: #22292f;
+  }
+
+  &.text-white {
+    color: #ffffff;
+  }
+
+  // shape
+  &.rouded-circle {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    flex-flow: column;
+    vertical-align: top;
+    font-weight: bold;
+    width: 2em;
+    height: 2em;
+    margin-left: 2em;
+    border-width: 3px;
+    border-style: solid;
+    border-color: inherit;
+  }
+
+  // size
+  &.xs {
+    font-size: 0.75em;
+  }
+
+  &.sm {
+    font-size: 0.875em;
+  }
+
+  &.lg {
+    font-size: 1.125em;
+    font-weight: 600;
+  }
+
+  &.xl {
+    font-size: 1.25em;
+    font-weight: 600;
+  }
+
+  // type
+  &.badge {
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+    padding-top: 0.15em;
+    padding-bottom: 0.15em;
+    border-radius: 10%;
+    margin-left: 0.4em;
+    margin-right: 0.4em;
+    font-weight: 500;
+    background-color: #2779bd;
+    color: #eff8ff;
+  }
+
+  &.tooltip {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+
+    &:hover .description {
+      display: inline-block;
+    }
+
+    .description {
+      display: none;
+      position: absolute;
+      padding: 0.5em;
+      font-size: 0.875em;
+      line-height: 1.6em;
+      color: #fff;
+      border-radius: 0.5em;
+      background: #000;
+      width: 16em;
+      // NOTE: この表示位置をstyleで指定する
+      // top: 0;
+      // bottom: 0;
+      // left: 0;
+      // right: 0;
+    }
+  }
+}
