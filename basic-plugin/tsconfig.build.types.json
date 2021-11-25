@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "Node",
+    "strict": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    // "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": false,
+    "noFallthroughCasesInSwitch": false,
+    "importHelpers": true,
+    "removeComments": true,
+    "types": ["vite/client", "@types/jest"],
+    "typeRoots": ["src/types", "./node_modules/@types"],
+
+    // for definition
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "./types",
+  },
+  "include": ["./src"],
+  "exclude": ["**/*.test.ts"]
+}
