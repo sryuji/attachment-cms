@@ -42,7 +42,7 @@ export default class ApiRepositoryFactory {
           'Content-Type': 'application/json',
         },
       },
-      timeout: 3000,
+      timeout: 6000,
       withCredentials: true,
       data: {},
     })
