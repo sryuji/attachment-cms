@@ -27,6 +27,8 @@ import { authStore } from '~/store'
 import { UnauthorizedError } from '~/utils/errors'
 import { AttachmentCMS } from '~/static/lib/attachment-cms-lib.es'
 
+const isProduction = process.env.production === 'production'
+
 @Component({ components: { SideMenu, Navbar, Notification, Confirmation } })
 export default class DefaultLayout extends Vue {
   beforeMount() {
@@ -36,9 +38,11 @@ export default class DefaultLayout extends Vue {
       throw err
     })
 
+    const baseUrl = isProduction ? 'https://api.attachment-cms.dev' : 'http://localhost:3000'
     new AttachmentCMS({
       token: '3fcaf9ce-a13f-4435-a0c7-8d2d8a48dc0f',
       id: 'attachment-cms',
+      baseUrl,
     }).run()
   }
 }

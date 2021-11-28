@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && cp dist/* ../web/static/plugin/basic",
+    "build": "tsc && vite build && ./bin/release.sh",
     "build:types": "rm -Rf ./types && mkdir types && tsc -p tsconfig.build.types.json",
     "serve": "vite preview",
     "lint": "eslint --ext \".ts\" .",
