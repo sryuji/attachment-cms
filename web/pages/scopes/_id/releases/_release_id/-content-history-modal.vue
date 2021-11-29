@@ -17,7 +17,7 @@
           class="input input-bordered"
           :disabled="isReleased"
         />
-        <form-validation :value="contentHistoryDto.path" :rules="['required']" />
+        <form-validation :value="contentHistoryDto.path" :rules="['required', 'path']" />
       </div>
       <div class="form-control">
         <label class="label">

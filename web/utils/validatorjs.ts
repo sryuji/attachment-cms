@@ -17,5 +17,12 @@ Validatorjs.register(
   },
   'ドメインを正しく入力してください。パスや末尾のスラッシュ(/)は不要です。'
 )
+Validatorjs.register(
+  'path',
+  function (value, requirement, attribute): boolean {
+    return isString(value) && !!value.match(/^\/([^?#]*)$/)
+  },
+  'スラッシュ(/)から始めてください。またqueryやhashは除いてください。'
+)
 
 export { Validatorjs }
