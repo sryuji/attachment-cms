@@ -111,6 +111,7 @@
   }
 
   &.tooltip {
+    text-transform: none;
     position: relative;
     cursor: pointer;
     display: inline-block;
@@ -120,6 +121,7 @@
     }
 
     .description {
+      white-space: normal;
       display: none;
       position: absolute;
       padding: 0.5em;
