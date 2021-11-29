@@ -46,49 +46,14 @@
 
           <div class="my-3">
             <div v-for="content in contentHistories" :key="content.id" class="bg-grey-lighter p-6 mb-6 rounded-box">
-              <div class="sm:flex sm:flex-wrap">
-                <div class="flex-shrink-0">
-                  <span class="text-xl font-semibold bg-white rounded-box p-3">{{ content.path }}</span>
-                  <span class="ml-3">ページの</span>
-                </div>
-                <div class="flex-1 ml-3">
-                  <span class="font-semibold">{{ content.description }}</span>
-                </div>
-                <div
-                  v-if="!release.releasedAt || (latestRelease && release.id === latestRelease.id)"
-                  class="flex-shrink-0 ml-3 leading-10"
-                >
-                  <button class="btn btn-warning text-lg btn-sm" @click.prevent="openContentHistoryModal(content)">
-                    編集
-                  </button>
-                  <nuxt-link v-if="!scope.domain" :to="{ path: `/scopes/${scope.id}/edit` }" class="ml-3 btn btn-sm"
-                    >ドメインの登録してください</nuxt-link
-                  >
-                  <a
-                    v-else
-                    class="btn btn-sm ml-3"
-                    :class="{ 'btn-disabled': !scope.domain || !content.path }"
-                    @click.prevent="showWebsite(content.path)"
-                  >
-                    <span v-if="!release.releasedAt">プレビュー</span>
-                    <span v-else>サイトを確認</span>
-                  </a>
-                </div>
-              </div>
-              <div class="mt-4 bg-white p-3 rounded-box">{{ content.selector }}</div>
-              <div class="my-5 leading-9">
-                <span>で指定されるHTMLElementに対して</span>
-                <span class="bg-white p-3 rounded-box">{{ actionLabels[content.action] }}</span>
-                <span class="mx-3">Actionを発動します。</span>
-              </div>
-              <template v-if="content.content">
-                <div class="mt-3">
-                  <span>Actionで利用されるHTMLデータ</span>
-                </div>
-                <div class="bg-white p-4 rounded-box">
-                  <pre class="whitespace-pre-wrap">{{ content.content }}</pre>
-                </div>
-              </template>
+              <content-component
+                :content="content"
+                :latest-release="latestRelease"
+                :release="release"
+                :scope="scope"
+                @show-website="showWebsite"
+                @open-content-history-modal="openContentHistoryModal"
+              ></content-component>
             </div>
 
             <div v-if="!release.releasedAt" class="my-6">
@@ -191,6 +156,7 @@ import { Component, namespace, Ref } from 'nuxt-property-decorator'
 import { NavigationGuardNext, Route } from 'vue-router/types'
 import ScopeHeader from '../../-scope-header.vue'
 import ContentHistoryModal from './-content-history-modal.vue'
+import ContentComponent from './~content.vue'
 import { scopesStore, releasesStore, contentHistoriesStore } from '~/store'
 import { UpdateReleaseDto } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
 import { Release } from '~/types/attachment-cms-server/db/entity/release.entity'
@@ -202,7 +168,6 @@ import { eventBus } from '~/utils/event-bus'
 import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-history.entity'
 import { ConfirmationCloseError } from '~/utils/errors'
 import ConfirmationModal from '~/components/confirmation-modal.vue'
-import { LABELS } from '~/services/labels'
 
 const attachmentUmdScript = (token: string) => {
   return `
@@ -225,7 +190,7 @@ new AttachmentCMS({
 const releasesModule = namespace('releases')
 
 @Component({
-  components: { FormValidation, ContentHistoryModal, ScopeHeader, ConfirmationModal },
+  components: { FormValidation, ContentHistoryModal, ContentComponent, ScopeHeader, ConfirmationModal },
 })
 export default class ReleasePage extends Form {
   // State
@@ -312,10 +277,6 @@ export default class ReleasePage extends Form {
   get attachmentEsCode(): string {
     if (!this.scope) return ''
     return attachmentEsScript(this.scope.token)
-  }
-
-  get actionLabels(): Record<string, string> {
-    return LABELS.contentHistory.action
   }
 
   @releasesModule.Getter('hasNextRelease') hasNextRelease: boolean

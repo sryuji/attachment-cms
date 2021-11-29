@@ -1,4 +1,5 @@
 <template>
+  <!-- 最新リリース or リリース作成 への誘導判定するページ -->
   <div class="container mx-auto py-2"></div>
 </template>
 
