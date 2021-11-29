@@ -17,6 +17,7 @@
           <span class="label-text">domain</span>
         </label>
         <input v-model="form.domain" type="text" placeholder="https://xxxxx.xxx.com" class="input input-bordered" />
+        <form-validation :value="form.domain" :rules="['http_protocol', 'origin']" />
       </div>
       <div class="form-control">
         <label class="label">

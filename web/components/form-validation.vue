@@ -1,6 +1,10 @@
 <template>
   <label class="label">
-    <p v-for="(msg, i) in messages" :key="i" class="label-text-alt text-red-light text-sm">{{ msg }}</p>
+    <p>
+      <span v-for="(msg, i) in messages" :key="i" class="label-text-alt text-red-light text-sm"
+        >{{ msg }}<br v-if="messages.length - 1 > i"
+      /></span>
+    </p>
   </label>
 </template>
 
