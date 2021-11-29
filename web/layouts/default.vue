@@ -27,7 +27,7 @@ import { authStore } from '~/store'
 import { UnauthorizedError } from '~/utils/errors'
 import { AttachmentCMS } from '~/static/lib/attachment-cms-lib.es'
 
-const isProduction = process.env.production === 'production'
+const isProduction = process.env.NODE_ENV === 'production'
 
 @Component({ components: { SideMenu, Navbar, Notification, Confirmation } })
 export default class DefaultLayout extends Vue {
