@@ -2,10 +2,10 @@
   <div>
     <div class="sm:flex sm:flex-wrap">
       <div class="flex-shrink-0">
-        <span class="text-xl font-semibold bg-white rounded-box p-3">{{ content.path }}</span>
+        <span class="text-lg font-semibold bg-white rounded-box p-3">{{ content.path }}</span>
         <span class="ml-3">ページの</span>
       </div>
-      <div class="flex-1 ml-3">
+      <div class="flex-1 text-lg ml-3">
         <span class="font-semibold">{{ content.description }}</span>
       </div>
       <template v-if="isDisplayType(content.type)">
@@ -30,21 +30,25 @@
       </template>
     </div>
     <template v-if="isDisplayType(content.type)">
-      <div class="mt-4 bg-white p-3 rounded-box">{{ content.selector }}</div>
+      <div class="mt-3">下記、selectorで指定されるHTMLElementに対して</div>
+      <div class="bg-white p-3 rounded-box text-xs">{{ content.selector }}</div>
       <div class="my-5 leading-9">
-        <span>で指定されるHTMLElementに対して</span>
+        <span class="mr-3"> Action </span>
         <span class="bg-white p-3 rounded-box">{{ actionLabels[content.action] }}</span>
-        <span class="mx-3">Actionを発動します。</span>
+        <span class="ml-3">を発動</span>
       </div>
       <template v-if="content.content">
         <div class="mt-3">
-          <span>Actionで利用されるHTMLデータ</span>
+          <span>利用されるHTMLデータ</span>
         </div>
-        <div class="bg-white p-4 rounded-box">
+        <div class="bg-white p-4 rounded-box text-xs">
           <pre class="whitespace-pre-wrap">{{ content.content }}</pre>
         </div>
       </template>
     </template>
+    <div class="mt-3 flex justify-end">
+      識別ID: <span class="bg-white px-2 rounded-box">{{ content.id }}</span>
+    </div>
   </div>
 </template>
 
