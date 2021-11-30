@@ -39,8 +39,9 @@ export default class DefaultLayout extends Vue {
     })
 
     const baseUrl = isProduction ? 'https://api.attachment-cms.dev' : 'http://localhost:3000'
+    const token = isProduction ? '3fcaf9ce-a13f-4435-a0c7-8d2d8a48dc0f' : '0601c7e9-af0b-4e1d-a0e7-fde28278e9c2'
     new AttachmentCMS({
-      token: '3fcaf9ce-a13f-4435-a0c7-8d2d8a48dc0f',
+      token,
       id: 'attachment-cms',
       baseUrl,
     }).run()
