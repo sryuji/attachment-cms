@@ -97,12 +97,13 @@
           </div>
 
           <div v-if="!release.releasedAt" class="my-3 flex justify-between">
-            <nuxt-link
+            <button
               v-if="scope.domain && contentHistories.length > 0"
-              class="btn btn-primary mr-3"
-              :to="{ path: `/scopes/${scopeId}/releases/${releaseId}/publish` }"
-              >一般公開する</nuxt-link
+              class="btn btn-warning mr-3"
+              @click.prevent="publish"
             >
+              一般公開する
+            </button>
             <button class="btn btn-error" @click="deleteRelease">リリースを削除する</button>
           </div>
         </div>
@@ -316,7 +317,7 @@ export default class ReleasePage extends Form {
 
   async deleteRelease() {
     try {
-      await eventBus.confirm({ title: 'このリリースを削除しても良いですか？' })
+      await eventBus.confirm({ title: 'このリリースを削除しても良いですか？', style: 'error' })
       await releasesStore.deleteRelease(this.releaseId)
       const baseNextPath = `/scopes/${this.scopeId}/releases`
       const nextPath = this.latestRelease ? `${baseNextPath}/${this.latestRelease.id}` : `${baseNextPath}/new`
@@ -359,6 +360,17 @@ export default class ReleasePage extends Form {
     const releases = await releasesStore.fetchReleases({ scopeId: this.scopeId, page: this.page - 1 })
     const releaseId = releases[0].id
     this.$router.push({ path: `/scopes/${this.scopeId}/releases/${releaseId}` })
+  }
+
+  async publish() {
+    try {
+      await eventBus.confirm({ title: 'このリリースを一般公開しても良いですか？', style: 'default' })
+      await releasesStore.publishRelease({ release: this.release })
+      eventBus.notifyMessages('このリリースを一般公開しました。', 'success')
+    } catch (err) {
+      if (err instanceof ConfirmationCloseError) return
+      throw err
+    }
   }
 }
 </script>
