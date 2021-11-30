@@ -40,6 +40,11 @@ export class ReleasesRepository extends ApiRepository {
     return this.patch(`/releases/${id}/publish`, form)
   }
 
+  rollback(id: number): Promise<ReleaseSerializer> {
+    if (!id) throw new Error('Need id')
+    return this.patch(`/releases/${id}/rollback`, {})
+  }
+
   delete(id: number): Promise<void> {
     if (!id) throw new Error('Need id')
     return this.del(`/releases/${id}`)

@@ -147,6 +147,13 @@ export default class extends VuexModule {
   }
 
   @Action
+  async rollbackRelease(releaseId: number): Promise<Release> {
+    const data = await $api.releases.rollback(releaseId)
+    this.setRelease(data.release)
+    return data.release
+  }
+
+  @Action
   cleanOtherScope(scopeId: number): void {
     if (
       (this.latestRelease && this.latestRelease.scopeId !== scopeId) ||

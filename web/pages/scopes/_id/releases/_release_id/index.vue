@@ -104,7 +104,12 @@
             >
               一般公開する
             </button>
+            <div v-else></div>
+
             <button class="btn btn-error" @click="deleteRelease">リリースを削除する</button>
+          </div>
+          <div v-else-if="release.releasedAt && release.id === latestRelease.id" class="my-3 flex justify-between">
+            <button class="btn btn-warning mr-3" @click.prevent="rollback">リリースを１つ戻す</button>
           </div>
         </div>
       </div>
@@ -365,8 +370,22 @@ export default class ReleasePage extends Form {
   async publish() {
     try {
       await eventBus.confirm({ title: 'このリリースを一般公開しても良いですか？', style: 'warning' })
-      await releasesStore.publishRelease({ release: this.release })
+      await releasesStore.publishRelease({ release: { id: this.releaseId } })
       eventBus.notifyMessages('このリリースを一般公開しました。', 'success')
+    } catch (err) {
+      if (err instanceof ConfirmationCloseError) return
+      throw err
+    }
+  }
+
+  async rollback() {
+    try {
+      await eventBus.confirm({
+        title: 'このリリースを一般公開を停止し、１つ前のリリースを一般公開して良いですか？',
+        style: 'warning',
+      })
+      await releasesStore.rollbackRelease(this.releaseId)
+      eventBus.notifyMessages('このリリースの一般公開を停止しました。', 'success')
     } catch (err) {
       if (err instanceof ConfirmationCloseError) return
       throw err
