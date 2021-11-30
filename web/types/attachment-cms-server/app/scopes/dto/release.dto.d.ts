@@ -8,7 +8,7 @@ export declare class CreateReleaseDto {
     sourceReleaseId: number;
 }
 export declare class PublishReleaseDto extends UpdatableDto {
-    releasedAt: Date;
+    releasedAt?: Date;
 }
 export declare class CreateReleaseForm {
     release: CreateReleaseDto;
