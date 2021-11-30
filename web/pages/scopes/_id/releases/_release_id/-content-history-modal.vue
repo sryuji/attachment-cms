@@ -90,6 +90,7 @@ import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-
 import { convertToDtoWithForm } from '~/utils/object'
 import { LABELS } from '~/services/labels'
 import { eventBus } from '~/utils/event-bus'
+import { ConfirmationCloseError } from '~/utils/errors'
 
 @Component({
   components: { FormValidation },
@@ -165,8 +166,15 @@ export default class ContentHistoryModal extends Form {
   }
 
   async remove() {
-    await contentHistoriesStore.deleteContentHistory({ contentHistory: this.contentHistoryDto })
-    this.close()
+    try {
+      await eventBus.confirm({ title: 'このコンテンツを削除しても良いですか？', style: 'error' })
+      await contentHistoriesStore.deleteContentHistory({ contentHistory: this.contentHistoryDto })
+      eventBus.notifyMessages('コンテンツを削除しました。')
+      this.close()
+    } catch (err) {
+      if (err instanceof ConfirmationCloseError) return
+      throw err
+    }
   }
 
   @Emit()

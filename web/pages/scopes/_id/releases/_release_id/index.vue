@@ -364,7 +364,7 @@ export default class ReleasePage extends Form {
 
   async publish() {
     try {
-      await eventBus.confirm({ title: 'このリリースを一般公開しても良いですか？', style: 'default' })
+      await eventBus.confirm({ title: 'このリリースを一般公開しても良いですか？', style: 'warning' })
       await releasesStore.publishRelease({ release: this.release })
       eventBus.notifyMessages('このリリースを一般公開しました。', 'success')
     } catch (err) {
