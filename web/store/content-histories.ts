@@ -14,10 +14,6 @@ config.rawError = true
 export default class extends VuexModule {
   contentHistories: ContentHistory[] = []
 
-  get getContentHistory() {
-    return (id: number) => this.contentHistories.find((r) => r.id === id)
-  }
-
   @Mutation
   setContentHistories(contentHistories: ContentHistory[]) {
     this.contentHistories = contentHistories
