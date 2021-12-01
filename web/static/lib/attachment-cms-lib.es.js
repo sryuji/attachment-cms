@@ -165,6 +165,7 @@ function extendHistoryEvent() {
   });
 }
 const BASE_HTML_ID = "acms-content";
+const CONTENT_TYPES = ["PluginContentHistory", "ReleaseContentHistory"];
 class AttachmentCMS {
   constructor(options) {
     __publicField(this, "baseUrl");
@@ -181,7 +182,7 @@ class AttachmentCMS {
     this.id = options && options.id || null;
     this.throttleApplyContents = lodash_throttle(this.applyContents, options && options.throttleMs || 200);
   }
-  get isClient() {
+  get isServer() {
     return typeof window === "undefined";
   }
   get url() {
@@ -191,7 +192,7 @@ class AttachmentCMS {
     return this.queryToken || this.defaultToken;
   }
   async run() {
-    if (this.isClient)
+    if (this.isServer)
       return;
     this.queryToken = this.getQueryToken();
     this.showLimitedMode();
@@ -208,6 +209,15 @@ class AttachmentCMS {
       this.observeElement();
       this.observeHistoryState();
     }
+  }
+  load(data) {
+    if (!data || !data.contents)
+      throw new Error("Need 1 argument. Please pass response data.");
+    this.contentsResponse = data;
+  }
+  pick(id) {
+    const contents = Object.values(this.contentsResponse.contents).flat();
+    return contents.find((content) => content.id === id);
   }
   getQueryToken() {
     let qtoken = sessionStorage.getItem("acmst");
@@ -242,7 +252,12 @@ class AttachmentCMS {
       path = path.replace(/\/$/, "");
       const regex = new RegExp(String.raw`^${path}$`, "i");
       return currentPath.match(regex);
-    }).map((path) => data[path]).flat();
+    }).map((path) => data[path]).flat().sort((x, y) => this.calcContentIndex(x.type) - this.calcContentIndex(y.type));
+  }
+  calcContentIndex(type) {
+    let index = CONTENT_TYPES.indexOf(type);
+    index = index === -1 ? 999 : index;
+    return index;
   }
   observeElement() {
     const el = this.id ? document.getElementById(this.id) : document.getElementsByTagName("body")[0];
