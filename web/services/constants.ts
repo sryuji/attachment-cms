@@ -20,3 +20,22 @@ export type ConfirmationType = {
   closeButton?: string
   style?: ConfirmationStyleType
 }
+
+export function attachmentUmdScript(token: string) {
+  return `
+&lt;link rel="preconnect" href="https://api.attachment-cms.dev" crossorigin&gt;
+&lt;script type="text/javascript"&gt;
+  window.AttachmentConfig = { token: "${token}" }
+&lt;/script&gt;
+&lt;script defer type="module" src="https://attachment-cms.dev/lib/attachment-cms-lib.umd.js"&gt;&lt;/script&gt;
+  `
+}
+export function attachmentEsScript(token: string) {
+  return `
+import { AttachmentCMS } from 'https://attachment-cms.dev/lib/attachment-cms-lib.es.js'
+
+new AttachmentCMS({
+  token: "${token}",
+}).run()
+  `
+}

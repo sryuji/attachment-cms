@@ -15,6 +15,7 @@
         </button>
         <div v-else></div>
       </div>
+
       <div v-if="release" class="card shadow-md">
         <div class="card-body">
           <div class="flex flex-wrap items-center">
@@ -174,25 +175,8 @@ import { eventBus } from '~/utils/event-bus'
 import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-history.entity'
 import { ConfirmationCloseError } from '~/utils/errors'
 import ConfirmationModal from '~/components/confirmation-modal.vue'
+import { attachmentEsScript, attachmentUmdScript } from '~/services/constants'
 
-const attachmentUmdScript = (token: string) => {
-  return `
-&lt;link rel="preconnect" href="https://api.attachment-cms.dev" crossorigin&gt;
-&lt;script type="text/javascript"&gt;
-  window.AttachmentConfig = { token: "${token}" }
-&lt;/script&gt;
-&lt;script defer type="module" src="https://attachment-cms.dev/lib/attachment-cms-lib.umd.js"&gt;&lt;/script&gt;
-  `
-}
-const attachmentEsScript = (token: string) => {
-  return `
-import { AttachmentCMS } from 'https://attachment-cms.dev/lib/attachment-cms-lib.es.js'
-
-new AttachmentCMS({
-  token: "${token}",
-}).run()
-  `
-}
 const releasesModule = namespace('releases')
 
 @Component({
