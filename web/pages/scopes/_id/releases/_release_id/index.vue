@@ -46,7 +46,7 @@
           </div>
 
           <div
-            class="mt-3 flex justify-between items-center rounded-box bg-indigo-lightest text-indigo-dark font-semibold"
+            class="mt-3 flex justify-between items-center rounded-box bg-indigo-lighter text-indigo-dark font-semibold"
           >
             <div class="form-control flex-row p-2 pr-6">
               <label class="mx-3">
