@@ -5,6 +5,7 @@ export declare class Account extends ApplicationEntity<Account> {
     lastName: string;
     firstName: string;
     avatarUrl: string;
+    super: boolean;
     jwtRefreshToken: string;
     jwtRefreshTokenIssuedAt: Date;
     googleAccessToken: string;

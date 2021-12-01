@@ -3,11 +3,13 @@ import { Account } from '../../../db/entity/account.entity';
 export declare class AuthUserDto {
     sub: number;
     email: string;
+    super: boolean;
     accountScopes: AccountScope[];
     constructor(account?: Account);
     toJSON(): {
         sub: number;
         email: string;
+        super: boolean;
         accountScopes: AccountScope[];
     };
 }

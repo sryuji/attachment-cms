@@ -14,4 +14,5 @@ export declare class ContentHistory extends ApplicationEntity<ContentHistory> {
     action: string;
     inactive: boolean;
     sourceContentHistoryId: number;
+    isUpdated: boolean;
 }

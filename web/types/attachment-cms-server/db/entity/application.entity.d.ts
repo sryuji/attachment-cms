@@ -5,4 +5,5 @@ export declare abstract class ApplicationEntity<E> extends BaseEntity {
     updatedAt: Date;
     constructor(attributes?: unknown);
     isNew(): boolean;
+    validateEntity(): Promise<void>;
 }
