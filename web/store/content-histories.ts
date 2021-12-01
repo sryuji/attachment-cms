@@ -1,4 +1,5 @@
 import { Action, config, Module, Mutation, VuexModule } from 'vuex-module-decorators'
+import { Pager } from '~/types/attachment-cms-server/app/base/pager'
 import { CreateContentHistoryForm } from '~/types/attachment-cms-server/app/content-histories/dto/create-content-history.dto'
 import { UpdateContentHistoryForm } from '~/types/attachment-cms-server/app/content-histories/dto/update-content-history.dto'
 import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-history.entity'
@@ -13,6 +14,7 @@ config.rawError = true
 })
 export default class extends VuexModule {
   contentHistories: ContentHistory[] = []
+  totalCount: number
 
   @Mutation
   setContentHistories(contentHistories: ContentHistory[]) {
@@ -35,6 +37,11 @@ export default class extends VuexModule {
   }
 
   @Mutation
+  setTotalCount(pager: Pager): void {
+    this.totalCount = pager.totalCount
+  }
+
+  @Mutation
   removeContentHistory(id: number): void {
     const index = this.contentHistories.findIndex((r) => r.id === id)
     if (index < 0) return
@@ -42,8 +49,16 @@ export default class extends VuexModule {
   }
 
   @Action
-  async fetchContentHistories(releaseId: number, page?: 1, per?: 20): Promise<ContentHistory[]> {
-    const data = await $api.contentHistories.findAll({ releaseId, page, per })
+  async fetchContentHistories({
+    releaseId,
+    condition,
+  }: {
+    releaseId: number
+    condition: { path: string; isUpdated: boolean }
+  }): Promise<ContentHistory[]> {
+    const { path, isUpdated } = condition
+    const data = await $api.contentHistories.findAll({ releaseId, path, isUpdated, page: 1, per: 50 })
+    this.setTotalCount(data.pager)
     this.setContentHistories(data.contentHistories)
     return data.contentHistories
   }

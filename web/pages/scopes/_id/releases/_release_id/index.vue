@@ -45,8 +45,39 @@
             </div>
           </div>
 
+          <div
+            class="mt-3 flex justify-between items-center rounded-box bg-indigo-lightest text-indigo-dark font-semibold"
+          >
+            <div class="form-control flex-row p-2 pr-6">
+              <label class="mx-3">
+                <span class="label-text align-bottom">Pathで検索</span>
+              </label>
+              <input
+                v-model="condition.path"
+                type="text"
+                placeholder="/pathで検索"
+                class="input input-bordered input-sm w-80"
+                @change="searchContentHistories(releaseId)"
+              />
+            </div>
+            <div class="form-control pl-3 pr-1">
+              <label class="cursor-pointer label">
+                <span class="label-text">全て表示</span>
+                <input
+                  v-model="condition.isUpdated"
+                  type="checkbox"
+                  class="toggle toggle-primary mx-3"
+                  :true-value="true"
+                  :false-value="null"
+                  @change="searchContentHistories(releaseId)"
+                />
+                <span class="label-text mr-3">更新済のみ表示</span>
+              </label>
+            </div>
+          </div>
+
           <div class="my-3">
-            <div v-for="content in contentHistories" :key="content.id" class="bg-grey-lighter p-6 mb-6 rounded-box">
+            <div v-for="content in contentHistories" :key="content.id">
               <content-component
                 :content="content"
                 :latest-release="latestRelease"
@@ -176,6 +207,7 @@ import { ContentHistory } from '~/types/attachment-cms-server/db/entity/content-
 import { ConfirmationCloseError } from '~/utils/errors'
 import ConfirmationModal from '~/components/confirmation-modal.vue'
 import { attachmentEsScript, attachmentUmdScript } from '~/services/constants'
+import { RouteCoordinator } from '~/utils/route-coordinator'
 
 const releasesModule = namespace('releases')
 
@@ -190,7 +222,9 @@ export default class ReleasePage extends Form {
     record: null,
   }
 
+  condition = { path: '', isUpdated: null as boolean }
   installationTab: 'umd' | 'es' = 'umd'
+  routeCoordinator: RouteCoordinator
 
   // Lifecycle hooks
   beforeRouteEnter(to: Route, from: Route, next: NavigationGuardNext) {
@@ -212,6 +246,8 @@ export default class ReleasePage extends Form {
   }
 
   beforeMount() {
+    this.routeCoordinator = this.routeCoordinator || new RouteCoordinator(this)
+    this.routeCoordinator.setQueryToState(this.condition)
     this.fetchData(this.releaseId)
   }
 
@@ -287,11 +323,20 @@ export default class ReleasePage extends Form {
 
     const release = releaseId && releasesStore.getRelease(releaseId)
     const promise1: Promise<void | Release> = release ? Promise.resolve() : releasesStore.fetchRelease(releaseId)
-    const promise2: Promise<void | ContentHistory[]> = releaseId
-      ? contentHistoriesStore.fetchContentHistories(releaseId)
-      : Promise.resolve()
+    const promise2: Promise<void | ContentHistory[]> = this.searchContentHistories(releaseId)
     await Promise.all([promise1, promise2])
     this.resetForm()
+  }
+
+  async searchContentHistories(releaseId: number) {
+    await this.$nextTick()
+    this.$nuxt.$loading.start()
+    try {
+      await contentHistoriesStore.fetchContentHistories({ releaseId, condition: this.condition })
+      this.routeCoordinator.replaceQuery(this.condition)
+    } finally {
+      this.$nuxt.$loading.finish()
+    }
   }
 
   resetForm() {

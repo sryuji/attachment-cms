@@ -8,14 +8,18 @@ import { ClientValidationError } from '~/utils/errors'
 export class ContentHistoriesRepository extends ApiRepository {
   findAll({
     releaseId,
+    path,
+    isUpdated,
     page = 1,
     per = 20,
   }: {
     releaseId: number
+    path: string
+    isUpdated: boolean
     page: number
     per: number
   }): Promise<ContentHistoriesSerializer> {
-    return this.get(`/content-histories`, { params: { releaseId, page, per } })
+    return this.get(`/content-histories`, { params: { releaseId, path, isUpdated, page, per } })
   }
 
   findOne(id: number): Promise<ContentHistorySerializer> {

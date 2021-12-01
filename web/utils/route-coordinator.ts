@@ -1,5 +1,6 @@
 import { NuxtAppOptions } from '@nuxt/types'
 import { Route } from 'vue-router/types'
+import { isNullOrUndefined } from './object'
 
 export class RouteCoordinator {
   vm: NuxtAppOptions
@@ -18,22 +19,29 @@ export class RouteCoordinator {
     }
   }
 
-  saveQuery(parameters: Record<string, string | number | boolean | Array<string | number>>) {
-    this.vm.$router.replace({ query: parameters }).catch((err: Error) => err)
+  replaceQuery(parameters: Record<string, string | number | boolean | Array<string | number>>) {
+    const query = Object.keys(parameters).reduce((prev: typeof parameters, currentKey: string) => {
+      if (!isNullOrUndefined(parameters[currentKey])) prev[currentKey] = parameters[currentKey]
+      return prev
+    }, {})
+    this.vm.$router.replace({ query }).catch((err: Error) => err)
   }
 
-  restoreQuery(parameters: Record<string, string | number | boolean | Array<string | number>>) {
+  setQueryToState(parameters: Record<string, string | number | boolean | Array<string | number>>) {
     const query = this.vm.$route.query
+    const parameterKeys = Object.keys(parameters)
     Object.keys(query).forEach((key) => {
+      if (!parameterKeys.includes(key)) return
+
       let v = query[key]
-      // NOTE: 複数選択値のmappingに対応. ただし、parametersの初期値にArrayの定義は必須
-      if (Array.isArray(parameters[key]) && v && !Array.isArray(v)) v = [v]
-      if (key.endsWith('_id')) {
-        if (Array.isArray(v)) {
-          v = v.map((id) => parseInt(id))
-        } else if (v) {
-          v = parseInt(v)
+      if (!isNullOrUndefined(v)) {
+        if (typeof parameters[key] === 'number' || v.match(/\d+/)) v = parseInt(v)
+        if (['true'].includes(v)) {
+          v = true
+        } else if (['false'].includes(v)) {
+          v = false
         }
+        if (Array.isArray(parameters[key]) && !Array.isArray(v)) v = [v]
       }
       this.vm.$set(parameters, key, v)
     })

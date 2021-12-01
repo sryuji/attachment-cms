@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-grey-lighter p-6 mb-6 rounded-box">
     <div class="sm:flex sm:flex-wrap">
       <div class="flex-shrink-0">
         <span class="text-lg font-semibold bg-white rounded-box p-3">{{ content.path }}</span>
