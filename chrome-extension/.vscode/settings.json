@@ -1,0 +1,25 @@
+{
+  "editor.tabSize": 2,
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 120,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+
+  // eslint
+  "eslint.run": "onSave",
+  "eslint.packageManager": "yarn",
+  "eslint.options": {
+    "overrideConfigFile": ".eslintrc.js"
+  },
+  // prettier
+  "prettier.printWidth": 120,
+  "jest.jestCommandLine": "yarn test"
+}

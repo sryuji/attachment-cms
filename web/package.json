@@ -32,7 +32,8 @@
     "nuxt-property-decorator": "^2.9.1",
     "universal-cookie": "^4.0.4",
     "uuid": "^8.3.2",
-    "validatorjs": "^3.22.1"
+    "validatorjs": "^3.22.1",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",

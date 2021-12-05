@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+
+  h2 {
+    @apply text-xl;
+  }
+}
+
+.html {
+  display: block;
+  overflow-x: auto;
+  color: #dae1e7;
+  background: #282c34;
+}
