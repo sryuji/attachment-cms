@@ -6,7 +6,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build && yarn build:manifest",
+    "build:manifest": "esno src/manifest.ts",
     "serve": "vite preview",
     "lint:es": "eslint --ext \".ts,.js,.vue,.tsx\" .",
     "lint": "yarn lint:es"
