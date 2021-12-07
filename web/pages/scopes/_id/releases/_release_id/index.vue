@@ -168,7 +168,7 @@
     <confirmation-modal ref="urlConfirmation" v-slot="{ data }" title="URLを入力してください。">
       <div>
         <div>
-          <p class="">:word を利用したPath入力した場合、有効なURLを入力して頂く必要があります。</p>
+          <p class="">* を利用したPath入力した場合、有効なURLを入力して頂く必要があります。</p>
         </div>
         <div>
           <div class="form-control">
@@ -179,8 +179,8 @@
             <input v-model="data.url" type="text" class="input input-bordered" />
             <form-validation
               :value="data.url"
-              :rules="['required', 'http_protocol', 'regex:/^(?!.*:word).+$/']"
-              :error-messages="{ regex: ':wordを含まない正しいURLに書き換えてください。' }"
+              :rules="['required', 'http_protocol', 'regex:/^(?!.*\*).+$/']"
+              :error-messages="{ regex: '* を含まない正しいURLに書き換えてください。' }"
             />
           </div>
         </div>
