@@ -1,15 +1,26 @@
 import fs from 'fs-extra'
 import { resolve } from './utils/file'
 
-const getManifest = () => {
+function getManifest(): chrome.runtime.ManifestV3 {
   return {
     manifest_version: 3,
-    name: 'attachment CMS chrome extension',
-    description: '',
-    version: '0.1',
-    action: {
-      default_popup: './dist/popup/index.html',
+    default_locale: 'ja',
+    name: '__MSG_ext_name__',
+    description: '__MSG_ext_desc__',
+    version: '0.1.0',
+    permissions: ['contextMenus', 'scripting', 'storage', 'activeTab'],
+    host_permissions: ['http://*/*', 'https://*/*', '*://*/*'],
+    background: {
+      service_worker: 'js/background.js',
     },
+    content_scripts: [
+      {
+        matches: ['http://*/*', 'https://*/*', '*://*/*'],
+        js: ['js/content-script.js'],
+        css: [] as string[],
+        run_at: 'document_end',
+      },
+    ],
   }
 }
 
