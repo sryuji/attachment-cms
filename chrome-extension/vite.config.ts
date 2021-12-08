@@ -26,7 +26,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         background: resolve('src/background.ts'),
-        inject: resolve('src/web-accessible-resources/inject.ts'),
         'content-script': resolve('src/content-scripts/content-script.ts'),
       },
       output: {

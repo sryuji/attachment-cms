@@ -18,15 +18,3 @@ export class SelectScopeMessage extends TabMessage {
     this.type = 'SelectScopeMessage'
   }
 }
-export class AddContentMessage extends TabMessage {
-  constructor() {
-    super()
-    this.type = 'AddContentMessage'
-  }
-}
-export class MoveReleaseScreenMessage extends TabMessage {
-  constructor() {
-    super()
-    this.type = 'MoveReleaseScreenMessage'
-  }
-}
