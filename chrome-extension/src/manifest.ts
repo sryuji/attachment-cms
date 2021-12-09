@@ -8,7 +8,7 @@ function getManifest(): chrome.runtime.ManifestV3 {
     name: '__MSG_ext_name__',
     description: '__MSG_ext_desc__',
     version: '0.1.0',
-    permissions: ['contextMenus', 'scripting', 'storage', 'activeTab'],
+    permissions: ['contextMenus', 'scripting', 'storage', 'tabs'],
     host_permissions: ['http://*/*', 'https://*/*', '*://*/*'],
     background: {
       service_worker: 'js/background.js',

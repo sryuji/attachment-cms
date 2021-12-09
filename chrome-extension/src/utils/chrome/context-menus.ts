@@ -1,4 +1,4 @@
-import { ContextMenuChildId } from '../../constants/context-menu'
+import { ContextMenuChildId } from '../../service/context-menus.constants'
 
 type OnclickFnType = (info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) => void
 
