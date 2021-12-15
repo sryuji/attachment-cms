@@ -1,4 +1,4 @@
-import { ContextMenuChildId } from '../../service/context-menus.constants'
+import { ContextMenuChildId } from './constants'
 
 type OnclickFnType = (info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) => void
 
@@ -19,10 +19,11 @@ export class ContextMenus {
     })
   }
 
-  initialize(fn: () => void) {
+  initialize(settings: { id: ContextMenuChildId; title: string }[]) {
     chrome.runtime.onInstalled.addListener(() => {
       this.createRootMenu()
-      fn()
+      // NOTE: callbackは `onInstalled`イベント関係なく、background.ts呼ばれたら初期化されるように分けて初期化
+      settings.forEach((setting) => this.createChildMenu(setting.id, setting.title))
     })
   }
 
@@ -34,12 +35,11 @@ export class ContextMenus {
     chrome.contextMenus.update(id, { enabled: false })
   }
 
-  public updateCallback(id: ContextMenuChildId, onclick: OnclickFnType) {
+  public addListener(id: ContextMenuChildId, onclick: OnclickFnType) {
     this.onclickFnMap[id] = onclick
   }
 
-  public createChildMenu(id: ContextMenuChildId, title: string, onclick: OnclickFnType) {
-    this.onclickFnMap[id] = onclick
+  private createChildMenu(id: ContextMenuChildId, title: string) {
     chrome.contextMenus.create({
       id,
       parentId: this.rootId,
