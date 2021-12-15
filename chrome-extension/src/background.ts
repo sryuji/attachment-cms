@@ -5,6 +5,22 @@ import { openTab, sendMessageToTab } from './utils/chrome/tabs.util'
 import { state } from './background/state'
 
 state.load()
+state.addSetListener('scopeId', (value, oldValue) => {
+  if (value) {
+    ContextMenus.enableContextMenu('acms-contextmenu-contents-list')
+  } else {
+    ContextMenus.disableContextMenu('acms-contextmenu-contents-list')
+  }
+})
+state.addSetListener('releaseId', (value, oldValue) => {
+  if (value) {
+    ContextMenus.enableContextMenu('acms-contextmenu-add-content')
+    ContextMenus.enableContextMenu('acms-contextmenu-edit-content')
+  } else {
+    ContextMenus.disableContextMenu('acms-contextmenu-add-content')
+    ContextMenus.disableContextMenu('acms-contextmenu-edit-content')
+  }
+})
 
 const contextMenus = new ContextMenus(CONTEXT_MENU_ROOT_ID, CONTEXT_MENU_ROOT_TITLE)
 contextMenus.initialize([
