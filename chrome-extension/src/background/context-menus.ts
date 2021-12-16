@@ -1,61 +1,71 @@
-import { ContextMenuChildId } from './constants'
+import { ContextMenus } from '../utils/chrome/context-menus'
+import { openTab, sendMessageToTab } from '../utils/chrome/tabs.util'
+import { ContextMenuChildId, CONTEXT_MENU_ROOT_ID, CONTEXT_MENU_ROOT_TITLE } from './constants'
+import { state } from './state'
+import { tabs } from './tabs'
+import { SCOPES_URL } from './urls'
 
-type OnclickFnType = (info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) => void
+class Menus extends ContextMenus<ContextMenuChildId> {
+  constructor() {
+    super(CONTEXT_MENU_ROOT_ID, CONTEXT_MENU_ROOT_TITLE)
+  }
 
-export class ContextMenus {
-  rootId: string
-  rootTitle: string
-  onclickFnMap: Record<string, OnclickFnType>
+  initialize() {
+    this.createMenus()
+    this.addClickListener()
+    this.addStateListener()
+  }
 
-  constructor(rootId: string, rootTitle: string) {
-    this.rootId = rootId
-    this.rootTitle = rootTitle
-    this.onclickFnMap = {}
-    // この問題の対策 https://qiita.com/MugeSo/items/e5307bda346c0bb8e22e
-    chrome.contextMenus.onClicked.addListener((info, tab) => {
-      const fn = this.onclickFnMap[info.menuItemId]
-      if (!fn) return
-      fn(info, tab)
+  private createMenus() {
+    const releaseId = state.pick('releaseId')
+    super.initialize([
+      { id: 'acms-contextmenu-select-scope', title: 'Projectの選択', enabled: true },
+      { id: 'acms-contextmenu-contents-list', title: 'コンテンツの一覧', enabled: !!state.pick('scopeId') },
+      { id: 'acms-contextmenu-add-content', title: 'Click先にコンテンツを追加', enabled: !!releaseId },
+      { id: 'acms-contextmenu-edit-content', title: 'Click先のコンテンツを編集', enabled: !!releaseId },
+    ])
+  }
+
+  private addClickListener() {
+    super.addListener('acms-contextmenu-select-scope', async (info, tab) => {
+      state.save({ targetSiteTabId: tab.id })
+      await openTab(state.pick('acmsSiteTabId'), SCOPES_URL)
     })
-  }
-
-  initialize(settings: { id: ContextMenuChildId; title: string }[]) {
-    chrome.runtime.onInstalled.addListener(() => {
-      this.createRootMenu()
-      // NOTE: callbackは `onInstalled`イベント関係なく、background.ts呼ばれたら初期化されるように分けて初期化
-      settings.forEach((setting) => this.createChildMenu(setting.id, setting.title))
+    super.addListener('acms-contextmenu-contents-list', async (info, tab) => {
+      state.save({ targetSiteTabId: tab.id })
+      await tabs.openAcmsSite()
+      const path = new URL(tab.url).pathname
+      await sendMessageToTab(tabs.acmsSiteTabId, { query: { path } })
     })
-  }
-
-  public static enableContextMenu(id: ContextMenuChildId) {
-    chrome.contextMenus.update(id, { enabled: true })
-  }
-
-  public static disableContextMenu(id: ContextMenuChildId) {
-    chrome.contextMenus.update(id, { enabled: false })
-  }
-
-  public addListener(id: ContextMenuChildId, onclick: OnclickFnType) {
-    this.onclickFnMap[id] = onclick
-  }
-
-  private createChildMenu(id: ContextMenuChildId, title: string) {
-    chrome.contextMenus.create({
-      id,
-      parentId: this.rootId,
-      title,
-      contexts: ['all'],
-      type: 'normal',
-      onclick: null,
+    super.addListener('acms-contextmenu-add-content', async (info, tab) => {
+      state.save({ targetSiteTabId: tab.id })
+      await tabs.openAcmsSite()
+      const path = new URL(tab.url).pathname
+      // TODO: selectorを取得する
+      await sendMessageToTab(state.pick('acmsSiteTabId'), { contentHistory: { path, selector: '' } })
     })
+    // contextMenus.addListener('acms-contextmenu-edit-content', async (info, tab) => {
+    // })
   }
 
-  private createRootMenu() {
-    chrome.contextMenus.create({
-      title: this.rootTitle,
-      type: 'normal',
-      contexts: ['all'],
-      id: this.rootId,
+  private addStateListener() {
+    state.addStateListener('scopeId', (value, oldValue) => {
+      if (value) {
+        super.enableContextMenu('acms-contextmenu-contents-list')
+      } else {
+        super.disableContextMenu('acms-contextmenu-contents-list')
+      }
+    })
+    state.addStateListener('releaseId', (value, oldValue) => {
+      if (value) {
+        super.enableContextMenu('acms-contextmenu-add-content')
+        super.enableContextMenu('acms-contextmenu-edit-content')
+      } else {
+        super.disableContextMenu('acms-contextmenu-add-content')
+        super.disableContextMenu('acms-contextmenu-edit-content')
+      }
     })
   }
 }
+
+export const contextMenus = new Menus()

@@ -1,5 +1,6 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   document.dispatchEvent(new CustomEvent('RequestFromAcmsRuntime', { detail: message }))
+  sendResponse && sendResponse()
   return true
 })
 

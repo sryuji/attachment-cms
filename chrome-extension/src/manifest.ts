@@ -16,6 +16,7 @@ function getManifest(): chrome.runtime.ManifestV3 {
     content_scripts: [
       {
         matches: ['http://*/*', 'https://*/*', '*://*/*'],
+        // NOTE: /dist/js/配下にbuildされるため下記pathとなる
         js: ['js/content-script.js'],
         css: [] as string[],
         run_at: 'document_end',

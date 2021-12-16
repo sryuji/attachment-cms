@@ -4,14 +4,18 @@ export async function getCurrentTab() {
 }
 
 export async function isExistTab(tabId: number): Promise<boolean> {
-  const tab = await chrome.tabs.get(tabId)
-  return !!tab
+  try {
+    const tab = await chrome.tabs.get(tabId)
+    return !!tab
+  } catch (error) {
+    return false
+  }
 }
 
 export async function openTab(tabId: number, url: string): Promise<number> {
   if (!url.startsWith('http')) throw new Error('Need http/https protocol')
 
-  const hasTab = tabId && isExistTab(tabId)
+  const hasTab = tabId && (await isExistTab(tabId))
   if (hasTab) {
     await chrome.tabs.update(tabId, { url: url || undefined, active: true, highlighted: true })
     return tabId
@@ -21,8 +25,12 @@ export async function openTab(tabId: number, url: string): Promise<number> {
   }
 }
 
-export function sendMessageToTab(tabId: number, message: unknown) {
-  if (!tabId) throw new Error('Bug. tabId is empty')
+export async function activateTab(tabId: number) {
+  await chrome.tabs.update(tabId, { active: true, highlighted: true })
+}
+
+export async function sendMessageToTab(tabId: number, message: unknown) {
+  if (!tabId || !(await isExistTab(tabId))) return Promise.reject(new Error(`No tab. tabId is ${tabId}`))
   const promise = new Promise((resolve, reject) => {
     chrome.tabs.sendMessage(tabId, message, (response) => {
       resolve(response)

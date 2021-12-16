@@ -8,9 +8,11 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build && yarn build:manifest",
     "build:manifest": "esno src/manifest.ts",
+    "build:prod": "NODE_ENV=production yarn build",
     "serve": "vite preview",
     "lint:es": "eslint --ext \".ts,.js,.vue,.tsx\" .",
-    "lint": "yarn lint:es"
+    "lint": "yarn lint:es",
+    "lint:prod": "NODE_ENV=production yarn lint"
   },
   "dependencies": {
     "vue": "^3.2.16",
