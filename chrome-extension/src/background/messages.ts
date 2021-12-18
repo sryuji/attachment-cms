@@ -10,9 +10,14 @@ class Messages {
     chrome.runtime.onMessage.addListener(async (message, sender: chrome.runtime.MessageSender, sendResponse) => {
       switch (message.type) {
         case 'SelectScope':
-          state.save({ scopeId: message.scopeId, acmsSiteTabId: sender.tab.id })
+          state.save({
+            acmsSiteTabId: sender.tab.id,
+            scopeId: message.scopeId,
+            releaseId: null,
+            limitedReleaseToken: null,
+          })
           break
-        case 'SelectRelease':
+        case 'LatestRelease':
           state.save({
             acmsSiteTabId: sender.tab.id,
             scopeId: message.scopeId,
@@ -21,11 +26,21 @@ class Messages {
           })
           break
         case 'SelectContent':
-          state.save({ acmsSiteTabId: sender.tab.id })
+          state.save({
+            acmsSiteTabId: sender.tab.id,
+            scopeId: message.scopeId,
+            releaseId: message.releaseId,
+            limitedReleaseToken: message.limitedReleaseToken,
+          })
           if (this.targetSiteTabId) await sendMessageToTab(this.targetSiteTabId, message)
           break
         case 'SaveContent':
-          state.save({ acmsSiteTabId: sender.tab.id })
+          state.save({
+            acmsSiteTabId: sender.tab.id,
+            scopeId: message.scopeId,
+            releaseId: message.releaseId,
+            limitedReleaseToken: message.limitedReleaseToken,
+          })
           if (this.targetSiteTabId) await sendMessageToTab(this.targetSiteTabId, message)
           break
       }

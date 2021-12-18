@@ -1,8 +1,10 @@
-export function sendToAcmsRuntime(data: any) {
-  window.dispatchEvent(new CustomEvent('SendToAcmsRuntime', { detail: data }))
+export type Message = Record<string, any> & { type: string }
+
+export function sendToAcmsRuntime(message: Message) {
+  window.dispatchEvent(new CustomEvent('SendToAcmsRuntime', { detail: message }))
 }
 
-export function addRequestFromAcmsRuntimeListener(fn: (data: any) => {}) {
+export function addRequestFromAcmsRuntimeListener(fn: (message: Message) => {}) {
   const listener = ((ev: CustomEvent) => {
     fn(ev.detail)
   }) as EventListener

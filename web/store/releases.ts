@@ -9,6 +9,7 @@ import {
 } from '~/types/attachment-cms-server/app/scopes/dto/release.dto'
 import { Release } from '~/types/attachment-cms-server/db/entity/release.entity'
 import { $api } from '~/utils/api-accessor'
+import { sendToAcmsRuntime } from '~/utils/chrome-extension'
 import { contentHistoriesStore } from '~/utils/store-accessor'
 
 config.rawError = true
@@ -103,6 +104,12 @@ export default class extends VuexModule {
   async fetchLatestRelease(scopeId: number): Promise<Release> {
     const data = await $api.releases.findLatest(scopeId)
     this.setLatestRelease(data.release)
+    sendToAcmsRuntime({
+      type: 'LatestRelease',
+      scopeId,
+      releaseId: data.release.id,
+      limitedReleaseToken: data.release.limitedReleaseToken,
+    })
     return data.release
   }
 

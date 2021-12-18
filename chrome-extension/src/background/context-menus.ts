@@ -1,3 +1,4 @@
+import { CreateContentMessage, SearchContentMessage } from '../types/message'
 import { ContextMenus } from '../utils/chrome/context-menus'
 import { openTab, sendMessageToTab } from '../utils/chrome/tabs.util'
 import { ContextMenuChildId, CONTEXT_MENU_ROOT_ID, CONTEXT_MENU_ROOT_TITLE } from './constants'
@@ -35,17 +36,32 @@ class Menus extends ContextMenus<ContextMenuChildId> {
       state.save({ targetSiteTabId: tab.id })
       await tabs.openAcmsSite()
       const path = new URL(tab.url).pathname
-      await sendMessageToTab(tabs.acmsSiteTabId, { query: { path } })
+      const message: SearchContentMessage = {
+        type: 'SearchContent',
+        scopeId: state.pick('scopeId'),
+        releaseId: state.pick('releaseId'),
+        query: { path },
+      }
+      await sendMessageToTab(tabs.acmsSiteTabId, message)
     })
     super.addListener('acms-contextmenu-add-content', async (info, tab) => {
       state.save({ targetSiteTabId: tab.id })
       await tabs.openAcmsSite()
       const path = new URL(tab.url).pathname
       // TODO: selectorを取得する
-      await sendMessageToTab(state.pick('acmsSiteTabId'), { contentHistory: { path, selector: '' } })
+      const message: CreateContentMessage = {
+        type: 'CreateContent',
+        contentHistory: {
+          scopeId: state.pick('scopeId'),
+          releaseId: state.pick('releaseId'),
+          path,
+          selector: '',
+          content: '',
+        },
+      }
+      await sendMessageToTab(state.pick('acmsSiteTabId'), message)
     })
-    // contextMenus.addListener('acms-contextmenu-edit-content', async (info, tab) => {
-    // })
+    // contextMenus.addListener('acms-contextmenu-edit-content', async (info, tab) => {})
   }
 
   private addStateListener() {

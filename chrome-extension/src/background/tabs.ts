@@ -22,10 +22,7 @@ class Tabs {
   }
 
   async openAcmsSite() {
-    this.acmsSiteTabId = await openTab(
-      this.acmsSiteTabId,
-      resolveContentUrl(state.pick('scopeId'), state.pick('releaseId'))
-    )
+    this.acmsSiteTabId = await openTab(this.acmsSiteTabId, resolveContentUrl())
   }
 }
 
