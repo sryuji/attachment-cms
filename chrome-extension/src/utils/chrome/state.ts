@@ -2,9 +2,9 @@ import { isNotUndefined } from '../object'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class State<S extends Record<string, any>> {
-  private data: S
-  private proxyMap: Record<keyof S, (value: S[keyof S], oldValue: S[keyof S]) => void>
-  private storageKey: string
+  protected data: S
+  protected proxyMap: Record<keyof S, (value: S[keyof S], oldValue: S[keyof S]) => void>
+  protected storageKey: string
   private storageFns = chrome.storage.local
 
   constructor(storageKey: string, sync?: boolean) {

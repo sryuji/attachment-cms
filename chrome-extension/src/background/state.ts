@@ -1,17 +1,20 @@
 import { State } from '../utils/chrome/state'
 import { ACMS_STATE_STORAGE_KEY } from './constants'
 
-export type StateType = {
-  acmsSiteTabId: number
-  targetSiteTabId: number
-  scopeId: number
-  releaseId: number
-  limitedReleaseToken: string
+const data = {
+  enableOrigins: [] as string[],
+  acmsSiteTabId: null as number,
+  targetSiteTabId: null as number,
+  scopeId: null as number,
+  releaseId: null as number,
+  limitedReleaseToken: '',
 }
+export type StateType = typeof data
 
 class LocalState extends State<StateType> {
   constructor() {
     super(ACMS_STATE_STORAGE_KEY)
+    this.data = data
   }
 }
 

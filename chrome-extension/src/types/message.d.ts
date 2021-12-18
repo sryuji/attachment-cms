@@ -6,6 +6,10 @@ export type LatestReleaseMessage = {
   releaseId: number
   limitedReleaseToken: string
 }
+export type AttachLibMessage = {
+  type: 'AttachLib'
+  limitedReleaseToken: string
+}
 
 export type SearchContentMessage = {
   type: 'SearchContent'

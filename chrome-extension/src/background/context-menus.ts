@@ -1,6 +1,7 @@
 import { CreateContentMessage, SearchContentMessage } from '../types/message'
 import { ContextMenus } from '../utils/chrome/context-menus'
 import { openTab, sendMessageToTab } from '../utils/chrome/tabs.util'
+import { getPathname } from '../utils/url'
 import { ContextMenuChildId, CONTEXT_MENU_ROOT_ID, CONTEXT_MENU_ROOT_TITLE } from './constants'
 import { state } from './state'
 import { tabs } from './tabs'
@@ -11,13 +12,7 @@ class Menus extends ContextMenus<ContextMenuChildId> {
     super(CONTEXT_MENU_ROOT_ID, CONTEXT_MENU_ROOT_TITLE)
   }
 
-  initialize() {
-    this.createMenus()
-    this.addClickListener()
-    this.addStateListener()
-  }
-
-  private createMenus() {
+  createMenus() {
     const releaseId = state.pick('releaseId')
     super.initialize([
       { id: 'acms-contextmenu-select-scope', title: 'Projectの選択', enabled: true },
@@ -27,7 +22,7 @@ class Menus extends ContextMenus<ContextMenuChildId> {
     ])
   }
 
-  private addClickListener() {
+  addClickListener() {
     super.addListener('acms-contextmenu-select-scope', async (info, tab) => {
       state.save({ targetSiteTabId: tab.id })
       await openTab(state.pick('acmsSiteTabId'), SCOPES_URL)
@@ -35,26 +30,24 @@ class Menus extends ContextMenus<ContextMenuChildId> {
     super.addListener('acms-contextmenu-contents-list', async (info, tab) => {
       state.save({ targetSiteTabId: tab.id })
       await tabs.openAcmsSite()
-      const path = new URL(tab.url).pathname
       const message: SearchContentMessage = {
         type: 'SearchContent',
         scopeId: state.pick('scopeId'),
         releaseId: state.pick('releaseId'),
-        query: { path },
+        query: { path: getPathname(tab.url) },
       }
       await sendMessageToTab(tabs.acmsSiteTabId, message)
     })
     super.addListener('acms-contextmenu-add-content', async (info, tab) => {
       state.save({ targetSiteTabId: tab.id })
       await tabs.openAcmsSite()
-      const path = new URL(tab.url).pathname
       // TODO: selectorを取得する
       const message: CreateContentMessage = {
         type: 'CreateContent',
         contentHistory: {
           scopeId: state.pick('scopeId'),
           releaseId: state.pick('releaseId'),
-          path,
+          path: getPathname(tab.url),
           selector: '',
           content: '',
         },
@@ -64,7 +57,7 @@ class Menus extends ContextMenus<ContextMenuChildId> {
     // contextMenus.addListener('acms-contextmenu-edit-content', async (info, tab) => {})
   }
 
-  private addStateListener() {
+  addStateListener() {
     state.addStateListener('scopeId', (value, oldValue) => {
       if (value) {
         super.enableContextMenu('acms-contextmenu-contents-list')

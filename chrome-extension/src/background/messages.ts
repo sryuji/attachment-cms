@@ -1,5 +1,6 @@
 import { sendMessageToTab } from '../utils/chrome/tabs.util'
 import { state } from './state'
+import { tabs } from './tabs'
 
 class Messages {
   get targetSiteTabId(): number {
@@ -17,14 +18,17 @@ class Messages {
             limitedReleaseToken: null,
           })
           break
-        case 'LatestRelease':
+        case 'LatestRelease': {
           state.save({
             acmsSiteTabId: sender.tab.id,
             scopeId: message.scopeId,
             releaseId: message.releaseId,
             limitedReleaseToken: message.limitedReleaseToken,
           })
+          const tbs = await chrome.tabs.query({ url: state.pick('enableOrigins') })
+          tbs.forEach((tab) => tabs.requestAttachLib(tab))
           break
+        }
         case 'SelectContent':
           state.save({
             acmsSiteTabId: sender.tab.id,
