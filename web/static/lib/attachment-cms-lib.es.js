@@ -165,6 +165,7 @@ function extendHistoryEvent() {
   });
 }
 const BASE_HTML_ID = "acms-content";
+const ACMS_EXTENSION_KEY = "acmsExtension";
 const CONTENT_TYPES = ["PluginContentHistory", "ReleaseContentHistory"];
 class AttachmentCMS {
   constructor(options) {
@@ -175,8 +176,10 @@ class AttachmentCMS {
     __publicField(this, "id");
     __publicField(this, "contentsResponse");
     __publicField(this, "throttleApplyContents");
+    __publicField(this, "isExtension");
     if (!options || !options.token)
       throw new Error("Required acmst query parameter as token.");
+    this.isExtension = options.isExtension === true;
     this.baseUrl = options && options.baseUrl || "https://api.attachment-cms.dev";
     this.defaultToken = options.token;
     this.id = options && options.id || null;
@@ -194,6 +197,7 @@ class AttachmentCMS {
   async run() {
     if (this.isServer)
       return;
+    this.markAttachmentType();
     this.queryToken = this.getQueryToken();
     this.showLimitedMode();
     this.contentsResponse = await this.fetchContents();
@@ -218,6 +222,9 @@ class AttachmentCMS {
   pick(id) {
     const contents = Object.values(this.contentsResponse.contents).flat();
     return contents.find((content) => content.id === id);
+  }
+  markAttachmentType() {
+    sessionStorage.setItem(ACMS_EXTENSION_KEY, this.isExtension ? "extension" : "officail");
   }
   getQueryToken() {
     let qtoken = sessionStorage.getItem("acmst");

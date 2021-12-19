@@ -4,7 +4,13 @@ import throttle from 'lodash.throttle'
 import { extendHistoryEvent } from './lib/history'
 
 export const BASE_HTML_ID = 'acms-content'
+export const ACMS_EXTENSION_KEY = 'acmsExtension'
 const CONTENT_TYPES = ['PluginContentHistory', 'ReleaseContentHistory']
+
+export function getLoadedStatus(): undefined | 'official' | 'extension' {
+  const v = sessionStorage.getItem(ACMS_EXTENSION_KEY)
+  return v as 'official' | 'extension'
+}
 
 export class AttachmentCMS {
   private baseUrl: string
@@ -14,6 +20,7 @@ export class AttachmentCMS {
   private id: string
   private contentsResponse: ContentsResponse
   private throttleApplyContents: Function
+  private isExtension: boolean
 
   /**
    *
@@ -24,6 +31,7 @@ export class AttachmentCMS {
    */
   constructor(options: AttachmentConfigType) {
     if (!options || !options.token) throw new Error('Required acmst query parameter as token.')
+    this.isExtension = options.isExtension === true
     this.baseUrl = (options && options.baseUrl) || 'https://api.attachment-cms.dev'
     this.defaultToken = options.token
     this.id = (options && options.id) || null
@@ -44,6 +52,7 @@ export class AttachmentCMS {
 
   public async run() {
     if (this.isServer) return
+    this.markAttachmentType()
 
     this.queryToken = this.getQueryToken()
     this.showLimitedMode()
@@ -81,6 +90,10 @@ export class AttachmentCMS {
   public pick(id: number) {
     const contents = Object.values(this.contentsResponse.contents).flat()
     return contents.find((content) => content.id === id)
+  }
+
+  private markAttachmentType(): void {
+    sessionStorage.setItem(ACMS_EXTENSION_KEY, this.isExtension ? 'extension' : 'officail')
   }
 
   private getQueryToken(): string {
