@@ -1,4 +1,4 @@
-import { CreateContentMessage, SearchContentMessage } from '../types/message'
+import { CreateContentMessage } from '../types/message'
 import { ContextMenus } from '../utils/chrome/context-menus'
 import { openTab, sendMessageToTab } from '../utils/chrome/tabs.util'
 import { getPathname } from '../utils/url'
@@ -27,14 +27,7 @@ class Menus extends ContextMenus<ContextMenuId> {
     })
     super.addListener('acms-contextmenu-contents-list', async (info, tab) => {
       state.save({ targetSiteTabId: tab.id })
-      await tabs.openAcmsSite()
-      const message: SearchContentMessage = {
-        type: 'SearchContent',
-        scopeId: state.pick('scopeId'),
-        releaseId: state.pick('releaseId'),
-        query: { path: getPathname(tab.url) },
-      }
-      await sendMessageToTab(tabs.acmsSiteTabId, message)
+      await tabs.openAcmsSite(getPathname(tab.url))
     })
     super.addListener('acms-contextmenu-add-content', async (info, tab) => {
       state.save({ targetSiteTabId: tab.id })
