@@ -19,17 +19,17 @@ class Messages {
           })
           break
         case 'LatestRelease': {
-          state.save({
+          await state.save({
             acmsSiteTabId: sender.tab.id,
             scopeId: message.scopeId,
             releaseId: message.releaseId,
             limitedReleaseToken: message.limitedReleaseToken,
           })
-          tabs.requestAttachLib(this.targetSiteTabId)
+          await tabs.requestAttachLib(this.targetSiteTabId)
           break
         }
         case 'SelectContent':
-          state.save({
+          await state.save({
             acmsSiteTabId: sender.tab.id,
             scopeId: message.scopeId,
             releaseId: message.releaseId,
@@ -38,7 +38,7 @@ class Messages {
           if (this.targetSiteTabId) await sendMessageToTab(this.targetSiteTabId, message)
           break
         case 'SaveContent':
-          state.save({
+          await state.save({
             acmsSiteTabId: sender.tab.id,
             scopeId: message.scopeId,
             releaseId: message.releaseId,
