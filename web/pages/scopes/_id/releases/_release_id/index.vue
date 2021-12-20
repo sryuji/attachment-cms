@@ -370,7 +370,7 @@ export default class ReleasePage extends Form {
   async showWebsite(path: string) {
     try {
       let url = `${this.scope.domain}${path}`
-      if (path.match(/:word/)) {
+      if (path.match(/\*/)) {
         let data = { url }
         data = await this.urlConfirmation.confirm(data)
         const urlParser = new URL(data.url)
