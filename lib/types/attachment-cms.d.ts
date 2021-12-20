@@ -2,6 +2,8 @@ import { ContentDto } from './types/content.dto';
 import { AttachmentConfigType, ContentsResponse } from './types/global';
 export declare const BASE_HTML_ID = "acms-content";
 export declare const ACMS_EXTENSION_KEY = "acmsExtension";
+export declare const ACMS_LIB_KEY = "acmsLib";
+export declare function isInstalledExtension(): boolean;
 export declare function getLoadedStatus(): null | 'official' | 'extension';
 export declare class AttachmentCMS {
     private baseUrl;

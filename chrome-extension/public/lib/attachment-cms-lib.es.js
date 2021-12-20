@@ -165,10 +165,10 @@ function extendHistoryEvent() {
   });
 }
 const BASE_HTML_ID = "acms-content";
-const ACMS_EXTENSION_KEY = "acmsExtension";
+const ACMS_LIB_KEY = "acmsLib";
 const CONTENT_TYPES = ["PluginContentHistory", "ReleaseContentHistory"];
 function getLoadedStatus() {
-  const v = sessionStorage.getItem(ACMS_EXTENSION_KEY);
+  const v = sessionStorage.getItem(ACMS_LIB_KEY);
   return v;
 }
 class AttachmentCMS {
@@ -228,7 +228,7 @@ class AttachmentCMS {
     return contents.find((content) => content.id === id);
   }
   markAttachmentType() {
-    sessionStorage.setItem(ACMS_EXTENSION_KEY, this.isExtension ? "extension" : "officail");
+    sessionStorage.setItem(ACMS_LIB_KEY, this.isExtension ? "extension" : "officail");
   }
   getQueryToken() {
     let qtoken = sessionStorage.getItem("acmst");

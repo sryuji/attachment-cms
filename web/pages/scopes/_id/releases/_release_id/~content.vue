@@ -21,7 +21,7 @@
             v-else
             class="btn btn-sm ml-3"
             :class="{ 'btn-disabled': !scope.domain || !content.path }"
-            @click.prevent="showWebsite(content.path)"
+            @click.prevent="showWebsite(content.id, content.path)"
           >
             <span v-if="!release.releasedAt">プレビュー</span>
             <span v-else>サイトを確認</span>
@@ -86,7 +86,7 @@ export default class ContentComponent extends Vue {
 
   // methods
   @Emit()
-  showWebsite(path: string) {}
+  showWebsite(contentHistoryId: number, path: string) {}
 
   @Emit()
   openContentHistoryModal(content: ContentHistory) {}

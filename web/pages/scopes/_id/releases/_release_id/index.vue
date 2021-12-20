@@ -177,9 +177,10 @@
               <span class="badge badge-error">必須</span>
             </label>
             <input v-model="data.url" type="text" class="input input-bordered" />
+            <!-- https://developer.mozilla.org/ja/docs/web/java-script/guide/Regular_Expressions#escaping -->
             <form-validation
               :value="data.url"
-              :rules="['required', 'http_protocol', 'regex:/^(?!.*\*).+$/']"
+              :rules="['required', 'http_protocol', 'regex:/^(?!.*\\*).+$/']"
               :error-messages="{ regex: '* を含まない正しいURLに書き換えてください。' }"
             />
           </div>
@@ -208,6 +209,7 @@ import { ConfirmationCloseError } from '~/utils/errors'
 import ConfirmationModal from '~/components/confirmation-modal.vue'
 import { attachmentEsScript, attachmentUmdScript } from '~/services/constants'
 import { RouteCoordinator } from '~/utils/route-coordinator'
+import { hasExtension, sendToAcmsRuntime } from '~/utils/chrome-extension'
 
 const releasesModule = namespace('releases')
 
@@ -367,17 +369,32 @@ export default class ReleasePage extends Form {
     this.contentHistoryModal.open = true
   }
 
-  async showWebsite(path: string) {
+  async showWebsite(contentHistoryId: number, path: string) {
+    if (!this.isLatest)
+      throw new Error(`This release is NOT LATEST. showWebsite method is used by only latest release.`)
+
     try {
       let url = `${this.scope.domain}${path}`
       if (path.match(/\*/)) {
         let data = { url }
         data = await this.urlConfirmation.confirm(data)
         const urlParser = new URL(data.url)
-        url = `${urlParser.origin}${urlParser.pathname}`
+        path = urlParser.pathname
+        url = `${urlParser.origin}${path}`
       }
-      if (!this.release.releasedAt) url += `?acmst=${this.release.limitedReleaseToken}`
-      window.open(url, '_blank')
+      if (hasExtension()) {
+        sendToAcmsRuntime({
+          type: 'SelectContent',
+          scopeId: this.scopeId,
+          releaseId: this.releaseId,
+          limitedReleaseToken: this.release.limitedReleaseToken,
+          url,
+          contentHistoryId,
+        })
+      } else {
+        if (!this.release.releasedAt) url += `?acmst=${this.release.limitedReleaseToken}`
+        window.open(url, '_blank')
+      }
     } catch (err) {
       if (err instanceof ConfirmationCloseError) return
       throw err

@@ -15,3 +15,7 @@ export function addRequestFromAcmsRuntimeListener(fn: (message: Message) => {}) 
 export function removeRequestFromAcmsRuntimeListener(listener: EventListener) {
   window.removeEventListener('RequestFromAcmsRuntime', listener)
 }
+
+export function hasExtension(): boolean {
+  return !!sessionStorage.getItem('acmsExtension')
+}

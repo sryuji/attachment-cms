@@ -22,23 +22,25 @@ class Menus extends ContextMenus<ContextMenuId> {
 
   addClickListener() {
     super.addListener('acms-contextmenu-select-scope', async (info, tab) => {
-      state.save({ targetSiteTabId: tab.id })
+      await state.save({ targetSiteTabId: tab.id })
       await openTab(state.pick('acmsSiteTabId'), SCOPES_URL)
     })
     super.addListener('acms-contextmenu-contents-list', async (info, tab) => {
-      state.save({ targetSiteTabId: tab.id })
-      await tabs.openAcmsSite(getPathname(tab.url))
+      await state.save({ targetSiteTabId: tab.id })
+      const path = getPathname(tab.url)
+      await tabs.openAcmsSite(path)
     })
     super.addListener('acms-contextmenu-add-content', async (info, tab) => {
-      state.save({ targetSiteTabId: tab.id })
-      await tabs.openAcmsSite()
+      await state.save({ targetSiteTabId: tab.id })
+      const path = getPathname(tab.url)
+      await tabs.openAcmsSite(path)
       // TODO: selectorを取得する
       const message: CreateContentMessage = {
         type: 'CreateContent',
         contentHistory: {
           scopeId: state.pick('scopeId'),
           releaseId: state.pick('releaseId'),
-          path: getPathname(tab.url),
+          path,
           selector: '',
           content: '',
         },

@@ -1,5 +1,7 @@
 import { AttachmentCMS, getLoadedStatus } from '../../public/lib/attachment-cms-lib.es'
 
+const ACMS_EXTENSION_KEY = 'acmsExtension'
+
 export { getLoadedStatus }
 
 export function attachLib(limitedReleaseToken?: string, force = false) {
@@ -11,4 +13,8 @@ export function attachLib(limitedReleaseToken?: string, force = false) {
   } else if (['extension', 'official'].includes(status)) {
     window.location.reload()
   }
+}
+
+export function markUseExtension() {
+  sessionStorage.setItem(ACMS_EXTENSION_KEY, 'use')
 }

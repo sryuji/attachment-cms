@@ -4,11 +4,11 @@ import throttle from 'lodash.throttle'
 import { extendHistoryEvent } from './lib/history'
 
 export const BASE_HTML_ID = 'acms-content'
-export const ACMS_EXTENSION_KEY = 'acmsExtension'
+export const ACMS_LIB_KEY = 'acmsLib'
 const CONTENT_TYPES = ['PluginContentHistory', 'ReleaseContentHistory']
 
 export function getLoadedStatus(): null | 'official' | 'extension' {
-  const v = sessionStorage.getItem(ACMS_EXTENSION_KEY)
+  const v = sessionStorage.getItem(ACMS_LIB_KEY)
   return v as 'official' | 'extension'
 }
 
@@ -93,7 +93,7 @@ export class AttachmentCMS {
   }
 
   private markAttachmentType(): void {
-    sessionStorage.setItem(ACMS_EXTENSION_KEY, this.isExtension ? 'extension' : 'officail')
+    sessionStorage.setItem(ACMS_LIB_KEY, this.isExtension ? 'extension' : 'officail')
   }
 
   private getQueryToken(): string {

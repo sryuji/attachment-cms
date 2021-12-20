@@ -1,4 +1,4 @@
-import { sendMessageToTab } from '../utils/chrome/tabs.util'
+import { openTab, sendMessageToTab } from '../utils/chrome/tabs.util'
 import { state } from './state'
 import { tabs } from './tabs'
 
@@ -35,7 +35,7 @@ class Messages {
             releaseId: message.releaseId,
             limitedReleaseToken: message.limitedReleaseToken,
           })
-          if (this.targetSiteTabId) await sendMessageToTab(this.targetSiteTabId, message)
+          await openTab(this.targetSiteTabId, message.url)
           break
         case 'SaveContent':
           await state.save({
