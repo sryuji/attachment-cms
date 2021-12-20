@@ -1,23 +1,14 @@
-import { AttachLibMessage } from '../types/message'
+import { AttachmentCMS, getLoadedStatus } from '../../public/lib/attachment-cms-lib.es'
 
-export function attachLib(message: AttachLibMessage) {
-  if (typeof window === 'undefined' || !message.limitedReleaseToken) return
-  const preLimitedReleaseToken = sessionStorage.getItem('acmst')
-  if (preLimitedReleaseToken === message.limitedReleaseToken) return
+export { getLoadedStatus }
 
-  sessionStorage.setItem('acmst', message.limitedReleaseToken)
+export function attachLib(limitedReleaseToken?: string, force = false) {
+  if (limitedReleaseToken) sessionStorage.setItem('acmst', limitedReleaseToken)
 
-  if (!window.AttachmentCMS) {
-    insertLib
-  } else {
-    window.AttachmentCMS.run()
+  const status = getLoadedStatus()
+  if (force || !status) {
+    new AttachmentCMS({ token: 'dummy', isExtension: true }).run()
+  } else if (['extension', 'official'].includes(status)) {
+    window.location.reload()
   }
-}
-
-function insertLib(message: AttachLibMessage) {
-  const tag2 = document.createElement('script')
-  tag2.setAttribute('type', 'text/javascript')
-  tag2.setAttribute('src', 'https://attachment-cms.dev/lib/attachment-cms-lib.umd.js')
-  ;(document.head || document.documentElement).appendChild(tag2)
-  tag2.remove()
 }

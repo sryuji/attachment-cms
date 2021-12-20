@@ -25,8 +25,7 @@ class Messages {
             releaseId: message.releaseId,
             limitedReleaseToken: message.limitedReleaseToken,
           })
-          const tbs = await chrome.tabs.query({ url: state.pick('enableOrigins') })
-          tbs.forEach((tab) => tabs.requestAttachLib(tab))
+          tabs.requestAttachLib(this.targetSiteTabId)
           break
         }
         case 'SelectContent':

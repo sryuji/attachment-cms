@@ -34,7 +34,7 @@ export class State<S extends Record<string, any>> {
     return this.data[id]
   }
 
-  addStateListener(id: keyof S, listener: (value: S[keyof S], oldValue: S[keyof S]) => void) {
+  addListener(id: keyof S, listener: (value: S[keyof S], oldValue: S[keyof S]) => void) {
     this.proxyMap[id] = (value: S[keyof S], oldValue: S[keyof S]) => {
       if (value !== oldValue) listener(value, oldValue)
     }

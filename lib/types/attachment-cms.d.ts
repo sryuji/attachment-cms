@@ -2,7 +2,7 @@ import { ContentDto } from './types/content.dto';
 import { AttachmentConfigType, ContentsResponse } from './types/global';
 export declare const BASE_HTML_ID = "acms-content";
 export declare const ACMS_EXTENSION_KEY = "acmsExtension";
-export declare function getLoadedStatus(): undefined | 'official' | 'extension';
+export declare function getLoadedStatus(): null | 'official' | 'extension';
 export declare class AttachmentCMS {
     private baseUrl;
     private defaultToken;

@@ -18,7 +18,8 @@ export type SearchContentMessage = {
   query: { path: string; isUpdated?: boolean }
 }
 export type SelectContentMessage = { type: 'SelectContent'; url: string; contentHistoryId: number }
-export type SaveContentMessage = { type: 'SaveContent' }
+export type SaveContentMessage = { type: 'SaveContent'; contentHistoryId: number }
+export type LoadContentMessage = { type: 'LoadContent'; contentHistoryId: number }
 
 export type CreateContentMessage = {
   type: 'CreateContent'

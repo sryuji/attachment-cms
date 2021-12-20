@@ -7,7 +7,7 @@ export const BASE_HTML_ID = 'acms-content'
 export const ACMS_EXTENSION_KEY = 'acmsExtension'
 const CONTENT_TYPES = ['PluginContentHistory', 'ReleaseContentHistory']
 
-export function getLoadedStatus(): undefined | 'official' | 'extension' {
+export function getLoadedStatus(): null | 'official' | 'extension' {
   const v = sessionStorage.getItem(ACMS_EXTENSION_KEY)
   return v as 'official' | 'extension'
 }
