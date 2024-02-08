@@ -1,6 +1,6 @@
-import { CreateContentMessage } from '../types/message'
+import { CreateContentMessage, RequestContentParamsMessage, ResponseContentParamsMessage } from '../types/message'
 import { ContextMenus } from '../utils/chrome/context-menus'
-import { openTab, sendMessageToTab } from '../utils/chrome/tabs.util'
+import { awaitConnected, openTab, sendMessageToTab } from '../utils/chrome/tabs.util'
 import { getPathname } from '../utils/url'
 import { ContextMenuId, CONTEXT_MENU_ROOT_ID, CONTEXT_MENU_ROOT_TITLE } from './constants'
 import { state } from './state'
@@ -32,20 +32,24 @@ class Menus extends ContextMenus<ContextMenuId> {
     })
     super.addListener('acms-contextmenu-add-content', async (info, tab) => {
       await state.save({ targetSiteTabId: tab.id })
+      // TODO: 右クリック位置の検出
+      const message: RequestContentParamsMessage = { type: 'RequestContentParams' }
+      const response = await sendMessageToTab<ResponseContentParamsMessage>(tab.id, message)
       const path = getPathname(tab.url)
-      await tabs.openAcmsSite(path)
-      // TODO: selectorを取得する
-      const message: CreateContentMessage = {
+      const acmsSiteTabId = await tabs.openAcmsSite(path)
+      const isConnected = await awaitConnected(acmsSiteTabId)
+      if (!isConnected) return
+      const createContentMessage: CreateContentMessage = {
         type: 'CreateContent',
         contentHistory: {
           scopeId: state.pick('scopeId'),
           releaseId: state.pick('releaseId'),
           path,
-          selector: '',
+          selector: response.selector,
           content: '',
         },
       }
-      await sendMessageToTab(state.pick('acmsSiteTabId'), message)
+      await sendMessageToTab(state.pick('acmsSiteTabId'), createContentMessage)
     })
     // contextMenus.addListener('acms-contextmenu-edit-content', async (info, tab) => {})
     super.addListener('acms-contextmenu-attach-lib', async (info, tab) => {

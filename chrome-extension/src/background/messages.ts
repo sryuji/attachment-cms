@@ -1,4 +1,4 @@
-import { openTab, sendMessageToTab } from '../utils/chrome/tabs.util'
+import { openTab } from '../utils/chrome/tabs.util'
 import { state } from './state'
 import { tabs } from './tabs'
 
@@ -8,7 +8,9 @@ class Messages {
   }
 
   listen() {
-    chrome.runtime.onMessage.addListener(async (message, sender: chrome.runtime.MessageSender, sendResponse) => {
+    // WARNING: async不可
+    // https://developer.mozilla.org/ja/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage#addlistener_%E3%81%AE%E6%A7%8B%E6%96%87
+    chrome.runtime.onMessage.addListener((message, sender: chrome.runtime.MessageSender, sendResponse) => {
       switch (message.type) {
         case 'SelectScope':
           state.save({
@@ -19,33 +21,44 @@ class Messages {
           })
           break
         case 'LatestRelease': {
-          await state.save({
-            acmsSiteTabId: sender.tab.id,
-            scopeId: message.scopeId,
-            releaseId: message.releaseId,
-            limitedReleaseToken: message.limitedReleaseToken,
-          })
-          await tabs.requestAttachLib(this.targetSiteTabId)
+          state
+            .save({
+              acmsSiteTabId: sender.tab.id,
+              scopeId: message.scopeId,
+              releaseId: message.releaseId,
+              limitedReleaseToken: message.limitedReleaseToken,
+            })
+            .then(() => {
+              return tabs.requestAttachLib(this.targetSiteTabId)
+            })
           break
         }
         case 'SelectContent':
-          await state.save({
-            acmsSiteTabId: sender.tab.id,
-            scopeId: message.scopeId,
-            releaseId: message.releaseId,
-            limitedReleaseToken: message.limitedReleaseToken,
-          })
-          await openTab(this.targetSiteTabId, message.url)
+          state
+            .save({
+              acmsSiteTabId: sender.tab.id,
+              scopeId: message.scopeId,
+              releaseId: message.releaseId,
+              limitedReleaseToken: message.limitedReleaseToken,
+            })
+            .then(() => {
+              return openTab(this.targetSiteTabId, message.url)
+            })
           break
         case 'SaveContent':
-          await state.save({
-            acmsSiteTabId: sender.tab.id,
-            scopeId: message.scopeId,
-            releaseId: message.releaseId,
-            limitedReleaseToken: message.limitedReleaseToken,
-          })
-          if (this.targetSiteTabId) await sendMessageToTab(this.targetSiteTabId, message)
+          state
+            .save({
+              acmsSiteTabId: sender.tab.id,
+              scopeId: message.scopeId,
+              releaseId: message.releaseId,
+              limitedReleaseToken: message.limitedReleaseToken,
+            })
+            .then(() => {
+              return openTab(this.targetSiteTabId, message.url)
+            })
           break
+        default:
+          return false
       }
       sendResponse && sendResponse()
       return true

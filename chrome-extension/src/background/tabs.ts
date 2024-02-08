@@ -13,8 +13,10 @@ class Tabs {
     state.save({ acmsSiteTabId: tabId })
   }
 
-  async openAcmsSite(path?: string) {
-    this.acmsSiteTabId = await openTab(this.acmsSiteTabId, resolveContentUrl(path))
+  async openAcmsSite(path?: string): Promise<number> {
+    const tabId = await openTab(this.acmsSiteTabId, resolveContentUrl(path))
+    this.acmsSiteTabId = tabId
+    return tabId
   }
 
   async requestAttachLib(tabId: number): Promise<boolean> {

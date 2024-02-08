@@ -31,7 +31,7 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   @Get('google')
   googleAuth(@Req() req: Request) {
-    return
+    //TODO:
   }
 
   @ApiOperation({ summary: 'Google認証後のリダイレクト先' })
